@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<style>
+.container { 
+border-radius:100px; 
+-moz-border-radius:3px; /* Firefox */ 
+-webkit-border-radius:20px; /* Safari y Chrome */ 
+
+/* Otros estilos */ 
+border:1px solid #333;
+}
+</style>
+<div>
+<img src="logo.jpg" alt="logo" style="margin-left:15%;margin-top:-100px;position:absolute;">
+</div>
+<div class="container" style="background-color: #F2F2F2;margin-top:14%;padding-top:4%;padding-bottom:3%;">
+    
+  <form class="form" role="form" method="post" action="/login/">{% csrf_token %}
+  <div class="form-group" style="margin-left:13%;">
+    <label class="sr-only" for="exampleInputEmail2">User</label>
+    <input class="form-control" id="exampleInputEmail2" name="user"type="text" style="margin-left:43px;" placeholder="Enter user">
+  </div>
+  <div class="form-group" style="margin-left:15%;">
+    <label class="sr-only" for="exampleInputPassword2">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword2" name="password" style="margin-left:10px;" placeholder="Password">
+  </div>
+  <div class="checkbox" style="margin-left:13 %;">
+    <label>
+      <input type="checkbox"> Remember me
+    </label>
+  </div>
+  {% if error %}
+    <div class="alert alert-danger" style="width:50%;margin-left:25%">{{error}}</div>
+    {% endif %}
+  <button type="submit" class="btn btn-default" style="margin-left:15%;" value="login">Sign in</button>
+</form>
+    
+    
+</div>   
+{% if nota%}
+<div class="alert alert-warning">{{nota}}</div>
+{%endif%}
+</body>
+</html>
