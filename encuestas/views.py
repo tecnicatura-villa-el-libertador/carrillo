@@ -10,6 +10,12 @@ from django.shortcuts import resolve_url
 
 
 @login_required
+<<<<<<< HEAD
+def entrevista(request):
+
+    return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
+=======
 def login(request):
 
     return render_to_response('login.html', locals(),context_instance=RequestContext(request))
+>>>>>>> 6d07eb5c95bfcbbb4fb0cbad19d0f0c8c16579ea

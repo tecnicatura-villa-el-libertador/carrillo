@@ -11,12 +11,12 @@
 </head>
 <body>
 <style>
-.container { 
-border-radius:100px; 
--moz-border-radius:3px; /* Firefox */ 
--webkit-border-radius:20px; /* Safari y Chrome */ 
+.container {
+border-radius:100px;
+-moz-border-radius:3px; /* Firefox */
+-webkit-border-radius:20px; /* Safari y Chrome */
 
-/* Otros estilos */ 
+/* Otros estilos */
 border:1px solid #333;
 }
 </style>
@@ -24,8 +24,8 @@ border:1px solid #333;
 <img src="logo.jpg" alt="logo" style="margin-left:15%;margin-top:-100px;position:absolute;">
 </div>
 <div class="container" style="background-color: #F2F2F2;margin-top:14%;padding-top:4%;padding-bottom:3%;">
-    
-  <form class="form" role="form" method="post" action="/login/">{% csrf_token %}
+
+  <form class="form" role="form" method="post" action=action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
   <div class="form-group" style="margin-left:13%;">
     <label class="sr-only" for="exampleInputEmail2">User</label>
     <input class="form-control" id="exampleInputEmail2" name="user"type="text" style="margin-left:43px;" placeholder="Enter user">
@@ -44,9 +44,9 @@ border:1px solid #333;
     {% endif %}
   <button type="submit" class="btn btn-default" style="margin-left:15%;" value="login">Sign in</button>
 </form>
-    
-    
-</div>   
+
+
+</div>
 {% if nota%}
 <div class="alert alert-warning">{{nota}}</div>
 {%endif%}
