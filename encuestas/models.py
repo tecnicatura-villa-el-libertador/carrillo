@@ -20,3 +20,4 @@ class ProblemaSalud(models.Model):
 class Beneficios(models.Model):
     Nome = models.CharField(max_length=100)
     Activo = models.BooleanField()
+    
