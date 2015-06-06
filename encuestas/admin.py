@@ -1,6 +1,6 @@
 from django.contrib import admin
 from encuestas.models import (GrupoFamiliar, Entrevista, Persona, ProblemaSalud, Beneficio,
-                              CapitalFisico, CapitalSocial, Relevamiento, Table, Field)
+                              CapitalFisico, CapitalSocial, Relevamiento, CapitalHumano)
 
 
 class PersonaInline(admin.TabularInline):
@@ -17,8 +17,8 @@ admin.site.register(GrupoFamiliar, GrupoFamiliarAdmin)
 admin.site.register(Entrevista)
 admin.site.register(CapitalSocial)
 admin.site.register(CapitalFisico)
+admin.site.register(CapitalHumano)
+
 admin.site.register(Relevamiento)
 admin.site.register(ProblemaSalud)
 admin.site.register(Beneficio)
-admin.site.register(Table)
-admin.site.register(Field)
