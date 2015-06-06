@@ -8,23 +8,20 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 # TURN ON THE VIRTUAL ENVIRONMENT FOR YOUR APPLICATION
-activate_this = '/home/carrillo/.virtualenvs/carrillo/bin/activate_this.py'
-execfile(activate_this, dict(__file__=activate_this))
-
 import os
 import sys
 
-# ADD YOUR PROJECT TO THE PYTHONPATH FOR THE PYTHON INSTANCE
-path = '/home/carrillo/carrillo'
+# for demo
+activate_this = '/home/carrillo/.virtualenvs/carrillo/bin/activate_this.py'
+if os.path.exists(activate_this):
+    with open(activate_this) as f:
+        code = compile(f.read(), activate_this, 'exec')
+        exec(code, dict(__file__=activate_this))
 
+path = '/home/carrillo/carrillo'
 if path not in sys.path:
     sys.path.append(path)
 
-os.chdir(path)
-
-# TELL DJANGO WHERE YOUR SETTINGS MODULE IS LOCATED
-os.environ['DJANGO_SETTINGS_MODULE'] = 'carrillo.settings'
-
-# IMPORT THE DJANGO WSGI HANDLER TO TAKE CARE OF REQUESTS
-import django.core.handlers.wsgi
-application = django.core.handlers.wsgi.WSGIHandler()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "carrillo.settings")
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
