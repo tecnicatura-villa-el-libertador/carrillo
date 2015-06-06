@@ -102,23 +102,24 @@ class Relevamiento(models.Model):
 
     def __str__(self):
         return "Relevamiento %s - %s" % (self.fecha_inicio, self.fecha_final)
-        
+
 class CapitalHumano(models.Model):
-	SIT_VACUNAS_TYPE=(
-	('Completo','Vacunas completas')
-	('Incompleto','Faltan algunas vacunas')
-	('NS/NC','No sabe/No contesta')
-		)
-	SIT_COBERTURA_TYPE=(
-	('Publ','Se atiende en nosocomio publico')
-	('Priv','Se atiende en clinica/hospital privado')
-	('O.S','Tiene obra social')
-	('NS/NC','No sabe/No contesta')
-		)
-		
-	entrevista=models.ForeignKey('Entrevista')
-	trabajo=models.CharField(max_length=50)
-	embarazo=models.CharField(max_legth=50)
-	pap=models.BooleanoField(help_tex="Realizado en los ultimos 2 años")
-	vacunas=moldes.CharFierld(max_legth=50,choices=SIT_VACUNAS_TYPE)
-	coberturaMedica= models.CharFiels(max_legth=50,choice=SIT_COBERTURA_TYPE)
+    SIT_VACUNAS_TYPE= [
+        ('Completo','Vacunas completas'),
+        ('Incompleto','Faltan algunas vacunas'),
+        ('NS/NC','No sabe/No contesta'),
+    ]
+
+    SIT_COBERTURA_TYPE = [
+        ('Publ','Se atiende en nosocomio publico'),
+        ('Priv','Se atiende en clinica/hospital privado'),
+        ('O.S','Tiene obra social'),
+        ('NS/NC','No sabe/No contesta'),
+    ]
+
+    entrevista = models.ForeignKey('Entrevista')
+    trabajo = models.CharField(max_length=50)
+    embarazo = models.CharField(max_length=50)
+    pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
+    vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
+    coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
