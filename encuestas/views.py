@@ -11,5 +11,5 @@ from django.shortcuts import resolve_url
 
 @login_required
 def login(request):
-    
+
     return render_to_response('login.html', locals(),context_instance=RequestContext(request))

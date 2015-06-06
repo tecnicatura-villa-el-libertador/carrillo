@@ -15,5 +15,3 @@ Instalar
 ---------
 
 agregar instrucciones
-
-
