@@ -57,9 +57,7 @@ coverage.xml
 *.pot
 local_settings.py
 pip-selfcheck.json
-pyvenv.cfg 
+pyvenv.cfg
 
 # Sphinx documentation
 docs/_build/
-
-
