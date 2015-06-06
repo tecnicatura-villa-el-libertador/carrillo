@@ -77,9 +77,9 @@ class CapitalFisico(models.Model):
     propietario_terreno = models.BooleanField()
     situacion_vivienda = models.CharField(max_length=50, choices=SIT_DOMINIAL_TYPE)
 
-    pisos = models.BooleanField(help_text="La vivienda tiene pisos de baldosa, cerámicos y mosaicos")
-    paredes = models.BooleanField(help_text="La vivienda tiene paredes exteriores de hormigón, ladrillo o bloque con revoque o revestimiento externo")
-    techo = models.BooleanField(help_text="Techo de chapa de metal, fibrocemento, cielorraso, baldosa o losa")
+    pisos = models.BooleanField(help_text="La vivienda tiene pisos de baldosa, cerámicos y mosaicos", default=True)
+    paredes = models.BooleanField(help_text="La vivienda tiene paredes exteriores de hormigón, ladrillo o bloque con revoque o revestimiento externo", default=True)
+    techo = models.BooleanField(help_text="¿La vivienda tiene techo de chapa de metal, fibrocemento, cielorrazo, baldosa o losa?", default=True)
     calefaccion = models.CharField(max_length=50, choices=CALEFACCION)
 
 class CapitalSocial(models.Model):
@@ -118,6 +118,7 @@ class CapitalHumano(models.Model):
     ]
 
     entrevista = models.ForeignKey('Entrevista')
+    persona = models.ForeignKey('Persona')
     trabajo = models.CharField(max_length=50)
     embarazo = models.CharField(max_length=50)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
