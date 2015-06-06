@@ -57,5 +57,9 @@ class CapitalSocial(models.Model):
 	comisaria = escuelaPrimaria = models.BooleanField(label="Comisaria (<= 50 cuadras)")
 	bomberos = models.BooleanField(label="Bomberos (<= 50 cuadras)")
 	
-
+class Relevamiento(models.Model):
+	fechaInicio = models.DateField()
+	fechaFinal = models.DateField()
+	zona = models.CharField(max_length=50, null=True, blank=True)
+	nombreZona = models.CharField(max_length=50, null=True, blank=True)
 
