@@ -11,3 +11,4 @@ class GrupoFamiliar(models.Model):
     telefono = models.CharField(max_length=50, null=True, blank=True)
     tipo_familia = models.CharField(max_length=50, choices=OPCIONES_TIPO_FAMILIA)
 
+ssss
