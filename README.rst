@@ -20,6 +20,9 @@ Aprovechamos la jornada del "Hackatong" no sólo para utilizarla como una jornad
 Instalar
 ---------
 
+En windows, usar Conda
+
+
 Para comenzar a usar el sistema debe crear un entorno virtual. Pero primero debe ejecutar:
 
 $ sudo apt-get install python3.4-dev
