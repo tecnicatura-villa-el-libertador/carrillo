@@ -1,6 +1,12 @@
 Proyecto Carrillo
 ==================
 
+Desarrolladores y desarrolladoras: 
+
+- Ruben 973 ;-)
+
+
+
 Médicas y médicos de la ciudad de Córdoba realizan cada año un trabajo de relevamiento de campo en el marco de su residencias en el Hospital Príncipe de Asturias del barrio Villa del Libertador, bajo la tutela de la cátedra de Salud Pública de la carrera de Medicina de la UNC.
 
 Este relevamiento, realizado a través de encuestas en los hogares de la zona objetivo (a priori, la zona sur de córdoba), permite recabar métricas sobre la salud de la población, correlacionarlos con índices de calidad habitacional, nivel educativo, y muchos otros indicadores que permiten diseñar intervenciones y campañas especiales desde los centros de salud de la zona.
