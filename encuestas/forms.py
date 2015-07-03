@@ -1,4 +1,4 @@
-import floppyformsi.__future__ as forms
+from django import forms
 from models import Personas, CapitalHumano, CapitalFisico, CapitalSocial
 
 
