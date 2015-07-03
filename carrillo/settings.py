@@ -38,12 +38,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'bootstrap3',
+
     'carrillo',
     'encuestas',
 
     'pinax_theme_bootstrap',
 
 )
+
+
+BOOTSTRAP3 = {'field_renderers': {
+        'default': 'bootstrap3.renderers.FieldRenderer',
+        'inline': 'meshh.renderers.InlineFieldRenderer',
+    },
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
