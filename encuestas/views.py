@@ -1,4 +1,5 @@
 from django.shortcuts import render
+<<<<<<< HEAD
 from .forms import CapitalSocial
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
@@ -23,3 +24,9 @@ def Social(request):
     
 
 
+=======
+
+
+def inicio(request):
+    return render(request, 'site_base.html', {})
+>>>>>>> fd662f9f61b3999bab7e0a2f3afe6b204cdf58c9
