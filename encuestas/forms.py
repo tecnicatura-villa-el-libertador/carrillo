@@ -20,3 +20,5 @@ class CapitalFisico(forms.ModelForm):
 class CapitalSocial(forms.ModelForm):
     class Meta:
         model = CapitalSocial
+        campos = ['entrevista','energia_electrica','recoleccion_residuo','transporte_publico','calle_pavimentada',
+                  'jardin_infantes','escuela_primaria','escuela_secundaria','comisaria','bomberos']

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import CapitalSocial
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response
@@ -13,4 +14,12 @@ from django.shortcuts import resolve_url
 def encuesta(request):
 
     return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
+
+def Social(request):
+    form = CapitalSocial()
+    if request.method == 'POST':
+        form = CapitalSocial(request.POST)
+    return render(request,'clase_social.html',{'form':form})
+    
+
 
