@@ -3,7 +3,7 @@ from models import Personas, CapitalHumano, CapitalFisico, CapitalSocial
 
 
 class Persona(forms.ModelForm):
-    class Meta:
+    class Meta
         model = Personas
 
 
@@ -12,9 +12,10 @@ class CapitalHumano(forms.ModelForm):
         model = CapitalHumano
 
 
-class CapitalFisico(forms.ModelForm):
+class CapitalFisico_f(forms.ModelForm):
     class Meta:
         model = CapitalFisico
+		fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
 
 
 class CapitalSocial(forms.ModelForm):
