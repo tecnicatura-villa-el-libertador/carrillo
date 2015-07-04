@@ -130,7 +130,7 @@ class CapitalHumano(models.Model):
     entrevista = models.ForeignKey('Entrevista')
     persona = models.ForeignKey('Persona')
     trabajo = models.CharField(max_length=50)
-    embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=true,blanck=true)
+    embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blanck=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
