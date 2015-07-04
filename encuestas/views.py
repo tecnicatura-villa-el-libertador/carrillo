@@ -1,14 +1,13 @@
 from django.shortcuts import render
-from django.views.forms import CapitalFisico_f
-from encuestas.forms import Persona
+from encuestas.forms import PersonaModelForm, CapitalFisicoModelForm
 
 
 def vistapersona(request):
 
-    form=Persona()
+    form=PersonaModelForm()
 
     if request.POST:
-        form=Persona(request.POST)
+        form=PersonaForm(request.POST)
 
         if form.is_valid():
             
@@ -28,17 +27,17 @@ def vistapersona(request):
             
 
 
-
 def inicio(request):
     return render(request, 'site_base.html', {})
 
-def CapitalFisico_p(request):
-	form=CapitalFisico_f
+
+def capital_fisico(request):
+	form=CapitalFisicoModelForm()
+
 	if request.method=="POST":
-		form=CapitalFisico_f(request.POST)
+		form=CapitalFisicoModelForm(request.POST)
 		if form.is_valid():
-			form.cleaned_data[i] for i in ('entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
-			
-			return render(request,'formulario.html')
+			form.save()
+			return render(request,'exito.html', {})
 	return render(request,'formulario.html',{'form': form})
 	

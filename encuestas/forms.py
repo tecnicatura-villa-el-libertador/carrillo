@@ -1,27 +1,28 @@
 from django import forms
-from models import Personas, CapitalHumano, CapitalFisico, CapitalSocial
+from encuestas.models import Persona, CapitalHumano, CapitalFisico, CapitalSocial
 
 
-class Persona(forms.ModelForm):
+class PersonaModelForm(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ['grupo_familiar','nombre', 'apellido', 'sexo',
                  'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
 
 
-class CapitalHumano(forms.ModelForm):
+class CapitalHumanoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalHumano
         fields = ['entrevista', 'persona', 'trabajo', 'embarazo', 'pap',
                   'vacunas', 'coberturaMedica']
 
 
-class CapitalFisico_f(forms.ModelForm):
+class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalFisico
-		fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
+        fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
 
 
-class CapitalSocial(forms.ModelForm):
+class CapitalSocialModelForm(forms.ModelForm):
     class Meta:
         model = CapitalSocial
+        fields = []
