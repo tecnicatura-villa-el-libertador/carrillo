@@ -1,31 +1,47 @@
-from django.shortcuts import render
-from encuestas.forms import PersonaModelForm, CapitalFisicoModelForm
+<<<<<<< HEAD
+from django.shortcuts import render, render_to_response
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.debug import sensitive_post_parameters
+from django.template.response import TemplateResponse
+from django.shortcuts import resolve_url
 
 
 def vistapersona(request):
 
     form=PersonaModelForm()
-
+    nombre = 'Formulario de persona'
     if request.POST:
-        form=PersonaForm(request.POST)
+        form=PersonaModelForm(request.POST)
 
         if form.is_valid():
+            form.save() 
+
+            return render (request,'exito.html', {'form': form})
+
+    return render(request,'formulario.html', {'form': form,'nombre': nombre})
             
-            grupo_familiar = form.cleaned_data['grupo_familiar']
-            nombre = form.cleaned_data['nombre']
-            apellido = form.cleaned_data['apellido']
-            sexo = form.cleaned_data['sexo']
-            Fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
-            nacionalidad = form.cleaned_data['nacionalidad']
-            dni = form.cleaned_data['dni']
-            vinculo = form.cleaned_data['vinculo']
-##          form.save() para guardar en la base de datos
+def encuesta(request):
 
-            return render (request,'formulario.html', {'form': form})
+    return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
 
-    return render(request,'formulario.html', {'form': form})
+def Social(request):
+    form = CapitalSocialModelForm()
+    nombre = 'Formulario para capital social'
+    if request.method == 'POST':
+        form = CapitalSocialModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request,'exito.html',{'form':form})
+
             
-
+    return render(request,'formulario.html',{'form':form, 'nombre': nombre})
+    
+def inicio(request):
+    return render(request, 'site_base.html', {})
 
 def inicio(request):
     return render(request, 'site_base.html', {})
@@ -40,4 +56,3 @@ def capital_fisico(request):
 			form.save()
 			return render(request,'exito.html', {})
 	return render(request,'formulario.html',{'form': form})
-	
