@@ -16,9 +16,10 @@ class CapitalHumano(forms.ModelForm):
                   'vacunas', 'coberturaMedica']
 
 
-class CapitalFisico(forms.ModelForm):
+class CapitalFisico_f(forms.ModelForm):
     class Meta:
         model = CapitalFisico
+		fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
 
 
 class CapitalSocial(forms.ModelForm):
