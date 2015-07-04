@@ -58,7 +58,7 @@ class Persona(models.Model):
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
     nacionalidad  = models.CharField(max_length=30)
-    dni = models.IntegerField(max_length=8)
+    dni = models.IntegerField()
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
 
     def __str__(self):
