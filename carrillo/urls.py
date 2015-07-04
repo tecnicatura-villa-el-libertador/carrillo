@@ -14,5 +14,4 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login',name="my_login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
     url(r'^capitalsocial/',"encuestas.views.Social", name = "capitalsocial"),
-    url(r'^formulariocarrillo','encuesta.views.CapitalFisico_p')
 )
