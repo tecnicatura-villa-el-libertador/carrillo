@@ -1,5 +1,4 @@
 from django import forms
-<<<<<<< HEAD
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico
 
 class PersonaModelForm(forms.ModelForm):
