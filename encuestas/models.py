@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.db import models
 
 # Create your models here.
@@ -44,6 +45,9 @@ class Entrevista(models.Model):
     entrevistado = models.ForeignKey('Persona')
     fecha = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return '%s' % self.numero_entrevista
+
 class Persona(models.Model):
     VINCULO_TYPE = (
             ('Padre','Padre'),
@@ -82,6 +86,9 @@ class CapitalFisico(models.Model):
     techo = models.BooleanField(help_text="¿La vivienda tiene techo de chapa de metal, fibrocemento, cielorrazo, baldosa o losa?", default=True)
     calefaccion = models.CharField(max_length=50, choices=CALEFACCION)
 
+    def __srt__(self):
+        return "Capital Físico asociado a la entrevista: %s" % self.entrevista
+
 class CapitalSocial(models.Model):
     entrevista = models.ForeignKey('Entrevista')
     energia_electrica = models.BooleanField()
@@ -93,6 +100,9 @@ class CapitalSocial(models.Model):
     escuela_secundaria = models.BooleanField(help_text="Escuela Secundaria (<= 20 cuadras)")
     comisaria = models.BooleanField(help_text="Comisaria (<= 50 cuadras)")
     bomberos = models.BooleanField(help_text="Bomberos (<= 50 cuadras)")
+    def __str__(self):
+        return "Capital Social asociado a la entrevista: %s" % self.entrevista
+
 
 class Relevamiento(models.Model):
     fecha_inicio = models.DateField()
@@ -124,3 +134,6 @@ class CapitalHumano(models.Model):
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
+
+    def __srt__(self):
+        return "Capital Humano aasociado a la entrevista: %s" % self.entrev

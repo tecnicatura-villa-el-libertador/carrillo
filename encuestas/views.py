@@ -1,5 +1,6 @@
+<<<<<<< HEAD
 from django.shortcuts import render, render_to_response
-from .forms import PersonaModelForm, CapitalSocialModelForm
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.shortcuts import resolve_url
+
 
 def vistapersona(request):
 
@@ -41,13 +43,16 @@ def Social(request):
 def inicio(request):
     return render(request, 'site_base.html', {})
 
-#def CapitalFisico_p(request):
-#    form= CapitalFisicoModelForm()
-#    if request.method=="POST":
-#        form= CapitalFisicoModelForm(request.POST)
-#        if form.is_valid():
-#            form.cleaned_data[i] for i in ('entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
-#            
-#            return render(request,'formulario.html')
-#    return render(request,'formulario.html',{'form': form})
-    
+def inicio(request):
+    return render(request, 'site_base.html', {})
+
+
+def capital_fisico(request):
+	form=CapitalFisicoModelForm()
+
+	if request.method=="POST":
+		form=CapitalFisicoModelForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return render(request,'exito.html', {})
+	return render(request,'formulario.html',{'form': form})

@@ -1,8 +1,6 @@
 from django import forms
+<<<<<<< HEAD
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico
-from django.contrib.admin import widgets
-
-
 
 class PersonaModelForm(forms.ModelForm):
     class Meta:
@@ -18,12 +16,10 @@ class CapitalHumanoModelForm(forms.ModelForm):
                   'vacunas', 'coberturaMedica']
 
 
-
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
+         model = CapitalFisico
         fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
-        model = CapitalFisico
-
 
 class CapitalSocialModelForm(forms.ModelForm):
     class Meta:
