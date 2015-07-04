@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.shortcuts import render, render_to_response
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm
 from django.views.decorators.csrf import csrf_exempt
@@ -43,16 +42,14 @@ def Social(request):
 def inicio(request):
     return render(request, 'site_base.html', {})
 
-def inicio(request):
-    return render(request, 'site_base.html', {})
-
 
 def capital_fisico(request):
-	form=CapitalFisicoModelForm()
+    form=CapitalFisicoModelForm()
 
-	if request.method=="POST":
-		form=CapitalFisicoModelForm(request.POST)
-		if form.is_valid():
-			form.save()
-			return render(request,'exito.html', {})
-	return render(request,'formulario.html',{'form': form})
+    if request.method=="POST":
+        form=CapitalFisicoModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request,'exito.html', {})
+    return render(request,'formulario.html',{'form': form})
+
