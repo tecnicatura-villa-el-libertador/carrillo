@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 from django.shortcuts import render, render_to_response
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -56,3 +55,16 @@ def capital_fisico(request):
 			form.save()
 			return render(request,'exito.html', {})
 	return render(request,'formulario.html',{'form': form})
+
+def Grupo_Familiar(request):
+    form=GrupoFamiliarModelForm()
+    nombre = 'Formulario para Grupo Familiar'
+    if request.method=="POST":
+        form=GrupoFamiliarModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request,'exito.html', {})
+
+    return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+
+
