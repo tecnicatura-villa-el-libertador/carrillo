@@ -1,5 +1,5 @@
 from django import forms
-from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico
+from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar
 
 class PersonaModelForm(forms.ModelForm):
     class Meta:
@@ -18,10 +18,14 @@ class CapitalHumanoModelForm(forms.ModelForm):
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
          model = CapitalFisico
-        fields=['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
+         fields = ['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
 
 class CapitalSocialModelForm(forms.ModelForm):
     class Meta:
         model = CapitalSocial
         fields = ['entrevista','energia_electrica','recoleccion_residuo','transporte_publico','calle_pavimentada',
                   'jardin_infantes','escuela_primaria','escuela_secundaria','comisaria','bomberos']
+class GrupoFamiliarModelForm(forms.ModelForm):
+    class Meta:
+        model = GrupoFamiliar
+        fields = ['direccion', 'historia_clinica','telefono', 'tipo_familia']
