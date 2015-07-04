@@ -22,6 +22,8 @@ def Social(request):
         form = SocialModelForm(request.POST)
         if form.is_valid():
             form.save()
+            return render(request,'exito.html',{'form':form})
+
             
     return render(request,'formulario.html',{'form':form})
     
