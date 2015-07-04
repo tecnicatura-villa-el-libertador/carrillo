@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "encuestas.views.inicio", name="home"),
+    url(r'^persona/$', "encuestas.views.vistapersona", name="persona"),                       
     url(r'^accounts/login/$', 'django.contrib.auth.views.login',name="my_login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
 )
