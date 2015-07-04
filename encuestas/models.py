@@ -136,4 +136,4 @@ class CapitalHumano(models.Model):
     coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
 
     def __srt__(self):
-        return "Capital Humano aasociado a la entrevista: %s" % self.entrev
+        return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
