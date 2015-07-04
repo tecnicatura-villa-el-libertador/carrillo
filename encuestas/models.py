@@ -126,11 +126,11 @@ class CapitalHumano(models.Model):
         ('O.S','Tiene obra social'),
         ('NS/NC','No sabe/No contesta'),
     ]
-
+    SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
     entrevista = models.ForeignKey('Entrevista')
     persona = models.ForeignKey('Persona')
     trabajo = models.CharField(max_length=50)
-    embarazo = models.CharField(max_length=50)
+    embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=true,blanck=true)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
