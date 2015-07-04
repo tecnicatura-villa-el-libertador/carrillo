@@ -2,11 +2,9 @@
 {% load bootstrap3 %}
 {% block body %}
 
-
-       <form method="post" action=".">
+<form method="post" action=".">
             {% csrf_token %}
             {% bootstrap_form form layout='default' %}
             <button class="btn btn-success" type="submit">Guardar</button>
         </form>
-
 {% endblock body %}
