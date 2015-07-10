@@ -1,4 +1,4 @@
-Django==1.8.2
+#Django==1.8.2
 django-bootstrap3==5.1.1
 pinax-theme-bootstrap==5.7.6
 ipdb==0.8.1
