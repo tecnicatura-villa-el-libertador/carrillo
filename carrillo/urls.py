@@ -17,6 +17,6 @@ urlpatterns = patterns('',
     url(r'^capitalsocial/(?P<id_capitalsocial>\d+)/$',"encuestas.views.Social", name = "capitalsocial"),
     url(r'^capitalfisico/$','encuestas.views.capital_fisico'),
     url(r'^grupofamiliar/$',"encuestas.views.Grupo_Familiar", name = "grupofamiliar."),
-
+    url(r'^capitalhumano/$',"encuestas.views.capital_humano", name="capitalhumano"),
 
 )

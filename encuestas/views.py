@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,CapitalHumanoModelForm
 from .models import CapitalSocial
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
@@ -70,4 +70,17 @@ def Grupo_Familiar(request):
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
 
-
+def capital_humano(request,id_capitalhumano=None):
+    if id_capitalhumano:
+        instance=get_object_or_404(CapitalHumano,id=id_capitalhumano)
+    else:
+        instance=None
+    form=CapitalHumanoModelForm(instance=instance)
+    nombre="formulario para capital humano"
+    if request.method=='POST':
+        form=CapitalHumanoModelForm(request.POST, instance=instance)
+        if form.is_valid:
+            form.save()
+            return render(request, 'exito.html',{'form':form})
+    return render(request, 'formulario.html',{'form':form,'nombre':nombre})
+            
