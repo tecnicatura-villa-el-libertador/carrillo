@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
-from .models import CapitalSocial, GrupoFamiliar
+from .models import CapitalSocial, GrupoFamiliar, Persona
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -10,18 +10,19 @@ from django.template.response import TemplateResponse
 from django.shortcuts import resolve_url
 
 
-def vistapersona(request):
-
-    form=PersonaModelForm()
+def vistapersona(request, id_persona=None):
+    if id_persona:
+        instance = get_object_or_404(Persona, id=id_persona)
+    else:
+        instance = None
+    form = PersonaModelForm(instance = instance)
     nombre = 'Formulario de persona'
-    if request.POST:
-        form=PersonaModelForm(request.POST)
-
+    if request.method == 'POST':
+        form = PersonaModelForm(request.POST, instance=instance)
         if form.is_valid():
             form.save() 
-
             return render (request,'exito.html', {'form': form})
-
+        
     return render(request,'formulario.html', {'form': form,'nombre': nombre})
             
 def encuesta(request):
@@ -35,15 +36,14 @@ def Social(request, id_capitalsocial=None):
         instance = get_object_or_404(CapitalSocial, id=id_capitalsocial)
     else:
         instance = None
-    form = CapitalSocialModelForm(instance=instance)
+    form = CapitalSocialModelForm(instance = instance)
     nombre = 'Formulario para capital social'
     if request.method == 'POST':
         form = CapitalSocialModelForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
             return render(request,'exito.html',{'form':form})
-
-            
+  
     return render(request,'formulario.html',{'form':form, 'nombre': nombre})
     
 
