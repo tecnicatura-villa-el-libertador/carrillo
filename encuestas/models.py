@@ -3,14 +3,14 @@ from django.db import models
 
 # Create your models here.
 class ProblemaSalud(models.Model):
-    Name = models.CharField(max_length=100)
-    Active = models.BooleanField()
+    Nombre = models.CharField(max_length=100)
+    Activo = models.BooleanField()
     def __str__(self):
         return '%s' % self.Name
 
 class Beneficio(models.Model):
-    Name = models.CharField(max_length=100)
-    Active = models.BooleanField()
+    Nombre = models.CharField(max_length=100)
+    Activo = models.BooleanField()
     def __str__(self):
         return '%s' % self.Name
 
@@ -126,14 +126,14 @@ class CapitalHumano(models.Model):
         ('O.S','Tiene obra social'),
         ('NS/NC','No sabe/No contesta'),
     ]
-
+    SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
     entrevista = models.ForeignKey('Entrevista')
     persona = models.ForeignKey('Persona')
     trabajo = models.CharField(max_length=50)
-    embarazo = models.CharField(max_length=50)
+    embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
 
     def __srt__(self):
-        return "Capital Humano aasociado a la entrevista: %s" % self.entrev
+        return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
