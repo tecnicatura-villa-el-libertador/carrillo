@@ -9,6 +9,9 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.shortcuts import resolve_url
 
+def inicio(request):
+
+    return render_to_response('inicio.html', locals(),context_instance=RequestContext(request))
 
 def vistapersona(request):
 
@@ -22,8 +25,8 @@ def vistapersona(request):
 
             return render (request,'exito.html', {'form': form})
 
-    return render(request,'formulario.html', {'form': form,'nombre': nombre})
-            
+    return render(request,'formulario.html', {'form': form, 'nombre': nombre})
+
 def encuesta(request):
 
     return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
