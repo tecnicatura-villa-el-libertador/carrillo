@@ -9,6 +9,9 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.shortcuts import resolve_url
 
+def inicio(request):
+
+    return render_to_response('inicio.html', locals(),context_instance=RequestContext(request))
 
 def vistapersona(request):
 
@@ -22,8 +25,8 @@ def vistapersona(request):
 
             return render (request,'exito.html', {'form': form})
 
-    return render(request,'formulario.html', {'form': form,'nombre': nombre})
-            
+    return render(request,'formulario.html', {'form': form, 'nombre': nombre})
+
 def encuesta(request):
 
     return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
@@ -47,19 +50,16 @@ def Social(request, id_capitalsocial=None):
     return render(request,'formulario.html',{'form':form, 'nombre': nombre})
     
 
-def inicio(request):
-    return render(request, 'site_base.html', {})
-
 
 def capital_fisico(request):
-	form=CapitalFisicoModelForm()
+    form=CapitalFisicoModelForm()
 
-	if request.method=="POST":
-		form=CapitalFisicoModelForm(request.POST)
-		if form.is_valid():
-			form.save()
-			return render(request,'exito.html', {})
-	return render(request,'formulario.html',{'form': form})
+    if request.method=="POST":
+        form=CapitalFisicoModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request,'exito.html', {})
+    return render(request,'formulario.html',{'form': form})
 
 def Grupo_Familiar(request, id_grupofamiliar = None):
     if id_grupofamiliar:
@@ -75,5 +75,4 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
             return render(request,'exito.html', {'form': form})
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
-
 
