@@ -11,6 +11,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "encuestas.views.inicio", name="home"),
     url(r'^persona/$', "encuestas.views.vistapersona", name="persona"),
+<<<<<<< HEAD
+=======
+    url(r'^persona/(?P<id_persona>\d+)/$',"encuestas.views.vistapersona", name = "persona"),
+>>>>>>> 6563d52e1dd9837b607232e91651b6c430a07a21
     url(r'^accounts/login/$', 'django.contrib.auth.views.login',name="my_login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
     url(r'^capitalsocial/$',"encuestas.views.Social", name = "capitalsocial"),
