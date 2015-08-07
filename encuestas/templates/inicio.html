@@ -1,0 +1,36 @@
+{% load bootstrap3 %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <script LANGUAGE="Javascript">
+        var txt=" CARRILLO";
+        var espera=300;
+        var refresco=null;
+        function rotulo_title() {
+            document.title=txt;
+            txt=txt.substring(1,txt.length)+txt.charAt(0);
+            refresco=setTimeout("rotulo_title()",espera);
+        }
+        rotulo_title();
+    </script>
+    <a href="{% url 'home' %}" class="inicio"><img src="../static/images/logotipo.png" width=30% height=50% /></a>
+  </head>
+
+  <body>
+    <link rel="stylesheet" type="text/css" href="{% static 'estiloinicio.css' %}" />
+
+    <ul class="menu">
+      <li><a href="info.html">Información</a></li>
+      <li><a href=".html">Formularios</a>
+        <ul>
+          <li><a href="{% url 'persona' %}">Persona</a></li>
+          <li><a href="{% url 'capitalsocial' %}">Capital Social</a></li>
+          <li><a href="{% url 'capitalfisico' %}">Capital Fisico</a></li>
+          <li><a href="{% url 'grupofamiliar' %}">Grupo Familiar</a></li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>
+

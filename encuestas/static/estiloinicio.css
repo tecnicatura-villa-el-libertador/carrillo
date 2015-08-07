@@ -1,0 +1,107 @@
+  body {
+    background: white url("images/fondo.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover; -moz-background-size: cover;
+    -o-background-size: cover; background-size: cover; color: #333;
+    line-height: 1; }
+  img {
+    float: left; }
+  .menu {
+    border-radius: 5px;
+    list-style-type: none;
+    margin: 0 auto; /* si queremos centrarlo */
+    padding: 0;
+    /* la altura y su ancho dependerán de los textos */
+    height: 40px; 
+    width: 280px;
+    /* el color de fondo */
+    background-color: rgba(0,0,255,0.5);
+    background: -moz-linear-gradient(rgba(0,0,255,0.5),#222);
+    background: -webkit-linear-gradient(rgba(0,0,255,0.5),#222);
+    background: -o-linear-gradient(rgba(0,0,255,0.5),#222);
+    background: -ms-linear-gradient(rgba(0,0,255,0.5),#222);
+    background: linear-gradient(rgba(0,0,255,0.5),#222); }
+   /* cada item del menu */
+  .menu  li {
+    display: inline-block;
+    float: left; /* la lista se ve horizontal */
+    height: 200px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .menu li a {
+    border-left: 1px solid #000;
+    border-right: 1px solid #666;
+    color: #EEE;
+    display: inline-block;
+    font-family: Tahoma;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 28px;
+    padding: 0 14px;
+    margin: 6px 0;
+    text-decoration: none;
+    /* animamos el cambio de color de los textos */
+    -webkit-transition: color .2s ease-in-out;
+    -moz-transition: color .2s ease-in-out;
+    -o-transition: color .2s ease-in-out;
+    -ms-transition: color .2s ease-in-out;
+    transition: color .2s ease-in-out;
+  }
+  /* eliminamos los bordes del primer y el último */
+  .menu li:first-child a { border-left: none; }
+  .menu li:last-child a{ border-right: none; }
+  /* efecto hover cambia el color */
+  .menu li:hover > a { color: Crimson; }
+  /* los submenús */
+  .menu ul {
+    border-radius: 0 0 5px 5px;
+    left: 0;
+    margin: 0;
+    opacity: 0; /* no son visibles */
+    position: absolute;
+    top: 40px; /* se ubican debajo del enlace principal */
+    /* el color de fondo */
+    background: #222;
+    background: -moz-linear-gradient(#222,#555);
+    background: -webkit-linear-gradient(#22,#555);
+    background: -o-linear-gradient(#222,#555);
+    background: -ms-linear-gradient(#222,#555);
+    background: linear-gradient(#222,#555);
+    /* animamos su visibildiad */
+    -moz-transition: opacity .25s ease .1s;
+    -webkit-transition: opacity .25s ease .1s;
+    -o-transition: opacity .25s ease .1s;
+    -ms-transition: opacity .25s ease .1s;
+    transition: opacity .25s ease .1s;
+  }
+  /* son visibes al poner el cursor encima */
+  .menu li:hover > ul { opacity: 1; }
+  /* cada un de los items de los submenús */
+  .menu ul li {
+    height: 0; /* no son visibles */
+    overflow: hidden;
+    padding: 0;
+    /* animamos su visibildiad */
+    -moz-transition: height .25s ease .1s;
+    -webkit-transition: height .25s ease .1s;
+    -o-transition: height .25s ease .1s;
+    -ms-transition: height .25s ease .1s;
+    transition: height .25s ease .1s;
+  }
+  .menu li:hover > ul li {
+    height: 36px; /* los mostramos */
+    overflow: visible;
+    padding: 0;
+  }
+  .menu ul li a {
+    border: none;
+    border-bottom: 1px solid #111;
+    margin: 0;
+    /* el ancho dependerá de los textos a utilizar */
+    padding: 5px 20px;
+    width: 150px;
+  }
+  /* el último no tiene un borde */
+  .menu ul li:last-child a { border: none; }

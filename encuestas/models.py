@@ -5,12 +5,13 @@ from django.db import models
 class ProblemaSalud(models.Model):
     nombre = models.CharField(max_length=100)
     activo = models.BooleanField()
+
     def __str__(self):
         return '%s' % self.Name
 
 class Beneficio(models.Model):
-    Name = models.CharField(max_length=100)
-    Active = models.BooleanField()
+    Nombre = models.CharField(max_length=100)
+    Activo = models.BooleanField()
     def __str__(self):
         return '%s' % self.Name
 
