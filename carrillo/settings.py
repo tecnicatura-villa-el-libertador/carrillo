@@ -38,13 +38,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'bootstrap3',
-
     'carrillo',
     'encuestas',
-
     'pinax_theme_bootstrap',
+    'bootstrap3_datetime' ,
 
 )
 
