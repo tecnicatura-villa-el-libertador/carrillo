@@ -1,7 +1,17 @@
 {% extends "site_base.html" %}
+{% load staticfiles %}
 {% load bootstrap3 %}
-{% block body %}
 
+{% block extra_head %}
+	<script src="{% static "jquery/js/jquery-2.1.3.min.js" %}"></script>
+	{{ form.media.css }}
+{% endblock %}
+
+{% block extra_script %}
+	{{ form.media.js }}
+{% endblock %}
+
+{% block body %}
     <form method="post" action=".">
         <h1>{{nombre}}</h1>
         {% csrf_token %}
