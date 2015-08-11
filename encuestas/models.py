@@ -100,6 +100,7 @@ class Relevamiento(models.Model):
     fecha_final = models.DateField()
     zona = models.CharField(max_length=50, null=True, blank=True)
     nombre_zona = models.CharField(max_length=50, null=True, blank=True, help_text="ej: Villa el Libertador")
+    estado=models.BooleanField(help_text="Campaña Activa", default=True)
 
     def __str__(self):
         return "Relevamiento %s - %s" % (self.fecha_inicio, self.fecha_final)
@@ -124,7 +125,7 @@ class CapitalHumano(models.Model):
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
-    coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
+    cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
 
     def __srt__(self):
         return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
