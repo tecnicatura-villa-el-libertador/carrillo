@@ -1,11 +1,18 @@
 from django import forms
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar
+from bootstrap3_datetime.widgets import DateTimePicker
 
 class PersonaModelForm(forms.ModelForm):
+
+    fecha_nacimiento = forms.DateField(
+        widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+                                       "pickTime": False}))
     class Meta:
         model = Persona
         fields = ['grupo_familiar','nombre', 'apellido', 'sexo',
                  'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
+
+        
 
 
 class CapitalHumanoModelForm(forms.ModelForm):
