@@ -12,7 +12,7 @@ class CapitalHumanoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalHumano
         fields = ['entrevista', 'persona', 'trabajo', 'embarazo', 'pap',
-                  'vacunas', 'coberturaMedica']
+                  'vacunas', 'cobertura_medica']
 
 
 class CapitalFisicoModelForm(forms.ModelForm):
