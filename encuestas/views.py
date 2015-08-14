@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm
 from .models import CapitalSocial, GrupoFamiliar
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.shortcuts import resolve_url
+from django.contrib.auth import authenticate, login
 
 def inicio(request):
 
@@ -75,4 +76,23 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
             return render(request,'exito.html', {'form': form})
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+
+def Login(request):
+	nombre = "Formulario de login"
+	form = LoginForm()
+	if request.method =="POST":
+		username = request.POST["username"]
+		password = request.POST["password"]
+		user = authenticate(username=username, password=password)
+		if user.is_active:
+			login(request, user)
+			return render(request,'inicio.html')
+				
+	return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+	
+		
+			
+			
+		
+	
 
