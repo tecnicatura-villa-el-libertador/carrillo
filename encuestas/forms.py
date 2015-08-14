@@ -12,15 +12,12 @@ class PersonaModelForm(forms.ModelForm):
         fields = ['grupo_familiar','nombre', 'apellido', 'sexo',
                  'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
 
-        
-
 
 class CapitalHumanoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalHumano
         fields = ['entrevista', 'persona', 'trabajo', 'embarazo', 'pap',
                   'vacunas', 'cobertura_medica']
-
 
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
