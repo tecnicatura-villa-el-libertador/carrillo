@@ -37,6 +37,7 @@ def encuesta(request):
 
 
 
+@login_required
 def Social(request, id_capitalsocial=None):
     if id_capitalsocial:
         instance = get_object_or_404(CapitalSocial, id=id_capitalsocial)
