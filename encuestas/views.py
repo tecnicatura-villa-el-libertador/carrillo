@@ -1,14 +1,14 @@
-from django.shortcuts import render, render_to_response, get_object_or_404
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm
-from .models import CapitalSocial, GrupoFamiliar
+from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm,CapitalHumanoModelForm
+from .models import CapitalSocial, GrupoFamiliar, Relevamiento
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
-from django.shortcuts import resolve_url
-from django.contrib.auth import authenticate, login
+
 
 def inicio(request):
 
@@ -78,21 +78,47 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
 
 def Login(request):
-	nombre = "Formulario de login"
-	form = LoginForm()
-	if request.method =="POST":
-		username = request.POST["username"]
-		password = request.POST["password"]
-		user = authenticate(username=username, password=password)
-		if user.is_active:
-			login(request, user)
-			return render(request,'inicio.html')
-				
-	return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+    nombre = "Formulario de login"
+    form = LoginForm()
+    if request.method =="POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                print ('direccion a redirigir: ' + request.GET.get('next', '/'))
+                
+##                return redirect(request.GET.get('next', '/'))
+                return redirect('http://localhost:8000/admin/')
+                print ('url tomada: ' + request.GET)
+                
+    return render(request,'formulario.html',{'form': form, 'nombre': nombre})
 	
 		
 			
 			
-		
-	
+
+
+def capital_humano(request,id_capitalhumano=None):
+    if id_capitalhumano:
+        instance=get_object_or_404(CapitalHumano,id=id_capitalhumano)
+    else:
+        instance=None
+    form=CapitalHumanoModelForm(instance=instance)
+    nombre="formulario para capital humano"
+    if request.method=='POST':
+        form=CapitalHumanoModelForm(request.POST, instance=instance)
+        if form.is_valid:
+            form.save()
+            return render(request, 'exito.html',{'form':form})
+    return render(request, 'formulario.html',{'form':form,'nombre':nombre})
+
+def relevamientoActivo(request):
+    zona=Relevamiento.objects.filter(estado=True)
+    return render (request, 'Relevamiento,html',{'zona':zona})
+
+    
+    
+            
 

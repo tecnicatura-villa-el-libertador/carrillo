@@ -3,8 +3,9 @@ from django.db import models
 
 # Create your models here.
 class ProblemaSalud(models.Model):
-    Nombre = models.CharField(max_length=100)
-    Activo = models.BooleanField()
+    nombre = models.CharField(max_length=100)
+    activo = models.BooleanField()
+
     def __str__(self):
         return '%s' % self.Name
 
@@ -14,16 +15,6 @@ class Beneficio(models.Model):
     def __str__(self):
         return '%s' % self.Name
 
-class Table(models.Model):
-    Name = models.CharField(max_length=100)
-    def __str__(self):
-        return self.Name
-
-class Field(models.Model):
-    Name = models.CharField(max_length=255)
-    Table = models.OneToOneField(Table)
-    def __str__(self):
-        return '%s' % self.Name
 
 class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
@@ -109,6 +100,7 @@ class Relevamiento(models.Model):
     fecha_final = models.DateField()
     zona = models.CharField(max_length=50, null=True, blank=True)
     nombre_zona = models.CharField(max_length=50, null=True, blank=True, help_text="ej: Villa el Libertador")
+    estado=models.BooleanField(help_text="Campaña Activa", default=True)
 
     def __str__(self):
         return "Relevamiento %s - %s" % (self.fecha_inicio, self.fecha_final)
@@ -133,7 +125,7 @@ class CapitalHumano(models.Model):
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
-    coberturaMedica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
+    cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
 
     def __srt__(self):
         return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
