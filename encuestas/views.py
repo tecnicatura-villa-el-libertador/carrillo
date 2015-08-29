@@ -98,6 +98,13 @@ def relevamientoActivo(request):
     return render (request, 'Relevamiento,html',{'zona':zona})
 
     
-    
-            
+  def mujeres_con_pap(request):
+    nombre = 'Porcentaje de mujeres con PAP'
+    mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f', capitales_humanos__pap=True)
+    mujeres_con_pap=len(mujeres_con_pap)
+    mujeres_total=Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f')
+    mujeres_total=len(mujeres_total)
+    total=(mujeres_con_pap/mujeres_total)*100                                    
+
+    return render(request,'pap.html',{'nombre': nombre, 'total': total})
 
