@@ -20,4 +20,6 @@ urlpatterns = patterns('',
     url(r'^capitalhumano/$',"encuestas.views.capital_humano", name="capitalhumano"),
     url(r'^grupofamiliar/(?P<id_grupofamiliar>\d+)/$',"encuestas.views.Grupo_Familiar", name = "grupofamiliar"),
     url(r'^relevamiento/$', "encuestas.views.relevamientoActivo", name="relevamientoActivo"),
+	url(r'^reportepap/$', "encuestas.views.mujeres_con_pap", name="mujeres_con_pap"),
+	
 )
