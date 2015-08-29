@@ -19,6 +19,9 @@
     <form method="post" action=".">
         <h1>{{nombre}}</h1>
         {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         {% bootstrap_form form layout='default' %}
             <button class="btn btn-success" type="submit">Guardar</button>
     </form>

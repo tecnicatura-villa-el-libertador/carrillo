@@ -80,20 +80,19 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
 def Login(request):
     nombre = "Formulario de login"
     form = LoginForm()
+    next_url = request.GET.get('next', '/')
     if request.method =="POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
                 login(request, user)
-                print ('direccion a redirigir: ' + request.GET.get('next', '/'))
+                return redirect(request.POST.get('next', '/'))
                 
-##                return redirect(request.GET.get('next', '/'))
-                return redirect('http://localhost:8000/admin/')
-                print ('url tomada: ' + request.GET)
-                
-    return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+    return render(request,'formulario.html',{'form': form, 'nombre': nombre,
+                                             'next': next_url})
 	
 		
 			
