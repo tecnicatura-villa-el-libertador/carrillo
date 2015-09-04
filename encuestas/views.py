@@ -1,11 +1,10 @@
-from django.shortcuts import render, render_to_response, get_object_or_404,resolve_url
-
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,CapitalHumanoModelForm
-from .models import CapitalSocial, GrupoFamiliar,Relevamiento
-
+from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm,CapitalHumanoModelForm
+from .models import CapitalSocial, GrupoFamiliar, Relevamiento
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
@@ -77,6 +76,27 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
             return render(request,'exito.html', {'form': form})
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+
+def Login(request):
+    nombre = "Formulario de login"
+    form = LoginForm()
+    next_url = request.GET.get('next', '/')
+    if request.method =="POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                return redirect(request.POST.get('next', '/'))
+                
+    return render(request,'formulario.html',{'form': form, 'nombre': nombre,
+                                             'next': next_url})
+	
+		
+			
+			
 
 
 def capital_humano(request,id_capitalhumano=None):
