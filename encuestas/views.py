@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm,CapitalHumanoModelForm
 from .models import CapitalSocial, GrupoFamiliar, Relevamiento, Persona
+=======
+from django.shortcuts import render, render_to_response, get_object_or_404
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
+from .models import CapitalSocial, GrupoFamiliar, CapitalSocial, CapitalSocial
+>>>>>>> 016f96c75cab22f63260d09f121f760e2ed4c5fa
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -35,7 +41,7 @@ def vistapersona(request, id_persona=None):
 
 def encuesta(request):
 
-    return render_to_response('entrevista.html', locals(),context_instance=RequestContext(request))
+    return render_to_response('CapitalSocial.html', locals(),context_instance=RequestContext(request))
 
 
 
@@ -138,3 +144,27 @@ def relevamientoActivo(request):
 
     return render(request,'pap.html',{'nombre': nombre, 'total': total})
 
+
+
+def Reporte_CapitalSocial(request, id_capitalsocial=None):
+	total=CapitalSocial.objects.filter(entrevista__relevamiento__id=1).count()
+	con_energia=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,energia_electrica=True).count()
+	energia_porcentage=(con_energia/total)*100
+	con_recoleccion_residuos=CapitalSocial.objects.filter(entrevista__relevamiento_id=1,recoleccion_residuo=True).count()
+	recoleccion_porcentage=(con_recoleccion_residuos/total)*100
+	con_transporte_publico=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,transporte_publico=True).count()
+	transporte_porcentage=(con_transporte_publico/total)*100
+	con_pavimentacion=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,calle_pavimentada=True).count()
+	pavimentacion_porcentage=(con_pavimentacion/total)*100
+	con_jardin_infantes=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,jardin_infantes=True).count()
+	jardin_porcentage=(con_jardin_infantes/total)*100
+	con_escuela_primaria=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,escuela_primaria=True).count()
+	primaria_porcentage=(con_escuela_primaria/total)*100
+	con_escuela_secundaria=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,escuela_secundaria=True).count()
+	secundaria_porcentage=(con_escuela_secundaria/total)*100
+	con_comisaria=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,comisaria=True).count()
+	comisaria_porcentage=(con_comisaria/total)*100
+	con_bomberos=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,bomberos=True).count()
+	bomberos_porcentage=(con_bomberos/total)*100
+	return render(request, 'capitalsocial.html', {'energia_porcentage': energia_porcentage, 'pavimentacion_porcentage': pavimentacion_porcentage,'recoleccion_porcentage':recoleccion_porcentage,'transporte_porcentage':transporte_porcentage,'jardin_porcentage': jardin_porcentage,'primaria_porcentage':primaria_porcentage,'secundaria_porcentage':secundaria_porcentage,'comisaria_porcentage':comisaria_porcentage,'bomberos_porcentage':bomberos_porcentage})
+	
