@@ -12,10 +12,24 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 
+from django.views.generic.list import ListView
 
+
+
+class RelevamientosListView(ListView):
+    template_name = "relevamientos.html"
+    model = Relevamiento
+
+relevamientos = login_required(RelevamientosListView.as_view())
+
+
+@login_required
 def inicio(request):
-
     return render_to_response('inicio.html', locals(),context_instance=RequestContext(request))
+
+
+
+
 
 
 @login_required
@@ -87,6 +101,8 @@ def Grupo_Familiar(request, id_grupofamiliar = None):
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
 
+
+
 def Login(request):
     nombre = "Formulario de login"
     form = LoginForm()
@@ -130,7 +146,7 @@ def relevamientoActivo(request):
     return render (request, 'Relevamiento,html',{'zona':zona})
 
 
-  def mujeres_con_pap(request):
+def mujeres_con_pap(request):
     nombre = 'Porcentaje de mujeres con PAP'
     mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f', capitales_humanos__pap=True)
     mujeres_con_pap=len(mujeres_con_pap)

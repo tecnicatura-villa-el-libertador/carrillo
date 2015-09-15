@@ -11,10 +11,6 @@
     {{ form.media.js }}
 {% endblock %}
 
-{% block topbar %}
-    <a href="{% url 'home' %}" class="inicio"><img src="../static/images/logotipo.png" width=15% /></a>
-{% endblock topbar %}
-
 {% block body %}
     <form method="post" action=".">
         <h1>{{nombre}}</h1>

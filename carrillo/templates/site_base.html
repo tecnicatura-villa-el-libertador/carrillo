@@ -1,4 +1,11 @@
 {% extends "theme_bootstrap/base.html" %}
+{% load staticfiles %}
+
+{% block topbar %}
+    <a href="{% url 'home' %}" class="inicio"><img src="{% static "images/logotipo.png" %}" width=15% /></a>
+{% endblock topbar %}
+
+
 {% comment %}
 
 mirar el codigo fuente en
