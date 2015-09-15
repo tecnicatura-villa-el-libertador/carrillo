@@ -3,18 +3,25 @@
 {% load bootstrap3 %}
 
 {% block extra_head %}
-	<script src="{% static "jquery/js/jquery-2.1.3.min.js" %}"></script>
-	{{ form.media.css }}
+    <script src="{% static "jquery/js/jquery-2.1.3.min.js" %}"></script>
+    {{ form.media.css }}
 {% endblock %}
 
 {% block extra_script %}
-	{{ form.media.js }}
+    {{ form.media.js }}
 {% endblock %}
+
+{% block topbar %}
+    <a href="{% url 'home' %}" class="inicio"><img src="../static/images/logotipo.png" width=15% /></a>
+{% endblock topbar %}
 
 {% block body %}
     <form method="post" action=".">
         <h1>{{nombre}}</h1>
         {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         {% bootstrap_form form layout='default' %}
             <button class="btn btn-success" type="submit">Guardar</button>
     </form>

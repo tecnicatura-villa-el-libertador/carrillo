@@ -7,13 +7,13 @@ class ProblemaSalud(models.Model):
     activo = models.BooleanField()
 
     def __str__(self):
-        return '%s' % self.Name
+        return '%s' % self.nombre
 
 class Beneficio(models.Model):
-    Nombre = models.CharField(max_length=100)
-    Activo = models.BooleanField()
+    nombre = models.CharField(max_length=100)
+    activo = models.BooleanField()
     def __str__(self):
-        return '%s' % self.Name
+        return '%s' % self.nombre
 
 
 class GrupoFamiliar(models.Model):

@@ -12,15 +12,12 @@ class PersonaModelForm(forms.ModelForm):
         fields = ['grupo_familiar','nombre', 'apellido', 'sexo',
                  'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
 
-        
-
 
 class CapitalHumanoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalHumano
         fields = ['entrevista', 'persona', 'trabajo', 'embarazo', 'pap',
-                  'vacunas', 'coberturaMedica']
-
+                  'vacunas', 'cobertura_medica']
 
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
@@ -37,4 +34,9 @@ class GrupoFamiliarModelForm(forms.ModelForm):
     class Meta:
         model = GrupoFamiliar
         fields = ['direccion', 'historia_clinica','telefono', 'tipo_familia']
+
+class LoginForm(forms.Form):
+	username = forms.CharField(max_length=100)
+	password = forms.CharField(max_length=100)
+	
 

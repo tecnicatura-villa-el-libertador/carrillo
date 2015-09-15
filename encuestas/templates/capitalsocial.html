@@ -1,0 +1,17 @@
+{% extends "site_base.html" %}
+{% load bootstrap3 %}
+{% block body %}
+
+	<h1>Reporte: Capital Social</h1>
+	
+	<p>Hogares con energia: {{ energia_porcentage }} % </p>
+		<p>Hogares con pavimentacion: {{ pavimentacion_porcentage }} % </p>
+			<p>Hogares con recoleccion de reduos: {{ recoleccion_porcentage}} % </p>
+				<p> Hogares con jardin de infantes:{{jardin_porcentage}} % </p>
+					<p> Hogares con escuelas primarias:{{primaria_porcentage}} % </p>
+						<p> Hogares con escuela secundaria:{{ secundaria_porcentage}} % </p>
+							<p> Hogares con comisaria:{{comisaria_porcentage}} % </p>
+								<p> Hogares con bomberos:{{bomberos_porcentage}} % </p>
+							
+			
+{% endblock body %}
