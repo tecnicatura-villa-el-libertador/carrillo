@@ -20,20 +20,23 @@ class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
                              ('binuclear', 'Binuclear')]
 
+
     direccion = models.CharField(max_length=100)
     historia_clinica = models.CharField(max_length=50, null=True, blank=True)
     telefono = models.CharField(max_length=50, null=True, blank=True)
     tipo_familia = models.CharField(max_length=50, choices=OPCIONES_TIPO_FAMILIA)
+    apellido_principal = models.CharField(max_length=100)
+
     def __str__(self):
-        return '%s' % self.direccion
+        return 'Familia {0.apellido_principal} ({0.direccion})'.format(self)
 
 
 class Entrevista(models.Model):
     relevamiento = models.ForeignKey('Relevamiento')
     numero_entrevista = models.PositiveIntegerField()
-    grupo_familiar = models.ForeignKey('GrupoFamiliar')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado')
     entrevistador = models.ForeignKey("auth.User")
-    entrevistado = models.ForeignKey('Persona')
+    entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha = models.DateTimeField(auto_now=True)
 
     def __str__(self):

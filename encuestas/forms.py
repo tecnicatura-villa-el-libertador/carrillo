@@ -1,5 +1,5 @@
 from django import forms
-from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar
+from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista
 from bootstrap3_datetime.widgets import DateTimePicker
 
 class PersonaModelForm(forms.ModelForm):
@@ -9,8 +9,7 @@ class PersonaModelForm(forms.ModelForm):
                                        "pickTime": False}))
     class Meta:
         model = Persona
-        fields = ['grupo_familiar','nombre', 'apellido', 'sexo',
-                 'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
+        fields = ['nombre', 'apellido', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'dni', 'vinculo']
 
 
 class CapitalHumanoModelForm(forms.ModelForm):
@@ -33,10 +32,15 @@ class CapitalSocialModelForm(forms.ModelForm):
 class GrupoFamiliarModelForm(forms.ModelForm):
     class Meta:
         model = GrupoFamiliar
-        fields = ['direccion', 'historia_clinica','telefono', 'tipo_familia']
+        fields = ['apellido_principal', 'direccion', 'historia_clinica', 'telefono', 'tipo_familia']
 
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=100)
 	password = forms.CharField(max_length=100, widget=forms.PasswordInput())
 
 
+class EntrevistaModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Entrevista
+        fields = ['grupo_familiar']

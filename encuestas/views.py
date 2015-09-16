@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect, render_to_response, get_object_or_
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm,CapitalHumanoModelForm
 from .models import CapitalSocial, GrupoFamiliar, Relevamiento, Persona
 from django.shortcuts import render, render_to_response, get_object_or_404
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
-from .models import CapitalSocial, GrupoFamiliar, CapitalSocial
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm, EntrevistaModelForm
+from .models import CapitalSocial, GrupoFamiliar, CapitalSocial, Entrevista
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
@@ -11,25 +11,56 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
+from django_modalview.generic.edit import ModalCreateView
+from django_modalview.generic.component import ModalResponse
 
-from django.views.generic.list import ListView
+
+from django.views import generic
 
 
 
-class RelevamientosListView(ListView):
+@login_required
+def entrevista(request, id_relevamiento, id_entrevista=None):
+    if id_entrevista:
+        instance = get_object_or_404(Entrevista, id=id_persona, relevamiento__id=id_relevamiento)
+    else:
+        instance = None
+    form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
+    if form.is_valid():
+        form.save()
+
+    return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Continuar'})
+
+
+class RelevamientosListView(generic.list.ListView):
     template_name = "relevamientos.html"
     model = Relevamiento
 
 relevamientos = login_required(RelevamientosListView.as_view())
 
 
+class PersonaCreateModal(ModalCreateView):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonaCreateModal, self).__init__(*args, **kwargs)
+        self.title = "Agregar persona al grupo familiar"
+        self.form_class = PersonaModelForm
+
+    def form_valid(self, form, **kwargs):
+
+        i = self.save(form) #When you save the form an attribute name object is created.
+        import ipdb; ipdb.set_trace()
+        self.response = ModalResponse("{obj} se agregó correctamente".format(obj=self.object), 'success')
+        #When you call the parent method you set commit to false because you have save the object.
+        return super(PersonaCreateModal, self).form_valid(form, commit=False, **kwargs)
+
+persona_create_modal = login_required(PersonaCreateModal.as_view())
+
+
+
 @login_required
 def inicio(request):
     return render_to_response('inicio.html', locals(),context_instance=RequestContext(request))
-
-
-
-
 
 
 @login_required
@@ -49,11 +80,9 @@ def vistapersona(request, id_persona=None):
     return render(request,'formulario.html', {'form': form, 'nombre': nombre})
 
 
+
 def encuesta(request):
-
     return render_to_response('CapitalSocial.html', locals(),context_instance=RequestContext(request))
-
-
 
 
 @login_required
@@ -76,30 +105,31 @@ def Social(request, id_capitalsocial=None):
 
 @login_required
 def capital_fisico(request):
-    form=CapitalFisicoModelForm()
+    form = CapitalFisicoModelForm()
 
     if request.method=="POST":
-        form=CapitalFisicoModelForm(request.POST)
+        form = CapitalFisicoModelForm(request.POST)
         if form.is_valid():
             form.save()
             return render(request,'exito.html', {})
     return render(request,'formulario.html',{'form': form})
 
+
 @login_required
-def Grupo_Familiar(request, id_grupofamiliar = None):
+def grupo_familiar(request, id_grupofamiliar = None):
     if id_grupofamiliar:
         instance = get_object_or_404(GrupoFamiliar, id=id_grupofamiliar)
     else:
         instance = None
     form = GrupoFamiliarModelForm(instance = instance)
-    nombre = 'Formulario para Grupo Familiar'
+    nombre = 'Grupo Familiar'
     if request.method=="POST":
         form=GrupoFamiliarModelForm(request.POST, instance = instance)
         if form.is_valid():
             form.save()
             return render(request,'exito.html', {'form': form})
 
-    return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre})
 
 
 
@@ -140,10 +170,6 @@ def capital_humano(request,id_capitalhumano=None):
             return render(request, 'exito.html',{'form':form})
     return render(request, 'formulario.html',{'form':form,'nombre':nombre})
 
-@login_required
-def relevamientoActivo(request):
-    zona=Relevamiento.objects.filter(estado=True)
-    return render (request, 'Relevamiento,html',{'zona':zona})
 
 
 def mujeres_con_pap(request):

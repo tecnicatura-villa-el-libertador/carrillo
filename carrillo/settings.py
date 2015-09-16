@@ -42,8 +42,8 @@ INSTALLED_APPS = (
     'carrillo',
     'encuestas',
     'pinax_theme_bootstrap',
-    'bootstrap3_datetime' ,
-
+    'bootstrap3_datetime',
+    'django_modalview',
 )
 
 
