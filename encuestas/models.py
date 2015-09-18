@@ -57,9 +57,17 @@ class Persona(models.Model):
     VINCULO_TYPE = (
             #('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
-            ('Hijo/a','Hijo'),
+            ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
-            ('Abuelo/a','Abuelo'),
+            ('Abuelo/a','Abuelo/a'),
+            ('Primo/a', 'Primo/a'),
+            ('Nuera/Yerno', 'Nuera/Yerno'),
+            ('Nieto/a', 'Nieto/a'),
+            ('Cuñado/a', 'Cuñado/a'),
+            ('Concuñado/a','Concuñado/a'),
+            ('Tio/a','Tio/a'),
+            ('Sobrino/a', 'Sobrino/a'),
+            ('Esposo/a', 'Esposo/a'),
     )
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
@@ -67,10 +75,10 @@ class Persona(models.Model):
     apellido = models.CharField(max_length=30)
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
-    nacionalidad  = models.CharField(max_length=30)
+    nacionalidad = models.CharField(max_length=30)
     dni = models.IntegerField()
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
-    jefe_familia = models.BooleanField()
+    jefe_familia = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
