@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
-from django_modalview.generic.edit import ModalCreateView
+from django_modalview.generic.edit import ModalCreateView, ModalUpdateView
 from django_modalview.generic.component import ModalResponse
 
 
@@ -22,14 +22,14 @@ from django.views import generic
 @login_required
 def entrevista(request, id_relevamiento, id_entrevista=None):
     if id_entrevista:
-        instance = get_object_or_404(Entrevista, id=id_persona, relevamiento__id=id_relevamiento)
+        instance = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
     else:
         instance = None
     form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
     if form.is_valid():
         form.save()
 
-    return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Continuar'})
+    return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Guardar'})
 
 
 class RelevamientosListView(generic.list.ListView):
@@ -37,6 +37,13 @@ class RelevamientosListView(generic.list.ListView):
     model = Relevamiento
 
 relevamientos = login_required(RelevamientosListView.as_view())
+
+
+class GrupoFamiliarListView(generic.list.ListView):
+    template_name = "grupos_familiares.html"
+    model = GrupoFamiliar
+
+grupos_familiares = login_required(GrupoFamiliarListView.as_view())
 
 
 class PersonaCreateModal(ModalCreateView):
@@ -47,14 +54,33 @@ class PersonaCreateModal(ModalCreateView):
         self.form_class = PersonaModelForm
 
     def form_valid(self, form, **kwargs):
-
-        i = self.save(form) #When you save the form an attribute name object is created.
         import ipdb; ipdb.set_trace()
-        self.response = ModalResponse("{obj} se agregó correctamente".format(obj=self.object), 'success')
-        #When you call the parent method you set commit to false because you have save the object.
-        return super(PersonaCreateModal, self).form_valid(form, commit=False, **kwargs)
+        # i = self.save(form, commit=False)               # When you save the form an attribute name object is created.
+        i = form.save(commit=False)
+        i.grupo_familiar = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])
+        self.response = ModalResponse("{obj} se agregó correctamente".format(obj=i), 'success')
+        return super(PersonaCreateModal, self).form_valid(form, **kwargs)
+
+
+class PersonaUpdateModal(ModalUpdateView):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonaUpdateModal, self).__init__(*args, **kwargs)
+        self.title = "Editar persona"
+        self.form_class = PersonaModelForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.object = Persona.objects.get(pk=kwargs.get('id_persona'), grupo_familiar__id=kwargs.get('id_grupofamiliar'))
+        return super(PersonaUpdateModal, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        i = form.save()
+        self.response = ModalResponse("{obj} se actualizó correctamente".format(obj=i), 'success')
+        return super(PersonaUpdateModal, self).form_valid(form, commit=False, **kwargs)
 
 persona_create_modal = login_required(PersonaCreateModal.as_view())
+persona_update_modal = login_required(PersonaUpdateModal.as_view())
 
 
 
@@ -149,8 +175,6 @@ def Login(request):
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre,
                                              'next': next_url})
-
-
 
 
 

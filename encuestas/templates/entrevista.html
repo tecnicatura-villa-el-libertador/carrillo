@@ -1,0 +1,10 @@
+{% extends "formulario.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+    <div class="pull-right"><a class="btn btn-default" href="{% url 'grupo_familiar_create' %}">Agregar nuevo Grupo Familiar</a></div>
+
+    {{ block.super }}
+{% endblock body %}

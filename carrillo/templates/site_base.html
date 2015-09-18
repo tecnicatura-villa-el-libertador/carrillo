@@ -1,9 +1,17 @@
 {% extends "theme_bootstrap/base.html" %}
 {% load staticfiles %}
 
-{% block topbar %}
-    <a href="{% url 'home' %}" class="inicio"><img src="{% static "images/logotipo.png" %}" width=15% /></a>
-{% endblock topbar %}
+{% block site_brand %}
+    <a href="{% url 'home' %}" class="navbar-brand"><img src="{% static "images/logotipo.png" %}" width=15% /></a>
+{% endblock site_brand %}
+
+{% block nav %}
+
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'home' %}">Relevamientos</a></li>
+            <li><a href="{% url 'grupos_familiares' %}">Grupos Familiares</a></li>
+        </ul>
+{% endblock %}
 
 {% block body_extra_attributes %}style="margin-top: 30px;"{% endblock %}
 

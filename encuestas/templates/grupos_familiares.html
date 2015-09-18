@@ -1,0 +1,26 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+
+
+    <h1>Grupos Familiares</h1>
+
+  <div class="pull-right"><a class="btn btn-default" href="{% url 'grupo_familiar_create' %}">Agregar nuevo Grupo Familiar</a></div>
+    <table class="table">
+
+    {% for grupo in object_list %}
+    <tr>
+        <td>{{ grupo }}</td>
+        <td><a class="btn btn-success" href="{% url 'grupo_familiar_update' grupo.id %}">Editar</a></td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+{% endblock body %}

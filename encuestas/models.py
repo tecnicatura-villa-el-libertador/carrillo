@@ -49,7 +49,7 @@ class Persona(models.Model):
             ('Madre','Madre'),
             ('Abuelo/a','Abuelo'),
     )
-    grupo_familiar = models.ForeignKey('GrupoFamiliar')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)

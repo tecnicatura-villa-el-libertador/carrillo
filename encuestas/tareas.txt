@@ -1,0 +1,47 @@
+tarea
+
+formulario persona,
+
+  - Arreglar widget de fecha de nacimiento cuando se abre desde "grupo familiar"
+  - Nacionalidad, definir choices ['Argentina', 'Boliviana', 'Chilena', 'Colombiana', 'Peruana', 'Uruguaya', ...]
+  - Modalview botones "send" y "close", cambiar por "Guardar" y "cerrar"
+  - Agregar booleanfield "jefe de familia"
+  - Vinculos: agregar "tio/a", "prima/o", "nuera/yerno", "nieto/a", ""
+
+  - El apellido de una persona nueva debe precargarse en el formulario de Persona
+  - validaciones:
+
+     - Sólo 1 jefe de familia por grupo familiar
+     - chequeo en funcion del sexo: ejemplo "madre" sólo si es mujer,
+
+  - entrevistas.
+
+view grupo familiar
+
+
+   - agregar "guardar y crear nueva entrevista"
+   - listar entrevistas
+
+
+
+
+
+Form Entrevista
+  - convertir 'grupo familiar' con autocomplete-light
+
+
+
+- Listview de grupos familiares
+
+  - tabla con links a Editar
+
+- navbar bs3 estandar
+
+    item: relevamientos, familias
+
+
+
+
+
+
+
