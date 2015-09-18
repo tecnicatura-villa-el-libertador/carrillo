@@ -44,10 +44,19 @@ class Entrevista(models.Model):
 
 class Persona(models.Model):
     VINCULO_TYPE = (
+            ('Jefe/a de familia', 'Jefe/a de familia')
             ('Padre','Padre'),
-            ('Hijo/a','Hijo'),
+            ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
-            ('Abuelo/a','Abuelo'),
+            ('Abuelo/a','Abuelo/a'),
+            ('Primo/a', 'Primo/a'),
+            ('Nuera/Yerno', 'Nuera/Yerno'),
+            ('Nieto/a', 'Nieto/a'),
+            ('Cuñado/a', 'Cuñado/a'),
+            ('Concuñado/a','Concuñado/a'),
+            ('Tio/a','Tio/a'),
+            ('Sobrino/a', 'Sobrino/a'),
+            ('Esposo/a', 'Esposo/a'),
     )
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 

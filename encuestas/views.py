@@ -16,7 +16,26 @@ from django_modalview.generic.component import ModalResponse
 
 
 from django.views import generic
+from encuestas.forms import ContactForm
+from django.views.generic.edit import FormView
 
+
+
+class ContactView(FormView):
+    template_name = 'formulario.html'
+    form_class = ContactForm
+    success_url = '/'
+
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        print("enviar mensaje a :")
+        print(form.cleaned_data.get('nombre'))
+        print(form.cleaned_data.get('mensaje'))
+        return super(ContactView, self).form_valid(form)
+
+contacto = ContactView.as_view()
 
 
 @login_required
@@ -54,7 +73,7 @@ class PersonaCreateModal(ModalCreateView):
         self.form_class = PersonaModelForm
 
     def form_valid(self, form, **kwargs):
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         # i = self.save(form, commit=False)               # When you save the form an attribute name object is created.
         i = form.save(commit=False)
         i.grupo_familiar = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])

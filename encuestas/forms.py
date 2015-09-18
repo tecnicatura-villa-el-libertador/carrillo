@@ -2,6 +2,20 @@ from django import forms
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista
 from bootstrap3_datetime.widgets import DateTimePicker
 
+
+
+from django import forms
+
+class ContactForm(forms.Form):
+    nombre = forms.CharField()
+    mensaje = forms.CharField(widget=forms.Textarea)
+
+    def send_email(self):
+        # send email using the self.cleaned_data dictionary
+        pass
+
+
+
 class PersonaModelForm(forms.ModelForm):
 
     fecha_nacimiento = forms.DateField(
