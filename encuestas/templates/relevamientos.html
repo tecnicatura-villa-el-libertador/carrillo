@@ -1,0 +1,23 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+    <h1>Campañas de relevamiento</h1>
+
+    <table class="table">
+
+    {% for relevamiento in object_list %}
+    <tr>
+        <td>{{ relevamiento }}</td>
+           <td>{%if relevamiento.activo %}<a href="{% url 'entrevista_create' relevamiento.id %}" class="btn btn-success btn-xs">Nueva entrevista</a>{%endif%} <a href="#" class="btn btn-default btn-xs">Ver Reportes</a></td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+{% endblock body %}

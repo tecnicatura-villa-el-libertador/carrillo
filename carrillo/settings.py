@@ -42,8 +42,8 @@ INSTALLED_APPS = (
     'carrillo',
     'encuestas',
     'pinax_theme_bootstrap',
-    'bootstrap3_datetime' ,
-
+    'bootstrap3_datetime',
+    'django_modalview',
 )
 
 
@@ -91,6 +91,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/login/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/

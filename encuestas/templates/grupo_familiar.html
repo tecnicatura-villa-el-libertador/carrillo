@@ -1,0 +1,63 @@
+{% extends "formulario.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+    {{ block.super }}
+
+
+    {% if form.instance.id %}
+    <br>
+
+    <h2>Miembros</h2>
+
+        <div class="pull-right"><a class="btn btn-default as_modal" href="{% url 'persona_create_modal' form.instance.id %}">Agregar nueva persona</a></div>
+
+
+
+    <table class="table">
+
+    {% for persona in form.instance.miembros.all %}
+    <tr>
+        <td>{{ persona }}</td>
+        <td>{{ persona.vinculo }}</td>
+
+        <td><a class="btn btn-success as_modal" href="{% url 'persona_update_modal' form.instance.id persona.id %}">Editar</a>
+            <a class="btn btn-danger as_modal" href="#">Eliminar</a> </td>
+
+    </tr>
+
+    {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+{% endblock body %}
+
+
+
+{% block extra_script %}
+    <script type="text/javascript" src="{% static 'django_modalview/js/django_modal_view.js' %}"></script>
+    <script type="text/javascript" src="{% static 'django_modalview/js/jquery.form.js' %}"></script>
+    <script type="text/javascript">
+        $('.as_modal').DjangoModalRunner({
+            on_hide_modal_after_submit: function(){
+                location.reload();
+            },
+            on_hide_modal: function(){
+                location.reload();
+            },
+            on_done: function(response, statusText, xhr){
+                console.log(statusText);
+                if(statusText=='success'){
+                    setTimeout(function(){ $('#generic-modal').modal('hide'); }, 2000);
+                }
+            }
+        });
+    </script>
+
+
+
+{% endblock extra_script %}

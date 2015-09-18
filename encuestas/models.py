@@ -7,33 +7,36 @@ class ProblemaSalud(models.Model):
     activo = models.BooleanField()
 
     def __str__(self):
-        return '%s' % self.Name
+        return '%s' % self.nombre
 
 class Beneficio(models.Model):
-    Nombre = models.CharField(max_length=100)
-    Activo = models.BooleanField()
+    nombre = models.CharField(max_length=100)
+    activo = models.BooleanField()
     def __str__(self):
-        return '%s' % self.Name
+        return '%s' % self.nombre
 
 
 class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
                              ('binuclear', 'Binuclear')]
 
+
     direccion = models.CharField(max_length=100)
     historia_clinica = models.CharField(max_length=50, null=True, blank=True)
     telefono = models.CharField(max_length=50, null=True, blank=True)
     tipo_familia = models.CharField(max_length=50, choices=OPCIONES_TIPO_FAMILIA)
+    apellido_principal = models.CharField(max_length=100)
+
     def __str__(self):
-        return '%s' % self.direccion
+        return 'Familia {0.apellido_principal} ({0.direccion})'.format(self)
 
 
 class Entrevista(models.Model):
     relevamiento = models.ForeignKey('Relevamiento')
     numero_entrevista = models.PositiveIntegerField()
-    grupo_familiar = models.ForeignKey('GrupoFamiliar')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado')
     entrevistador = models.ForeignKey("auth.User")
-    entrevistado = models.ForeignKey('Persona')
+    entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -46,7 +49,7 @@ class Persona(models.Model):
             ('Madre','Madre'),
             ('Abuelo/a','Abuelo'),
     )
-    grupo_familiar = models.ForeignKey('GrupoFamiliar')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
@@ -100,10 +103,14 @@ class Relevamiento(models.Model):
     fecha_final = models.DateField()
     zona = models.CharField(max_length=50, null=True, blank=True)
     nombre_zona = models.CharField(max_length=50, null=True, blank=True, help_text="ej: Villa el Libertador")
-    estado=models.BooleanField(help_text="Campaña Activa", default=True)
+    activo=models.BooleanField(help_text="Campaña Activa", default=True)
 
     def __str__(self):
         return "Relevamiento %s - %s" % (self.fecha_inicio, self.fecha_final)
+
+    class Meta:
+        ordering = ('-activo',)
+
 
 class CapitalHumano(models.Model):
     SIT_VACUNAS_TYPE= [

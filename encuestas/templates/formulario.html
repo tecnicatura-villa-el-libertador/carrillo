@@ -11,15 +11,14 @@
     {{ form.media.js }}
 {% endblock %}
 
-{% block topbar %}
-    <a href="{% url 'home' %}" class="inicio"><img src="../static/images/logotipo.png" width=15% /></a>
-{% endblock topbar %}
-
 {% block body %}
     <form method="post" action=".">
         <h1>{{nombre}}</h1>
         {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
         {% bootstrap_form form layout='default' %}
-            <button class="btn btn-success" type="submit">Guardar</button>
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
     </form>
 {% endblock body %}
