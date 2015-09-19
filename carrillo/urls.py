@@ -40,4 +40,5 @@ urlpatterns = patterns('',
 	url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
     url(r'^login/',"encuestas.views.Login", name="login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
+    url(r'^contacto/$', "encuestas.views.contacto", name="conctacto"),
 )
