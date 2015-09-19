@@ -49,15 +49,27 @@ class Persona(models.Model):
             ('Madre','Madre'),
             ('Abuelo/a','Abuelo'),
     )
+
+    NACIONALIDAD_CHOICES = (
+        ('argentino', 'Argentino'),
+        ('boliviano', 'Boliviano'),
+        ('chileno', 'Chileno'),
+        ('uruguayo', 'Uruguayo'),
+        ('colombiano', 'Colombiano'),
+        ('peruano','Peruano'),
+
+        )
+
+
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
-    nacionalidad  = models.CharField(max_length=30)
-    dni = models.IntegerField()
+    nacionalidad  = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
+
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
