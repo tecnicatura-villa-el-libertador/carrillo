@@ -38,47 +38,37 @@ class Entrevista(models.Model):
     entrevistador = models.ForeignKey("auth.User")
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha = models.DateTimeField(auto_now=True)
+    notas = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.numero_entrevista
 
+    def calcular_completitud(self):
+        """se fija si existen los objetos que "guardan datos" de la entrevista
+
+         - capitalfisico 25%
+         - capitalsocial 25%
+         - capitalhumano 50%/len(miembros en la familia)
+         """
+        pass
+
+
 class Persona(models.Model):
     VINCULO_TYPE = (
-            ('Jefe/a de familia', 'Jefe/a de familia')
             ('Padre','Padre'),
-            ('Hijo/a','Hijo/a'),
+            ('Hijo/a','Hijo'),
             ('Madre','Madre'),
-            ('Abuelo/a','Abuelo/a'),
-            ('Primo/a', 'Primo/a'),
-            ('Nuera/Yerno', 'Nuera/Yerno'),
-            ('Nieto/a', 'Nieto/a'),
-            ('Cuñado/a', 'Cuñado/a'),
-            ('Concuñado/a','Concuñado/a'),
-            ('Tio/a','Tio/a'),
-            ('Sobrino/a', 'Sobrino/a'),
-            ('Esposo/a', 'Esposo/a'),
+            ('Abuelo/a','Abuelo'),
     )
-
-    NACIONALIDAD_CHOICES = (
-        ('argentino', 'Argentino'),
-        ('boliviano', 'Boliviano'),
-        ('chileno', 'Chileno'),
-        ('uruguayo', 'Uruguayo'),
-        ('colombiano', 'Colombiano'),
-        ('peruano','Peruano'),
-
-        )
-
-
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
-    nacionalidad  = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
+    nacionalidad  = models.CharField(max_length=30)
+    dni = models.IntegerField()
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
-
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
