@@ -48,6 +48,7 @@ class GrupoFamiliarModelForm(forms.ModelForm):
         model = GrupoFamiliar
         fields = ['apellido_principal', 'direccion', 'historia_clinica', 'telefono', 'tipo_familia']
 
+
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=100)
 	password = forms.CharField(max_length=100, widget=forms.PasswordInput())
