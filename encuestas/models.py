@@ -43,6 +43,7 @@ class Entrevista(models.Model):
     def __str__(self):
         return '%s' % self.numero_entrevista
 
+
     def calcular_completitud(self):
         """se fija si existen los objetos que "guardan datos" de la entrevista
 
@@ -52,22 +53,13 @@ class Entrevista(models.Model):
          """
         pass
 
-
 class Persona(models.Model):
     VINCULO_TYPE = (
             #('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
-            ('Hijo/a','Hijo/a'),
+            ('Hijo/a','Hijo'),
             ('Madre','Madre'),
-            ('Abuelo/a','Abuelo/a'),
-            ('Primo/a', 'Primo/a'),
-            ('Nuera/Yerno', 'Nuera/Yerno'),
-            ('Nieto/a', 'Nieto/a'),
-            ('Cuñado/a', 'Cuñado/a'),
-            ('Concuñado/a','Concuñado/a'),
-            ('Tio/a','Tio/a'),
-            ('Sobrino/a', 'Sobrino/a'),
-            ('Esposo/a', 'Esposo/a'),
+            ('Abuelo/a','Abuelo'),
     )
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
