@@ -57,16 +57,16 @@ class Entrevista(models.Model):
 class Persona(models.Model):
     VINCULO_TYPE = (
             #('Jefe/a de familia', 'Jefe/a de familia'),
-            ('Padre','Padre'),
-            ('Hijo/a','Hijo/a'),
-            ('Madre','Madre'),
-            ('Abuelo/a','Abuelo/a'),
+            ('Padre', 'Padre'),
+            ('Hijo/a', 'Hijo/a'),
+            ('Madre', 'Madre'),
+            ('Abuelo/a', 'Abuelo/a'),
             ('Primo/a', 'Primo/a'),
             ('Nuera/Yerno', 'Nuera/Yerno'),
             ('Nieto/a', 'Nieto/a'),
             ('Cuñado/a', 'Cuñado/a'),
-            ('Concuñado/a','Concuñado/a'),
-            ('Tio/a','Tio/a'),
+            ('Concuñado/a', 'Concuñado/a'),
+            ('Tio/a', 'Tio/a'),
             ('Sobrino/a', 'Sobrino/a'),
             ('Esposo/a', 'Esposo/a'),
     )
@@ -83,6 +83,7 @@ class Persona(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
+
 
 class CapitalFisico(models.Model):
     SIT_DOMINIAL_TYPE = (
