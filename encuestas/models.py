@@ -44,7 +44,7 @@ class Entrevista(models.Model):
 
 class Persona(models.Model):
     VINCULO_TYPE = (
-            ('Jefe/a de familia', 'Jefe/a de familia')
+            ('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
             ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
