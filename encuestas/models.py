@@ -44,7 +44,7 @@ class Entrevista(models.Model):
 
 class Persona(models.Model):
     VINCULO_TYPE = (
-            ('Jefe/a de familia', 'Jefe/a de familia')
+            ('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
             ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
@@ -78,6 +78,7 @@ class Persona(models.Model):
     fecha_nacimiento = models.DateField()
     nacionalidad  = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
+    jefe_familia = models.BooleanField()
 
 
     def __str__(self):
