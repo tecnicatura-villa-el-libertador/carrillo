@@ -1,12 +1,12 @@
-<<<<<<< HEAD
+
 from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,LoginForm,CapitalHumanoModelForm
 from .models import CapitalSocial, GrupoFamiliar, Relevamiento, Persona
-=======
+
 from django.shortcuts import render, render_to_response, get_object_or_404
 from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
-from .models import CapitalSocial, GrupoFamiliar, CapitalSocial, CapitalSocial
->>>>>>> 016f96c75cab22f63260d09f121f760e2ed4c5fa
+from .models import CapitalSocial, GrupoFamiliar, CapitalSocial, CapitalFisico
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 
 
 def inicio(request):
@@ -134,7 +135,7 @@ def relevamientoActivo(request):
     return render (request, 'Relevamiento,html',{'zona':zona})
 
     
-  def mujeres_con_pap(request):
+def mujeres_con_pap(request):
     nombre = 'Porcentaje de mujeres con PAP'
     mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f', capitales_humanos__pap=True)
     mujeres_con_pap=len(mujeres_con_pap)
@@ -167,4 +168,32 @@ def Reporte_CapitalSocial(request, id_capitalsocial=None):
 	con_bomberos=CapitalSocial.objects.filter(entrevista__relevamiento__id=1,bomberos=True).count()
 	bomberos_porcentage=(con_bomberos/total)*100
 	return render(request, 'capitalsocial.html', {'energia_porcentage': energia_porcentage, 'pavimentacion_porcentage': pavimentacion_porcentage,'recoleccion_porcentage':recoleccion_porcentage,'transporte_porcentage':transporte_porcentage,'jardin_porcentage': jardin_porcentage,'primaria_porcentage':primaria_porcentage,'secundaria_porcentage':secundaria_porcentage,'comisaria_porcentage':comisaria_porcentage,'bomberos_porcentage':bomberos_porcentage})
+
+def Reporte_CapitalFisico(request, id_capitalfisico=None):
+	total=CapitalFisico.objects.filter (entrevista__relevamiento__id=1).count()
+	es_propietarioTerreno=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, propietario_terreno=True).count()
+	propietarioTerreno_porcentaje= (es_propietarioTerreno/total)*100
+	tiene_pisos=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, pisos=True).count()
+	pisos_porcentaje=(tiene_pisos/total)*100
+	tiene_techo=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, techo=True).count()
+	techo_porcentaje=(tiene_techo/total)*100
+	tiene_paredes=CapitalFisico.objects.filter(entrevista__relevamiento_id=1, paredes=True).count()
+	paredes_porcentaje=(tiene_paredes/total)*100
+	propietario_vivienda=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, situacion_vivienda='propietarioVivienda').count()
+	propietario_vivienda_porcentaje=(propietario_vivienda/total)*100
+	en_comodato=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, situacion_vivienda='comodato').count()
+	comodato_porcentaje=(en_comodato/total)*100
+	en_alquiler=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, situacion_vivienda='alquiler').count()
+	alquiler_porcentaje=(en_alquiler/total)*100
+	es_otro=CapitalFisico.objects.filter(entrevista__relevamiento__id=1, situacion_vivienda='otro').count()
+	porcentaje_es_otro=(es_otro/total)*100
+	tiene_calefaccion_natural=CapitalFisico.objects.filter(entrevista__relevamiento__id=1,calefaccion='gas_natural').count()
+	calefaccion_natural_porcentaje=(tiene_calefaccion_natural/total)*100
+	tiene_calefaccion_envasado=CapitalFisico.objects.filter(entrevista__relevamiento__id=1,calefaccion='gas_envasado').count()	
+	calefaccion_envasado_porcentaje=(tiene_calefaccion_envasado/total)*100
+
+	cantidad_habitaciones=CapitalFisico.objects.filter(entrevista__relevamiento__id=1).aggregate(Avg('habitaciones'))
+
+
+	return render(request, 'capitalfisico.html',{'propietarioTerreno_porcentaje':propietarioTerreno_porcentaje, 'pisos_porcentaje': pisos_porcentaje, 'techo_porcentaje':techo_porcentaje, 'paredes_porcentaje':paredes_porcentaje,'propietario_vivienda_porcentaje':propietario_vivienda_porcentaje,'comodato_porcentaje':comodato_porcentaje,'alquiler_porcentaje':alquiler_porcentaje,'porcentaje_es_otro':porcentaje_es_otro,'calefaccion_natural_porcentaje':calefaccion_natural_porcentaje,'calefaccion_envasado_porcentaje':calefaccion_envasado_porcentaje,'cantidad_habitaciones':cantidad_habitaciones['habitaciones__avg']})
 	
