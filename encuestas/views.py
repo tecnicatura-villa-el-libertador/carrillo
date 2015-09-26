@@ -166,6 +166,7 @@ def grupo_familiar(request, id_grupofamiliar = None):
         instance = get_object_or_404(GrupoFamiliar, id=id_grupofamiliar)
     else:
         instance = None
+    form_persona = PersonaModelForm()
     form = GrupoFamiliarModelForm(instance = instance)
     nombre = 'Grupo Familiar'
     if request.method=="POST":
@@ -174,7 +175,7 @@ def grupo_familiar(request, id_grupofamiliar = None):
             form.save()
             return render(request,'exito.html', {'form': form})
 
-    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre})
+    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona})
 
 
 
