@@ -23,8 +23,8 @@ class PersonaModelForm(forms.ModelForm):
                                        "pickTime": False}))
     class Meta:
         model = Persona
-        fields = ['nombre', 'apellido', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
-
+        fields = ['grupo_familiar', 'nombre', 'apellido', 'dni', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
+        widgets = {'grupo_familiar': forms.HiddenInput()}
 
 class CapitalHumanoModelForm(forms.ModelForm):
     class Meta:

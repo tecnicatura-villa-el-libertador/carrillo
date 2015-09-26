@@ -72,11 +72,20 @@ class PersonaCreateModal(ModalCreateView):
         self.title = "Agregar persona al grupo familiar"
         self.form_class = PersonaModelForm
 
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.grupo = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])
+        return super(PersonaCreateModal, self).dispatch(request, *args, **kwargs)
+
+    def get_form(self, form_class):
+        form = super(PersonaCreateModal, self).get_form(form_class)
+        form.initial = {'grupo_familiar': self.grupo, 'apellido': self.grupo.apellido_principal}
+        return form
+
     def form_valid(self, form, **kwargs):
         #import ipdb; ipdb.set_trace()
         # i = self.save(form, commit=False)               # When you save the form an attribute name object is created.
-        i = form.save(commit=False)
-        i.grupo_familiar = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])
+        i = form.save()
         self.response = ModalResponse("{obj} se agregó correctamente".format(obj=i), 'success')
         return super(PersonaCreateModal, self).form_valid(form, **kwargs)
 
