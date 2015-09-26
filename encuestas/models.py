@@ -38,11 +38,11 @@ class Entrevista(models.Model):
     entrevistador = models.ForeignKey("auth.User")
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha = models.DateTimeField(auto_now=True)
-    notas = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.numero_entrevista
 
+<<<<<<< HEAD
 
     def calcular_completitud(self):
         """se fija si existen los objetos que "guardan datos" de la entrevista
@@ -56,7 +56,7 @@ class Entrevista(models.Model):
 
 class Persona(models.Model):
     VINCULO_TYPE = (
-            #('Jefe/a de familia', 'Jefe/a de familia'),
+            ('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
             ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
@@ -65,8 +65,8 @@ class Persona(models.Model):
             ('Nuera/Yerno', 'Nuera/Yerno'),
             ('Nieto/a', 'Nieto/a'),
             ('Cuñado/a', 'Cuñado/a'),
-            ('Concuñado/a','Concuñado/a'),
-            ('Tio/a','Tio/a'),
+            ('Concuñado/a', 'Concuñado/a'),
+            ('Tio/a', 'Tio/a'),
             ('Sobrino/a', 'Sobrino/a'),
             ('Esposo/a', 'Esposo/a'),
     )
@@ -83,6 +83,7 @@ class Persona(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
+
 
 class CapitalFisico(models.Model):
     SIT_DOMINIAL_TYPE = (
