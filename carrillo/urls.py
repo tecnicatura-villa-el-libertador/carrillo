@@ -34,11 +34,14 @@ urlpatterns = patterns('',
 
     url(r'^capitalhumano/$',"encuestas.views.capital_humano", name="capitalhumano"),
 
-
-
+    url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
+    url(r'^reporte/capitalfisico/$',"encuestas.views.Reporte_CapitalFisico", name="Reporte_CapitalFisico"), )
     url(r'^reporte/pap/$', "encuestas.views.mujeres_con_pap", name="mujeres_con_pap"),
-	url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
+
+    url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
     url(r'^login/',"encuestas.views.Login", name="login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
     url(r'^contacto/$', "encuestas.views.contacto", name="conctacto"),
+    url(r'^relevamiento/$', "encuestas.views.relevamientoActivo", name="relevamientoActivo"),
+    url(r'^grupofamiliar/(?P<id_grupofamiliar>\d+)/$',"encuestas.views.Grupo_Familiar", name = "grupofamiliar"),
 )
