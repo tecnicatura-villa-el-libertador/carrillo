@@ -42,7 +42,6 @@ class Entrevista(models.Model):
     def __str__(self):
         return '%s' % self.numero_entrevista
 
-<<<<<<< HEAD
 
     def calcular_completitud(self):
         """se fija si existen los objetos que "guardan datos" de la entrevista
