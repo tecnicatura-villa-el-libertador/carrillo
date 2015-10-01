@@ -26,11 +26,19 @@ class PersonaModelForm(forms.ModelForm):
         fields = ['grupo_familiar', 'nombre', 'apellido', 'dni', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
         widgets = {'grupo_familiar': forms.HiddenInput()}
 
+
 class CapitalHumanoModelForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoModelForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = CapitalHumano
-        fields = ['trabajo', 'embarazo', 'pap',
-                  'vacunas', 'cobertura_medica']
+        fields = ['entrevista', 'persona', 'trabajo', 'escolaridad', 'escolaridad_ultimo_curso',
+                  'embarazo', 'pap', 'vacunas', 'cobertura_medica', 'beneficios_sociales', 'problemas_salud']
+        widgets = {'entrevista': forms.HiddenInput(), 'persona': forms.HiddenInput()}
+
+
 
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:

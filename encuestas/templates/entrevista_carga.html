@@ -40,7 +40,31 @@
 
 
     </div>
-    <div role="tabpanel" class="tab-pane" id="capitalhumano">...</div>
+    <div role="tabpanel" class="tab-pane" id="capitalhumano">
+
+
+
+        <table class="table">
+
+        {% for persona in form.instance.grupo_familiar.miembros.all %}
+        <tr>
+            <td>{{ persona }}</td>
+
+            {% if persona in capitales_humanos_existentes %}
+                <td><a class="btn btn-success as_modal" href="{% url 'capital_humano_update_modal' form.instance.id persona.id %}">Editar</a></td>
+            {% else %}
+                <td><a class="btn btn-success as_modal" href="{% url 'capital_humano_create_modal' form.instance.id persona.id %}">Agregar</a></td>
+            {% endif %}
+
+
+        </tr>
+
+        {% endfor %}
+
+        </table>
+
+
+    </div>
     <div role="tabpanel" class="tab-pane" id="entrevista">
 
             {% csrf_token %}
@@ -58,3 +82,12 @@
 
 
 {% endblock body %}
+
+
+
+{% block extra_script %}
+
+
+    {% include "modal_js.html" %}
+
+{% endblock extra_script %}

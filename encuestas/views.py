@@ -99,6 +99,8 @@ def entrevista_carga(request, id_relevamiento, id_entrevista):
         # recargar la pagina
         return redirect(request.META.get('HTTP_REFERER'))
 
+    capitales_humanos_existentes = Persona.objects.filter(capitales_humanos__entrevista=entrevista)
+
     context = locals().copy()
 
     return render(request,'entrevista_carga.html', context)
@@ -162,6 +164,52 @@ class PersonaUpdateModal(ModalUpdateView):
 
 persona_create_modal = login_required(PersonaCreateModal.as_view())
 persona_update_modal = login_required(PersonaUpdateModal.as_view())
+
+
+class CapitalHumanoCreateModal(ModalCreateView):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoCreateModal, self).__init__(*args, **kwargs)
+        self.title = "Agregar capital humano"
+        self.form_class = CapitalHumanoModelForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.persona = Persona.objects.get(id=self.kwargs['id_persona'])
+        self.entrevista = Entrevista.objects.get(id=self.kwargs['id_entrevista'])
+        return super(CapitalHumanoCreateModal, self).dispatch(request, *args, **kwargs)
+
+    def get_form(self, form_class):
+        form = super(CapitalHumanoCreateModal, self).get_form(form_class)
+        form.initial = {'entrevista': self.entrevista, 'persona': self.persona}
+        return form
+
+    def form_valid(self, form, **kwargs):
+        i = form.save()
+        self.response = ModalResponse("{obj} se agregó correctamente".format(obj=i), 'success')
+        return super(CapitalHumanoCreateModal, self).form_valid(form, **kwargs)
+
+
+class CapitalHumanoUpdateModal(ModalUpdateView):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoUpdateModal, self).__init__(*args, **kwargs)
+        self.title = "Editar capital humano"
+        self.form_class = CapitalHumanoModelForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.object = CapitalHumano.objects.get(persona__id=kwargs.get('id_persona'), entrevista__id=kwargs.get('id_entrevista'))
+        return super(CapitalHumanoUpdateModal, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        i = form.save()
+        self.response = ModalResponse("{obj} se actualizó correctamente".format(obj=i), 'success')
+        return super(CapitalHumanoUpdateModal, self).form_valid(form, commit=False, **kwargs)
+
+capital_humano_create_modal = login_required(CapitalHumanoCreateModal.as_view())
+capital_humano_update_modal = login_required(CapitalHumanoUpdateModal.as_view())
+
 
 
 
@@ -253,22 +301,6 @@ def Login(request):
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre,
                                              'next': next_url})
-
-
-@login_required
-def capital_humano(request,id_capitalhumano=None):
-    if id_capitalhumano:
-        instance=get_object_or_404(CapitalHumano,id=id_capitalhumano)
-    else:
-        instance=None
-    form=CapitalHumanoModelForm(instance=instance)
-    nombre="formulario para capital humano"
-    if request.method=='POST':
-        form=CapitalHumanoModelForm(request.POST, instance=instance)
-        if form.is_valid:
-            form.save()
-            return render(request, 'exito.html',{'form':form})
-    return render(request, 'formulario.html',{'form':form,'nombre':nombre})
 
 
 def mujeres_con_pap(request):

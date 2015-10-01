@@ -57,6 +57,7 @@ class Entrevista(TimeStampedModel):
         pass
 
 
+
 class Persona(models.Model):
     VINCULO_TYPE = (
             ('Jefe/a de familia', 'Jefe/a de familia'),
@@ -149,16 +150,46 @@ class CapitalHumano(models.Model):
         ('Publ','Se atiende en nosocomio publico'),
         ('Priv','Se atiende en clinica/hospital privado'),
         ('O.S','Tiene obra social'),
+        ('Pregaga','Prepaga'),
+        ('PAMI','PAMI'),
         ('NS/NC','No sabe/No contesta'),
     ]
+    SIT_TRABAJO = [
+        ('permanente_jh', 'Permanente/JH'),
+        ('transitorio_jh', 'Transitorio/JH'),
+        ('plan_social_jh', 'Plan Social/JH'),
+        ('no_trabaja_jh', 'No trabaja/JH'),
+        ('permanente_no_jh', 'Permanente/No JH'),
+        ('transitorio_no_jh', 'Transitorio/No JH'),
+        ('plan_social_no_jh', 'Plan Social/No JH'),
+        ('no_trabaja_no_jh', 'No trabaja/No JH'),
+    ]
+    SIT_ESCOLARIDAD = [
+        ('ninguno', 'Ninguno'),
+        ('prim_incompleto', 'Primario Incompleto'),
+        ('prim_completo', 'Primario Completo'),
+        ('sec_incompleto', 'Secundario Incompleto'),
+        ('sec_completo', 'Secundario Completo'),
+        ('terciario', 'Terciario'),
+        ('universitario', 'Universitario'),
+        ('lee_escribe', 'Lee/Escribe'),
+        ('ns_nc', 'NS/NC')
+    ]
+
     SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
+
     entrevista = models.ForeignKey('Entrevista', related_name='capitales_humanos')
     persona = models.ForeignKey('Persona', related_name='capitales_humanos')
-    trabajo = models.CharField(max_length=50)
+    trabajo = models.CharField(max_length=50, choices=SIT_TRABAJO)
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
+    escolaridad = models.CharField(max_length=50, choices=SIT_ESCOLARIDAD)
+    escolaridad_ultimo_curso = models.IntegerField(help_text='último curso aprobado', null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
+    beneficios_sociales = models.ManyToManyField('Beneficio', null=True, blank=True, limit_choices_to={'activo': True})
+    problemas_salud = models.ManyToManyField('ProblemaSalud', null=True, blank=True, limit_choices_to={'activo': True})
 
     def __srt__(self):
-        return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
+        return "Capital Humano asociado a la entrevista: %s" % self.entrevista
+
