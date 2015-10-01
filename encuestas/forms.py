@@ -56,6 +56,10 @@ class LoginForm(forms.Form):
 
 class EntrevistaModelForm(forms.ModelForm):
 
+    fecha_visita = forms.DateField(
+        widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+                                       "pickTime": False}))
+
     class Meta:
         model = Entrevista
-        fields = ['grupo_familiar']
+        fields = ['grupo_familiar', 'numero_entrevista', 'fecha_visita']

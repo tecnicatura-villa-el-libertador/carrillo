@@ -1,10 +1,9 @@
-from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
-from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,
-                    LoginForm,CapitalHumanoModelForm, EntrevistaModelForm)
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
+                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm)
 from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-
-
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -13,20 +12,17 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django_modalview.generic.edit import ModalCreateView, ModalUpdateView
 from django_modalview.generic.component import ModalResponse
-from django.db.models import Avg
-
-
-from django.views import generic
-from encuestas.forms import ContactForm
 from django.views.generic.edit import FormView
+from django.db.models import Avg
+from django.views import generic
 
+from encuestas.forms import ContactForm
 
 
 class ContactView(FormView):
     template_name = 'formulario.html'
     form_class = ContactForm
     success_url = '/'
-
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -41,15 +37,29 @@ contacto = ContactView.as_view()
 
 @login_required
 def entrevista(request, id_relevamiento, id_entrevista=None):
+
     if id_entrevista:
         instance = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
     else:
         instance = None
+    relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
     form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
     if form.is_valid():
-        form.save()
+
+        entrevista = form.save(commit=False)
+        entrevista.relevamiento = relevamiento
+        entrevista.cargado_por = request.user
+        entrevista.save()
+        entrevista.entrevistadores.add(request.user)
+        return redirect(reverse('entrevista_carga', args=[relevamiento.id, entrevista.id]))
 
     return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Guardar'})
+
+
+@login_required
+def entrevista_carga(request, id_relevamiento, id_entrevista):
+    entrevista = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
+    return render(request,'entrevista_carga.html', {'nombre': 'Entrevista', 'button_text': 'Guardar'})
 
 
 class RelevamientosListView(generic.list.ListView):
