@@ -34,15 +34,15 @@ class CapitalHumanoModelForm(forms.ModelForm):
 
         # si es hombre, no preguntar por pap y embarazo
         if 'persona' in kwargs['initial'] and kwargs['initial']['persona'].sexo == 'm':
-            self.fields['pap'].widget= forms.HiddenInput()
-            self.fields['embarazo'].widget= forms.HiddenInput()
+            self.fields['pap'].widget = forms.HiddenInput()
+            self.fields['embarazo'].widget = forms.HiddenInput()
 
 
     class Meta:
         model = CapitalHumano
         fields = ['entrevista', 'persona', 'trabajo', 'escolaridad', 'escolaridad_ultimo_curso',
                   'embarazo', 'pap', 'vacunas', 'cobertura_medica', 'beneficios_sociales', 'problemas_salud']
-        # widgets = {'entrevista': forms.HiddenInput(), 'persona': forms.HiddenInput()}
+        widgets = {'entrevista': forms.HiddenInput(), 'persona': forms.HiddenInput()}
 
 
 
