@@ -15,31 +15,47 @@
     <li role="presentation" class="active"><a href="#capitalfisico" aria-controls="capitalfisico" role="tab" data-toggle="tab">Capital Físico</a></li>
     <li role="presentation"><a href="#capitalsocial" aria-controls="capitalsocial" role="tab" data-toggle="tab">Capital Social</a></li>
     <li role="presentation"><a href="#capitalhumano" aria-controls="capitalhumano" role="tab" data-toggle="tab">Capital Humano</a></li>
+    <li role="presentation"><a href="#preguntas" aria-controls="preguntas" role="tab" data-toggle="tab">Cuestionario</a></li>
     <li role="presentation"><a href="#entrevista" aria-controls="entrevista" role="tab" data-toggle="tab">Otros datos de la entrevista</a></li>
   </ul>
 
   <!-- Tab panes -->
   <form method="post" action=".">
+  {% csrf_token %}
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="capitalfisico">
 
 
-            {% csrf_token %}
+
             {% bootstrap_form form_cf layout='default' %}
             <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
 
 
 
     </div>
-    <div role="tabpanel" class="tab-pane" id="capitalsocial">
+    <div role="tabpanel" class="tab-pane" id="preguntas">
 
-            {% csrf_token %}
+        {%  for preg, f_respuesta in forms_respuestas %}
+            <div>
+            <h4>{{ preg }}</h4>
+            {% bootstrap_form f_respuesta layout='default' %}
+            </div>
+        {% endfor %}
+
+        <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+    </div>
+
+        <div role="tabpanel" class="tab-pane" id="capitalsocial">
+
+
             {% bootstrap_form form_cs layout='default' %}
             <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
 
 
-
     </div>
+
+
     <div role="tabpanel" class="tab-pane" id="capitalhumano">
 
 
@@ -67,7 +83,7 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="entrevista">
 
-            {% csrf_token %}
+
             {% bootstrap_form form layout='default' %}
             <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
 

@@ -11,9 +11,11 @@ class ProblemaSalud(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 
+
 class Beneficio(models.Model):
     nombre = models.CharField(max_length=100)
     activo = models.BooleanField()
+
     def __str__(self):
         return '%s' % self.nombre
 
@@ -21,7 +23,6 @@ class Beneficio(models.Model):
 class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
                              ('binuclear', 'Binuclear')]
-
 
     direccion = models.CharField(max_length=100)
     historia_clinica = models.CharField(max_length=50, null=True, blank=True)
@@ -56,6 +57,19 @@ class Entrevista(TimeStampedModel):
          """
         pass
 
+
+class Pregunta(models.Model):
+    pregunta = models.CharField(max_length=200)
+    activa = models.BooleanField(default=True, help_text='Desmarque si ya no quiere que esta entrevista sea relevada')
+
+    def __str__(self):
+        return self.pregunta
+
+
+class RespuestaEntrevista(models.Model):
+    pregunta = models.ForeignKey('Pregunta')
+    entrevista = models.ForeignKey('Entrevista', related_name='respuestas')
+    respuesta = models.TextField(null=True, blank=True)
 
 
 class Persona(models.Model):
