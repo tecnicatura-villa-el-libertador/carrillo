@@ -187,8 +187,8 @@ class CapitalHumano(models.Model):
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
-    beneficios_sociales = models.ManyToManyField('Beneficio', null=True, blank=True, limit_choices_to={'activo': True})
-    problemas_salud = models.ManyToManyField('ProblemaSalud', null=True, blank=True, limit_choices_to={'activo': True})
+    beneficios_sociales = models.ManyToManyField('Beneficio', blank=True, limit_choices_to={'activo': True})
+    problemas_salud = models.ManyToManyField('ProblemaSalud', blank=True, limit_choices_to={'activo': True})
 
     def __srt__(self):
         return "Capital Humano asociado a la entrevista: %s" % self.entrevista

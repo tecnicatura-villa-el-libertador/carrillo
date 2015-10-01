@@ -132,10 +132,8 @@ class PersonaCreateModal(ModalCreateView):
         self.grupo = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])
         return super(PersonaCreateModal, self).dispatch(request, *args, **kwargs)
 
-    def get_form(self, form_class):
-        form = super(PersonaCreateModal, self).get_form(form_class)
-        form.initial = {'grupo_familiar': self.grupo, 'apellido': self.grupo.apellido_principal}
-        return form
+    def get_initial(self):
+        return {'grupo_familiar': self.grupo, 'apellido': self.grupo.apellido_principal}
 
     def form_valid(self, form, **kwargs):
         #import ipdb; ipdb.set_trace()
@@ -179,10 +177,8 @@ class CapitalHumanoCreateModal(ModalCreateView):
         self.entrevista = Entrevista.objects.get(id=self.kwargs['id_entrevista'])
         return super(CapitalHumanoCreateModal, self).dispatch(request, *args, **kwargs)
 
-    def get_form(self, form_class):
-        form = super(CapitalHumanoCreateModal, self).get_form(form_class)
-        form.initial = {'entrevista': self.entrevista, 'persona': self.persona}
-        return form
+    def get_initial(self):
+        return {'entrevista': self.entrevista, 'persona': self.persona}
 
     def form_valid(self, form, **kwargs):
         i = form.save()
@@ -201,6 +197,9 @@ class CapitalHumanoUpdateModal(ModalUpdateView):
         # I get an user in the db with the id parameter that is in the url.
         self.object = CapitalHumano.objects.get(persona__id=kwargs.get('id_persona'), entrevista__id=kwargs.get('id_entrevista'))
         return super(CapitalHumanoUpdateModal, self).dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {'entrevista': self.object.entrevista, 'persona': self.object.persona}
 
     def form_valid(self, form, **kwargs):
         i = form.save()
