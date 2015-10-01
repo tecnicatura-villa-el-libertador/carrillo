@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
-                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm)
-from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico
+                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm, RespuestaEntrevistaModelForm)
+from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico, Pregunta, RespuestaEntrevista
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -69,9 +69,30 @@ def entrevista_carga(request, id_relevamiento, id_entrevista):
     form = OtrosDatosModelForm(instance=entrevista, data=request.POST.copy() if request.method == 'POST' else None)
 
     form.fields['entrevistado'].queryset = entrevista.grupo_familiar.miembros.all()
-
-
     todos_validos = True
+
+    forms_respuestas = []
+    for preg in Pregunta.objects.filter(activa=True).order_by('id'):
+        try:
+            respuesta = RespuestaEntrevista.objects.get(pregunta=preg, entrevista=entrevista)
+        except RespuestaEntrevista.DoesNotExist:
+            respuesta = None
+        fr = RespuestaEntrevistaModelForm(instance=respuesta, prefix='preg_%i' % preg.id, initial={'pregunta': preg, 'entrevista': entrevista},
+                                          data=request.POST.copy() if request.method == 'POST' else None)
+        forms_respuestas.append((preg, fr))
+        if request.method == 'POST' and fr.is_valid():
+            r = fr.save(commit=False)
+            if r.id or r.respuesta:
+                # solo guardar la instancia si ya existia o efectivamente fue respondida
+                r.save()
+
+        elif request.method == 'POST':
+            todos_validos = False
+    if not todos_validos:
+        messages.error(request, 'Hay errores en el cuestionario')
+
+
+
     if form_cf.is_valid():
         cf = form_cf.save(commit=False)
         cf.entrevista = entrevista

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista
+from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista, RespuestaEntrevista
 from bootstrap3_datetime.widgets import DateTimePicker
 
 
@@ -88,3 +88,11 @@ class OtrosDatosModelForm(forms.ModelForm):
     class Meta:
         model = Entrevista
         fields = ['entrevistado', 'numero_entrevista', 'fecha_visita', 'entrevistadores', 'observaciones']
+
+
+class RespuestaEntrevistaModelForm(forms.ModelForm):
+
+    class Meta:
+        model = RespuestaEntrevista
+        fields = ['respuesta', 'entrevista', 'pregunta']
+        widgets = {'entrevista': forms.HiddenInput(), 'pregunta': forms.HiddenInput()}

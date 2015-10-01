@@ -59,14 +59,17 @@ class Entrevista(TimeStampedModel):
 
 
 class Pregunta(models.Model):
-    pregunta = models.CharField(max_length=100)
+    pregunta = models.CharField(max_length=200)
     activa = models.BooleanField(default=True, help_text='Desmarque si ya no quiere que esta entrevista sea relevada')
+
+    def __str__(self):
+        return self.pregunta
 
 
 class RespuestaEntrevista(models.Model):
     pregunta = models.ForeignKey('Pregunta')
-    entrevista = models.ForeignKey('Entrevista')
-    respuesta = models.TextField()
+    entrevista = models.ForeignKey('Entrevista', related_name='respuestas')
+    respuesta = models.TextField(null=True, blank=True)
 
 
 class Persona(models.Model):
