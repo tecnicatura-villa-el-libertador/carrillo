@@ -41,6 +41,7 @@ class Entrevista(TimeStampedModel):
     entrevistadores = models.ManyToManyField("auth.User", related_name='entrevistas_realizadas')
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha_visita = models.DateTimeField(help_text='¿Cuando se realizó la entrevista?')
+    observaciones = models.TextField(help_text='Observaciones', null=True, blank=True,)
 
     def __str__(self):
         return '%s' % self.numero_entrevista

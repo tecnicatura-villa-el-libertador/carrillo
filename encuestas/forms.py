@@ -63,3 +63,14 @@ class EntrevistaModelForm(forms.ModelForm):
     class Meta:
         model = Entrevista
         fields = ['grupo_familiar', 'numero_entrevista', 'fecha_visita']
+
+
+class OtrosDatosModelForm(forms.ModelForm):
+
+    fecha_visita = forms.DateField(
+        widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+                                       "pickTime": False}))
+
+    class Meta:
+        model = Entrevista
+        fields = ['entrevistado', 'numero_entrevista', 'fecha_visita', 'entrevistadores', 'observaciones']

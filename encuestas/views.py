@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
-                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm)
+                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm)
 from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.urlresolvers import reverse
@@ -66,7 +66,10 @@ def entrevista_carga(request, id_relevamiento, id_entrevista):
 
     form_cf = CapitalFisicoModelForm(instance=capital_fisico, data=request.POST.copy() if request.method == 'POST' else None)
     form_cs = CapitalSocialModelForm(instance=capital_social, data=request.POST.copy() if request.method == 'POST' else None)
-    form = EntrevistaModelForm(instance=entrevista, data=request.POST.copy() if request.method == 'POST' else None)
+    form = OtrosDatosModelForm(instance=entrevista, data=request.POST.copy() if request.method == 'POST' else None)
+
+    form.fields['entrevistado'].queryset = entrevista.grupo_familiar.miembros.all()
+
 
     todos_validos = True
     if form_cf.is_valid():
