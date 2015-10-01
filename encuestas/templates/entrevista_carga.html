@@ -5,27 +5,53 @@
 {% block body %}
 
 
-
+<h1>{{ entrevista}} </h1>
 
 
 <div>
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#entrevista" aria-controls="entrevista" role="tab" data-toggle="tab">Entrevista</a></li>
-    <li role="presentation"><a href="#capitalfisico" aria-controls="capitalfisico" role="tab" data-toggle="tab">Capital Físico</a></li>
+    <li role="presentation" class="active"><a href="#capitalfisico" aria-controls="capitalfisico" role="tab" data-toggle="tab">Capital Físico</a></li>
     <li role="presentation"><a href="#capitalsocial" aria-controls="capitalsocial" role="tab" data-toggle="tab">Capital Social</a></li>
     <li role="presentation"><a href="#capitalhumano" aria-controls="capitalhumano" role="tab" data-toggle="tab">Capital Humano</a></li>
+    <li role="presentation"><a href="#entrevista" aria-controls="entrevista" role="tab" data-toggle="tab">Otros datos</a></li>
   </ul>
 
   <!-- Tab panes -->
+  <form method="post" action=".">
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="entrevista">...</div>
-    <div role="tabpanel" class="tab-pane" id="capitalfisico">...</div>
-    <div role="tabpanel" class="tab-pane" id="capitalsocial">...</div>
-    <div role="tabpanel" class="tab-pane" id="capitalhumano">...</div>
-  </div>
+    <div role="tabpanel" class="tab-pane active" id="capitalfisico">
 
+
+            {% csrf_token %}
+            {% bootstrap_form form_cf layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="capitalsocial">
+
+            {% csrf_token %}
+            {% bootstrap_form form_cs layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="capitalhumano">...</div>
+    <div role="tabpanel" class="tab-pane" id="entrevista">
+
+            {% csrf_token %}
+            {% bootstrap_form form layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+    </div>
+
+  </div>
+   </form>
 </div>
 
 

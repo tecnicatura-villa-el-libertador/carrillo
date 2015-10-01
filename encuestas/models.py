@@ -95,7 +95,7 @@ class CapitalFisico(models.Model):
             ('otro','Otro'),
         )
     CALEFACCION = (('gas_natural', 'Gas Natural',), ('gas_envasado', 'Gas Envasado'))
-    entrevista = models.ForeignKey('Entrevista')
+    entrevista = models.OneToOneField('Entrevista', related_name='capital_fisico')
     habitaciones = models.PositiveIntegerField('Nº de Habitaciones')
     propietario_terreno = models.BooleanField()
     situacion_vivienda = models.CharField(max_length=50, choices=SIT_DOMINIAL_TYPE)
@@ -109,7 +109,7 @@ class CapitalFisico(models.Model):
         return "Capital Físico asociado a la entrevista: %s" % self.entrevista
 
 class CapitalSocial(models.Model):
-    entrevista = models.ForeignKey('Entrevista')
+    entrevista = models.OneToOneField('Entrevista', related_name='capital_social')
     energia_electrica = models.BooleanField()
     recoleccion_residuo = models.BooleanField(help_text="Recolección de Residuos (mínimo 2 v/sem")
     transporte_publico = models.BooleanField(help_text="Transporte Público <300m")
@@ -151,8 +151,8 @@ class CapitalHumano(models.Model):
         ('NS/NC','No sabe/No contesta'),
     ]
     SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
-    entrevista = models.ForeignKey('Entrevista')
-    persona = models.ForeignKey('Persona')
+    entrevista = models.ForeignKey('Entrevista', related_name='capitales_humanos')
+    persona = models.ForeignKey('Persona', related_name='capitales_humanos')
     trabajo = models.CharField(max_length=50)
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")

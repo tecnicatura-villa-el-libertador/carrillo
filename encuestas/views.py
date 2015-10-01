@@ -15,7 +15,7 @@ from django_modalview.generic.component import ModalResponse
 from django.views.generic.edit import FormView
 from django.db.models import Avg
 from django.views import generic
-
+from django.contrib import messages
 from encuestas.forms import ContactForm
 
 
@@ -23,6 +23,7 @@ class ContactView(FormView):
     template_name = 'formulario.html'
     form_class = ContactForm
     success_url = '/'
+
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -59,7 +60,45 @@ def entrevista(request, id_relevamiento, id_entrevista=None):
 @login_required
 def entrevista_carga(request, id_relevamiento, id_entrevista):
     entrevista = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
-    return render(request,'entrevista_carga.html', {'nombre': 'Entrevista', 'button_text': 'Guardar'})
+
+    capital_fisico = entrevista.capital_fisico if hasattr(entrevista, 'capital_fisico') else None
+    capital_social = entrevista.capital_social if hasattr(entrevista, 'capital_social') else None
+
+    form_cf = CapitalFisicoModelForm(instance=capital_fisico, data=request.POST.copy() if request.method == 'POST' else None)
+    form_cs = CapitalSocialModelForm(instance=capital_social, data=request.POST.copy() if request.method == 'POST' else None)
+    form = EntrevistaModelForm(instance=entrevista, data=request.POST.copy() if request.method == 'POST' else None)
+
+    todos_validos = True
+    if form_cf.is_valid():
+        cf = form_cf.save(commit=False)
+        cf.entrevista = entrevista
+        cf.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Capital Físico')
+
+    if form_cs.is_valid():
+        cs = form_cs.save(commit=False)
+        cs.entrevista = entrevista
+        cs.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Capital Social')
+
+    if form.is_valid():
+        form.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Otros datos')
+
+    if request.method == 'POST' and todos_validos:
+        messages.success(request, 'Todos los datos se guardaron correctamente')
+        # recargar la pagina
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    context = locals().copy()
+
+    return render(request,'entrevista_carga.html', context)
 
 
 class RelevamientosListView(generic.list.ListView):
@@ -144,10 +183,6 @@ def vistapersona(request, id_persona=None):
 
     return render(request,'formulario.html', {'form': form, 'nombre': nombre})
 
-
-
-def encuesta(request):
-    return render_to_response('CapitalSocial.html', locals(),context_instance=RequestContext(request))
 
 
 @login_required
