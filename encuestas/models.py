@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 from django.db import models
+from model_utils.models import TimeStampedModel
+
 
 # Create your models here.
 class ProblemaSalud(models.Model):
@@ -31,13 +33,14 @@ class GrupoFamiliar(models.Model):
         return 'Familia {0.apellido_principal} ({0.direccion})'.format(self)
 
 
-class Entrevista(models.Model):
+class Entrevista(TimeStampedModel):
     relevamiento = models.ForeignKey('Relevamiento')
-    numero_entrevista = models.PositiveIntegerField()
+    numero_entrevista = models.CharField(max_length=50, null=True, blank=True, help_text='Código interno de la entrevista, si existiera')
     grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado')
-    entrevistador = models.ForeignKey("auth.User")
+    cargado_por = models.ForeignKey("auth.User", related_name='entrevistas_cargadas', null=True, blank=True)
+    entrevistadores = models.ManyToManyField("auth.User", related_name='entrevistas_realizadas')
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
-    fecha = models.DateTimeField(auto_now=True)
+    fecha_visita = models.DateTimeField(help_text='¿Cuando se realizó la entrevista?')
 
     def __str__(self):
         return '%s' % self.numero_entrevista
