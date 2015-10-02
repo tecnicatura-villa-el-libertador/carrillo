@@ -11,7 +11,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django_modalview.generic.edit import ModalCreateView, ModalUpdateView
-from django_modalview.generic.component import ModalResponse
+from django_modalview.generic.component import ModalResponse, ModalButton
 from django.views.generic.edit import FormView
 from django.db.models import Avg
 from django.views import generic
@@ -146,6 +146,9 @@ class PersonaCreateModal(ModalCreateView):
     def __init__(self, *args, **kwargs):
         super(PersonaCreateModal, self).__init__(*args, **kwargs)
         self.title = "Agregar persona al grupo familiar"
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
+
         self.form_class = PersonaModelForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -170,6 +173,8 @@ class PersonaUpdateModal(ModalUpdateView):
         super(PersonaUpdateModal, self).__init__(*args, **kwargs)
         self.title = "Editar persona"
         self.form_class = PersonaModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
 
     def dispatch(self, request, *args, **kwargs):
         # I get an user in the db with the id parameter that is in the url.
@@ -191,6 +196,8 @@ class CapitalHumanoCreateModal(ModalCreateView):
         super(CapitalHumanoCreateModal, self).__init__(*args, **kwargs)
         self.title = "Agregar capital humano"
         self.form_class = CapitalHumanoModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
 
     def dispatch(self, request, *args, **kwargs):
         # I get an user in the db with the id parameter that is in the url.
@@ -213,6 +220,8 @@ class CapitalHumanoUpdateModal(ModalUpdateView):
         super(CapitalHumanoUpdateModal, self).__init__(*args, **kwargs)
         self.title = "Editar capital humano"
         self.form_class = CapitalHumanoModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
 
     def dispatch(self, request, *args, **kwargs):
         # I get an user in the db with the id parameter that is in the url.

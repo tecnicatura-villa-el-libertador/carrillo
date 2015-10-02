@@ -3,18 +3,5 @@
     <script type="text/javascript" src="{% static 'django_modalview/js/django_modal_view.js' %}"></script>
     <script type="text/javascript" src="{% static 'django_modalview/js/jquery.form.js' %}"></script>
     <script type="text/javascript">
-        $('.as_modal').DjangoModalRunner({
-            on_hide_modal_after_submit: function(){
-                location.reload();
-            },
-            on_hide_modal: function(){
-                location.reload();
-            },
-            on_done: function(response, statusText, xhr){
-                console.log(statusText);
-                if(statusText=='success'){
-                    setTimeout(function(){ $('#generic-modal').modal('hide'); }, 2000);
-                }
-            }
-        });
+        $('.as_modal').DjangoModalRunner({});
     </script>
