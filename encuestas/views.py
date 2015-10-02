@@ -1,10 +1,9 @@
-from django.shortcuts import render,redirect, render_to_response, get_object_or_404, resolve_url
-from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,
-                    LoginForm,CapitalHumanoModelForm, EntrevistaModelForm)
-from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
+                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm, RespuestaEntrevistaModelForm)
+from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico, Pregunta, RespuestaEntrevista
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-
-
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -12,14 +11,12 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django_modalview.generic.edit import ModalCreateView, ModalUpdateView
-from django_modalview.generic.component import ModalResponse
-from django.db.models import Avg
-
-
-from django.views import generic
-from encuestas.forms import ContactForm
+from django_modalview.generic.component import ModalResponse, ModalButton
 from django.views.generic.edit import FormView
-
+from django.db.models import Avg
+from django.views import generic
+from django.contrib import messages
+from encuestas.forms import ContactForm
 
 
 class ContactView(FormView):
@@ -41,15 +38,93 @@ contacto = ContactView.as_view()
 
 @login_required
 def entrevista(request, id_relevamiento, id_entrevista=None):
+
     if id_entrevista:
         instance = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
     else:
         instance = None
+    relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
     form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
     if form.is_valid():
-        form.save()
+
+        entrevista = form.save(commit=False)
+        entrevista.relevamiento = relevamiento
+        entrevista.cargado_por = request.user
+        entrevista.save()
+        entrevista.entrevistadores.add(request.user)
+        return redirect(reverse('entrevista_carga', args=[relevamiento.id, entrevista.id]))
 
     return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Guardar'})
+
+
+@login_required
+def entrevista_carga(request, id_relevamiento, id_entrevista):
+    entrevista = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
+
+    capital_fisico = entrevista.capital_fisico if hasattr(entrevista, 'capital_fisico') else None
+    capital_social = entrevista.capital_social if hasattr(entrevista, 'capital_social') else None
+
+    form_cf = CapitalFisicoModelForm(instance=capital_fisico, data=request.POST.copy() if request.method == 'POST' else None)
+    form_cs = CapitalSocialModelForm(instance=capital_social, data=request.POST.copy() if request.method == 'POST' else None)
+    form = OtrosDatosModelForm(instance=entrevista, data=request.POST.copy() if request.method == 'POST' else None)
+
+    form.fields['entrevistado'].queryset = entrevista.grupo_familiar.miembros.all()
+    todos_validos = True
+
+    forms_respuestas = []
+    for preg in Pregunta.objects.filter(activa=True).order_by('id'):
+        try:
+            respuesta = RespuestaEntrevista.objects.get(pregunta=preg, entrevista=entrevista)
+        except RespuestaEntrevista.DoesNotExist:
+            respuesta = None
+        fr = RespuestaEntrevistaModelForm(instance=respuesta, prefix='preg_%i' % preg.id, initial={'pregunta': preg, 'entrevista': entrevista},
+                                          data=request.POST.copy() if request.method == 'POST' else None)
+        forms_respuestas.append((preg, fr))
+        if request.method == 'POST' and fr.is_valid():
+            r = fr.save(commit=False)
+            if r.id or r.respuesta:
+                # solo guardar la instancia si ya existia o efectivamente fue respondida
+                r.save()
+
+        elif request.method == 'POST':
+            todos_validos = False
+    if not todos_validos:
+        messages.error(request, 'Hay errores en el cuestionario')
+
+
+
+    if form_cf.is_valid():
+        cf = form_cf.save(commit=False)
+        cf.entrevista = entrevista
+        cf.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Capital Físico')
+
+    if form_cs.is_valid():
+        cs = form_cs.save(commit=False)
+        cs.entrevista = entrevista
+        cs.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Capital Social')
+
+    if form.is_valid():
+        form.save()
+    elif request.method == 'POST':
+        todos_validos = False
+        messages.error(request, 'Hay errores en Otros datos')
+
+    if request.method == 'POST' and todos_validos:
+        messages.success(request, 'Todos los datos se guardaron correctamente')
+        # recargar la pagina
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    capitales_humanos_existentes = Persona.objects.filter(capitales_humanos__entrevista=entrevista)
+
+    context = locals().copy()
+
+    return render(request,'entrevista_carga.html', context)
 
 
 class RelevamientosListView(generic.list.ListView):
@@ -71,6 +146,9 @@ class PersonaCreateModal(ModalCreateView):
     def __init__(self, *args, **kwargs):
         super(PersonaCreateModal, self).__init__(*args, **kwargs)
         self.title = "Agregar persona al grupo familiar"
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
+
         self.form_class = PersonaModelForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -78,10 +156,8 @@ class PersonaCreateModal(ModalCreateView):
         self.grupo = GrupoFamiliar.objects.get(id=self.kwargs['id_grupofamiliar'])
         return super(PersonaCreateModal, self).dispatch(request, *args, **kwargs)
 
-    def get_form(self, form_class):
-        form = super(PersonaCreateModal, self).get_form(form_class)
-        form.initial = {'grupo_familiar': self.grupo, 'apellido': self.grupo.apellido_principal}
-        return form
+    def get_initial(self):
+        return {'grupo_familiar': self.grupo, 'apellido': self.grupo.apellido_principal}
 
     def form_valid(self, form, **kwargs):
         #import ipdb; ipdb.set_trace()
@@ -97,6 +173,8 @@ class PersonaUpdateModal(ModalUpdateView):
         super(PersonaUpdateModal, self).__init__(*args, **kwargs)
         self.title = "Editar persona"
         self.form_class = PersonaModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
 
     def dispatch(self, request, *args, **kwargs):
         # I get an user in the db with the id parameter that is in the url.
@@ -110,6 +188,57 @@ class PersonaUpdateModal(ModalUpdateView):
 
 persona_create_modal = login_required(PersonaCreateModal.as_view())
 persona_update_modal = login_required(PersonaUpdateModal.as_view())
+
+
+class CapitalHumanoCreateModal(ModalCreateView):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoCreateModal, self).__init__(*args, **kwargs)
+        self.title = "Agregar capital humano"
+        self.form_class = CapitalHumanoModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
+
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.persona = Persona.objects.get(id=self.kwargs['id_persona'])
+        self.entrevista = Entrevista.objects.get(id=self.kwargs['id_entrevista'])
+        return super(CapitalHumanoCreateModal, self).dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {'entrevista': self.entrevista, 'persona': self.persona}
+
+    def form_valid(self, form, **kwargs):
+        i = form.save()
+        self.response = ModalResponse("{obj} se agregó correctamente".format(obj=i), 'success')
+        return super(CapitalHumanoCreateModal, self).form_valid(form, **kwargs)
+
+
+class CapitalHumanoUpdateModal(ModalUpdateView):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoUpdateModal, self).__init__(*args, **kwargs)
+        self.title = "Editar capital humano"
+        self.form_class = CapitalHumanoModelForm
+        self.submit_button = ModalButton('Guardar', button_type='primary')
+        self.close_button = ModalButton('Cerrar')
+
+    def dispatch(self, request, *args, **kwargs):
+        # I get an user in the db with the id parameter that is in the url.
+        self.object = CapitalHumano.objects.get(persona__id=kwargs.get('id_persona'), entrevista__id=kwargs.get('id_entrevista'))
+        return super(CapitalHumanoUpdateModal, self).dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {'entrevista': self.object.entrevista, 'persona': self.object.persona}
+
+    def form_valid(self, form, **kwargs):
+        i = form.save()
+        self.response = ModalResponse("{obj} se actualizó correctamente".format(obj=i), 'success')
+        return super(CapitalHumanoUpdateModal, self).form_valid(form, commit=False, **kwargs)
+
+capital_humano_create_modal = login_required(CapitalHumanoCreateModal.as_view())
+capital_humano_update_modal = login_required(CapitalHumanoUpdateModal.as_view())
+
 
 
 
@@ -134,10 +263,6 @@ def vistapersona(request, id_persona=None):
 
     return render(request,'formulario.html', {'form': form, 'nombre': nombre})
 
-
-
-def encuesta(request):
-    return render_to_response('CapitalSocial.html', locals(),context_instance=RequestContext(request))
 
 
 @login_required
@@ -205,22 +330,6 @@ def Login(request):
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre,
                                              'next': next_url})
-
-
-@login_required
-def capital_humano(request,id_capitalhumano=None):
-    if id_capitalhumano:
-        instance=get_object_or_404(CapitalHumano,id=id_capitalhumano)
-    else:
-        instance=None
-    form=CapitalHumanoModelForm(instance=instance)
-    nombre="formulario para capital humano"
-    if request.method=='POST':
-        form=CapitalHumanoModelForm(request.POST, instance=instance)
-        if form.is_valid:
-            form.save()
-            return render(request, 'exito.html',{'form':form})
-    return render(request, 'formulario.html',{'form':form,'nombre':nombre})
 
 
 def mujeres_con_pap(request):

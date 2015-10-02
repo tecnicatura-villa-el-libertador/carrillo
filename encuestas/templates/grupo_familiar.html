@@ -13,13 +13,12 @@
 
 {% block body %}
 
-    {{ block.super }}
 
 
     {% if form.instance.id %}
-    <br>
 
     <h2>Miembros</h2>
+    <br>
 
         <div class="pull-right"><a class="btn btn-default as_modal" href="{% url 'persona_create_modal' form.instance.id %}">Agregar nueva persona</a></div>
 
@@ -43,33 +42,18 @@
 
     {% endif %}
 
+    {{ block.super }}
+
+
 {% endblock body %}
 
 
 
 {% block extra_script %}
-   
+
     {{ form_persona.media.js }}
 
-    <script type="text/javascript" src="{% static 'django_modalview/js/django_modal_view.js' %}"></script>
-    <script type="text/javascript" src="{% static 'django_modalview/js/jquery.form.js' %}"></script>
-    <script type="text/javascript">
-        $('.as_modal').DjangoModalRunner({
-            on_hide_modal_after_submit: function(){
-                location.reload();
-            },
-            on_hide_modal: function(){
-                location.reload();
-            },
-            on_done: function(response, statusText, xhr){
-                console.log(statusText);
-                if(statusText=='success'){
-                    setTimeout(function(){ $('#generic-modal').modal('hide'); }, 2000);
-                }
-            }
-        });
-    </script>
-
+    {% include "modal_js.html" %}
 
 
 {% endblock extra_script %}

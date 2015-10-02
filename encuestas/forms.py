@@ -1,5 +1,5 @@
 from django import forms
-from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista
+from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista, RespuestaEntrevista
 from bootstrap3_datetime.widgets import DateTimePicker
 
 
@@ -26,21 +26,35 @@ class PersonaModelForm(forms.ModelForm):
         fields = ['grupo_familiar', 'nombre', 'apellido', 'dni', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
         widgets = {'grupo_familiar': forms.HiddenInput()}
 
+
 class CapitalHumanoModelForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CapitalHumanoModelForm, self).__init__(*args, **kwargs)
+
+        # si es hombre, no preguntar por pap y embarazo
+        if 'persona' in kwargs['initial'] and kwargs['initial']['persona'].sexo == 'm':
+            self.fields['pap'].widget = forms.HiddenInput()
+            self.fields['embarazo'].widget = forms.HiddenInput()
+
+
     class Meta:
         model = CapitalHumano
-        fields = ['entrevista', 'persona', 'trabajo', 'embarazo', 'pap',
-                  'vacunas', 'cobertura_medica']
+        fields = ['entrevista', 'persona', 'trabajo', 'escolaridad', 'escolaridad_ultimo_curso',
+                  'embarazo', 'pap', 'vacunas', 'cobertura_medica', 'beneficios_sociales', 'problemas_salud']
+        widgets = {'entrevista': forms.HiddenInput(), 'persona': forms.HiddenInput()}
+
+
 
 class CapitalFisicoModelForm(forms.ModelForm):
     class Meta:
         model = CapitalFisico
-        fields = ['entrevista','habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
+        fields = ['habitaciones', 'propietario_terreno', 'situacion_vivienda','pisos','paredes','techo','calefaccion']
 
 class CapitalSocialModelForm(forms.ModelForm):
     class Meta:
         model = CapitalSocial
-        fields = ['entrevista','energia_electrica','recoleccion_residuo','transporte_publico','calle_pavimentada',
+        fields = ['energia_electrica','recoleccion_residuo','transporte_publico','calle_pavimentada',
                   'jardin_infantes','escuela_primaria','escuela_secundaria','comisaria','bomberos']
 
 class GrupoFamiliarModelForm(forms.ModelForm):
@@ -56,6 +70,29 @@ class LoginForm(forms.Form):
 
 class EntrevistaModelForm(forms.ModelForm):
 
+    fecha_visita = forms.DateField(
+        widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+                                       "pickTime": False}))
+
     class Meta:
         model = Entrevista
-        fields = ['grupo_familiar']
+        fields = ['grupo_familiar', 'numero_entrevista', 'fecha_visita']
+
+
+class OtrosDatosModelForm(forms.ModelForm):
+
+    fecha_visita = forms.DateField(
+        widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+                                       "pickTime": False}))
+
+    class Meta:
+        model = Entrevista
+        fields = ['entrevistado', 'numero_entrevista', 'fecha_visita', 'entrevistadores', 'observaciones']
+
+
+class RespuestaEntrevistaModelForm(forms.ModelForm):
+
+    class Meta:
+        model = RespuestaEntrevista
+        fields = ['respuesta', 'entrevista', 'pregunta']
+        widgets = {'entrevista': forms.HiddenInput(), 'pregunta': forms.HiddenInput()}

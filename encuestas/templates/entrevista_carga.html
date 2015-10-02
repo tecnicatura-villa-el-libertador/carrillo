@@ -1,0 +1,109 @@
+{% extends "formulario.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+
+<h1>{{ entrevista}} </h1>
+
+
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#capitalfisico" aria-controls="capitalfisico" role="tab" data-toggle="tab">Capital Físico</a></li>
+    <li role="presentation"><a href="#capitalsocial" aria-controls="capitalsocial" role="tab" data-toggle="tab">Capital Social</a></li>
+    <li role="presentation"><a href="#capitalhumano" aria-controls="capitalhumano" role="tab" data-toggle="tab">Capital Humano</a></li>
+    <li role="presentation"><a href="#preguntas" aria-controls="preguntas" role="tab" data-toggle="tab">Cuestionario</a></li>
+    <li role="presentation"><a href="#entrevista" aria-controls="entrevista" role="tab" data-toggle="tab">Otros datos de la entrevista</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <form method="post" action=".">
+  {% csrf_token %}
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="capitalfisico">
+
+
+
+            {% bootstrap_form form_cf layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="preguntas">
+
+        {%  for preg, f_respuesta in forms_respuestas %}
+            <div>
+            <h4>{{ preg }}</h4>
+            {% bootstrap_form f_respuesta layout='default' %}
+            </div>
+        {% endfor %}
+
+        <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+    </div>
+
+        <div role="tabpanel" class="tab-pane" id="capitalsocial">
+
+
+            {% bootstrap_form form_cs layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+    </div>
+
+
+    <div role="tabpanel" class="tab-pane" id="capitalhumano">
+
+
+
+        <table class="table">
+
+        {% for persona in form.instance.grupo_familiar.miembros.all %}
+        <tr>
+            <td>{{ persona }}</td>
+
+            {% if persona in capitales_humanos_existentes %}
+                <td><a class="btn btn-success as_modal" href="{% url 'capital_humano_update_modal' form.instance.id persona.id %}">Editar</a></td>
+            {% else %}
+                <td><a class="btn btn-success as_modal" href="{% url 'capital_humano_create_modal' form.instance.id persona.id %}">Agregar</a></td>
+            {% endif %}
+
+
+        </tr>
+
+        {% endfor %}
+
+        </table>
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="entrevista">
+
+
+            {% bootstrap_form form layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Guardar" }}</button>
+
+
+    </div>
+
+  </div>
+   </form>
+</div>
+
+
+
+
+{% endblock body %}
+
+
+
+{% block extra_script %}
+
+
+    {% include "modal_js.html" %}
+
+{% endblock extra_script %}

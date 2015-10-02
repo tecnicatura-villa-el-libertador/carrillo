@@ -11,9 +11,11 @@ class ProblemaSalud(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 
+
 class Beneficio(models.Model):
     nombre = models.CharField(max_length=100)
     activo = models.BooleanField()
+
     def __str__(self):
         return '%s' % self.nombre
 
@@ -21,7 +23,6 @@ class Beneficio(models.Model):
 class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
                              ('binuclear', 'Binuclear')]
-
 
     direccion = models.CharField(max_length=100)
     historia_clinica = models.CharField(max_length=50, null=True, blank=True)
@@ -41,6 +42,7 @@ class Entrevista(TimeStampedModel):
     entrevistadores = models.ManyToManyField("auth.User", related_name='entrevistas_realizadas')
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
     fecha_visita = models.DateTimeField(help_text='¿Cuando se realizó la entrevista?')
+    observaciones = models.TextField(help_text='Observaciones', null=True, blank=True,)
 
     def __str__(self):
         return '%s' % self.numero_entrevista
@@ -54,6 +56,20 @@ class Entrevista(TimeStampedModel):
          - capitalhumano 50%/len(miembros en la familia)
          """
         pass
+
+
+class Pregunta(models.Model):
+    pregunta = models.CharField(max_length=200)
+    activa = models.BooleanField(default=True, help_text='Desmarque si ya no quiere que esta entrevista sea relevada')
+
+    def __str__(self):
+        return self.pregunta
+
+
+class RespuestaEntrevista(models.Model):
+    pregunta = models.ForeignKey('Pregunta')
+    entrevista = models.ForeignKey('Entrevista', related_name='respuestas')
+    respuesta = models.TextField(null=True, blank=True)
 
 
 class Persona(models.Model):
@@ -95,7 +111,7 @@ class CapitalFisico(models.Model):
             ('otro','Otro'),
         )
     CALEFACCION = (('gas_natural', 'Gas Natural',), ('gas_envasado', 'Gas Envasado'))
-    entrevista = models.ForeignKey('Entrevista')
+    entrevista = models.OneToOneField('Entrevista', related_name='capital_fisico')
     habitaciones = models.PositiveIntegerField('Nº de Habitaciones')
     propietario_terreno = models.BooleanField()
     situacion_vivienda = models.CharField(max_length=50, choices=SIT_DOMINIAL_TYPE)
@@ -109,7 +125,7 @@ class CapitalFisico(models.Model):
         return "Capital Físico asociado a la entrevista: %s" % self.entrevista
 
 class CapitalSocial(models.Model):
-    entrevista = models.ForeignKey('Entrevista')
+    entrevista = models.OneToOneField('Entrevista', related_name='capital_social')
     energia_electrica = models.BooleanField()
     recoleccion_residuo = models.BooleanField(help_text="Recolección de Residuos (mínimo 2 v/sem")
     transporte_publico = models.BooleanField(help_text="Transporte Público <300m")
@@ -148,16 +164,46 @@ class CapitalHumano(models.Model):
         ('Publ','Se atiende en nosocomio publico'),
         ('Priv','Se atiende en clinica/hospital privado'),
         ('O.S','Tiene obra social'),
+        ('Pregaga','Prepaga'),
+        ('PAMI','PAMI'),
         ('NS/NC','No sabe/No contesta'),
     ]
+    SIT_TRABAJO = [
+        ('permanente_jh', 'Permanente/JH'),
+        ('transitorio_jh', 'Transitorio/JH'),
+        ('plan_social_jh', 'Plan Social/JH'),
+        ('no_trabaja_jh', 'No trabaja/JH'),
+        ('permanente_no_jh', 'Permanente/No JH'),
+        ('transitorio_no_jh', 'Transitorio/No JH'),
+        ('plan_social_no_jh', 'Plan Social/No JH'),
+        ('no_trabaja_no_jh', 'No trabaja/No JH'),
+    ]
+    SIT_ESCOLARIDAD = [
+        ('ninguno', 'Ninguno'),
+        ('prim_incompleto', 'Primario Incompleto'),
+        ('prim_completo', 'Primario Completo'),
+        ('sec_incompleto', 'Secundario Incompleto'),
+        ('sec_completo', 'Secundario Completo'),
+        ('terciario', 'Terciario'),
+        ('universitario', 'Universitario'),
+        ('lee_escribe', 'Lee/Escribe'),
+        ('ns_nc', 'NS/NC')
+    ]
+
     SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
-    entrevista = models.ForeignKey('Entrevista')
-    persona = models.ForeignKey('Persona')
-    trabajo = models.CharField(max_length=50)
+
+    entrevista = models.ForeignKey('Entrevista', related_name='capitales_humanos')
+    persona = models.ForeignKey('Persona', related_name='capitales_humanos')
+    trabajo = models.CharField(max_length=50, choices=SIT_TRABAJO)
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
+    escolaridad = models.CharField(max_length=50, choices=SIT_ESCOLARIDAD)
+    escolaridad_ultimo_curso = models.IntegerField(help_text='último curso aprobado', null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
+    beneficios_sociales = models.ManyToManyField('Beneficio', blank=True, limit_choices_to={'activo': True})
+    problemas_salud = models.ManyToManyField('ProblemaSalud', blank=True, limit_choices_to={'activo': True})
 
     def __srt__(self):
-        return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
+        return "Capital Humano asociado a la entrevista: %s" % self.entrevista
+

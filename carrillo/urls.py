@@ -27,12 +27,17 @@ urlpatterns = patterns('',
 
     url(r'^entrevista/(?P<id_relevamiento>\d+)/nueva/$', 'encuestas.views.entrevista', name="entrevista_create"),
     url(r'^entrevista/(?P<id_relevamiento>\d+)/(?P<id_entrevista>\d+)/$', 'encuestas.views.entrevista', name="entrevista_update"),
+    url(r'^entrevista/(?P<id_relevamiento>\d+)/(?P<id_entrevista>\d+)/carga/$', 'encuestas.views.entrevista_carga', name="entrevista_carga"),
+
+
+    url(r'^capitalhumano/(?P<id_entrevista>\d+)/(?P<id_persona>\d+)/nuevo/$',"encuestas.views.capital_humano_create_modal", name="capital_humano_create_modal"),
+    url(r'^capitalhumano/(?P<id_entrevista>\d+)/(?P<id_persona>\d+)/$',"encuestas.views.capital_humano_update_modal", name="capital_humano_update_modal"),
 
     url(r'^capitalsocial/$',"encuestas.views.Social", name = "capitalsocial"),
     url(r'^capitalsocial/(?P<id_capitalsocial>\d+)/$',"encuestas.views.Social", name = "capitalsocial"),
     url(r'^capitalfisico/$','encuestas.views.capital_fisico', name = "capitalfisico"),
 
-    url(r'^capitalhumano/$',"encuestas.views.capital_humano", name="capitalhumano"),
+
 
     url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
     url(r'^reporte/capitalfisico/$',"encuestas.views.Reporte_CapitalFisico", name="Reporte_CapitalFisico"),
