@@ -1,0 +1,23 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block body %}
+
+    <h1>{{ relevamiento }}</h1>
+
+    <table class="table">
+
+    {% for entrevista in object_list %}
+    <tr>
+        <td>{{ entrevista }}</td>
+           <td><a href="{% url "entrevista_carga" relevamiento.id entrevista.id %}" class="btn btn-success btn-xs">{%if relevamiento.activo %}Editar{% else%} Ver {%endif%} </a> </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+{% endblock body %}

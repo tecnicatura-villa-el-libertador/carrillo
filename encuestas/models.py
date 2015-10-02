@@ -45,7 +45,7 @@ class Entrevista(TimeStampedModel):
     observaciones = models.TextField(help_text='Observaciones', null=True, blank=True,)
 
     def __str__(self):
-        return '%s' % self.numero_entrevista
+        return 'Entrevista #{} - {}'.format(self.id, self.grupo_familiar)
 
 
     def calcular_completitud(self):

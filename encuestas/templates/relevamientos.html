@@ -11,7 +11,7 @@
     {% for relevamiento in object_list %}
     <tr>
         <td>{{ relevamiento }}</td>
-           <td>{%if relevamiento.activo %}<a href="{% url 'entrevista_create' relevamiento.id %}" class="btn btn-success btn-xs">Nueva entrevista</a>{%endif%} <a href="#" class="btn btn-default btn-xs">Ver Reportes</a></td>
+           <td>{%if relevamiento.activo %}<a href="{% url 'entrevista_create' relevamiento.id %}" class="btn btn-success btn-xs">Nueva entrevista</a>{%endif%} <a href="{% url "entrevistas" relevamiento.id %}" class="btn btn-default btn-xs">Ver Entrevistas</a> <a href="#" class="btn btn-default btn-xs">Ver Reportes</a></td>
 
     </tr>
 

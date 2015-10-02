@@ -134,6 +134,25 @@ class RelevamientosListView(generic.list.ListView):
 relevamientos = login_required(RelevamientosListView.as_view())
 
 
+class EntrevistasListView(generic.list.ListView):
+    template_name = "entrevistas.html"
+    model = Entrevista
+
+    def get_queryset(self):
+        self.relevamiento = get_object_or_404(Relevamiento, id=self.kwargs['id_relevamiento'])
+        return Entrevista.objects.filter(relevamiento=self.relevamiento)
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(EntrevistasListView, self).get_context_data(**kwargs)
+        # Add in the publisher
+        context['relevamiento'] = self.relevamiento
+        return context
+
+
+entrevistas = login_required(EntrevistasListView.as_view())
+
+
 class GrupoFamiliarListView(generic.list.ListView):
     template_name = "grupos_familiares.html"
     model = GrupoFamiliar

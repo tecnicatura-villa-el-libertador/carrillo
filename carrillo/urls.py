@@ -25,10 +25,11 @@ urlpatterns = patterns('',
 
     url(r'^$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
 
+
     url(r'^entrevista/(?P<id_relevamiento>\d+)/nueva/$', 'encuestas.views.entrevista', name="entrevista_create"),
     url(r'^entrevista/(?P<id_relevamiento>\d+)/(?P<id_entrevista>\d+)/$', 'encuestas.views.entrevista', name="entrevista_update"),
     url(r'^entrevista/(?P<id_relevamiento>\d+)/(?P<id_entrevista>\d+)/carga/$', 'encuestas.views.entrevista_carga', name="entrevista_carga"),
-
+    url(r'^entrevistas/(?P<id_relevamiento>\d+)/$', 'encuestas.views.entrevistas', name="entrevistas"),
 
     url(r'^capitalhumano/(?P<id_entrevista>\d+)/(?P<id_persona>\d+)/nuevo/$',"encuestas.views.capital_humano_create_modal", name="capital_humano_create_modal"),
     url(r'^capitalhumano/(?P<id_entrevista>\d+)/(?P<id_persona>\d+)/$',"encuestas.views.capital_humano_update_modal", name="capital_humano_update_modal"),
