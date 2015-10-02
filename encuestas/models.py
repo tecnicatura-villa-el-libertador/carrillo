@@ -22,7 +22,12 @@ class Beneficio(models.Model):
 
 class GrupoFamiliar(models.Model):
     OPCIONES_TIPO_FAMILIA = [('nuclear', 'Nuclear'),
-                             ('binuclear', 'Binuclear')]
+                             ('nuclear_ampliada', 'Nuclear Ampliada'),
+                             ('binuclear', 'Binuclear'),
+                             ('monoparental', 'Monoparental'),
+                             ( 'extensa','Extensa'),
+                             ('unipersonal','Unipersonal')
+                             ('equivalentes', 'Equivalentes Familiares')]
 
     direccion = models.CharField(max_length=100)
     historia_clinica = models.CharField(max_length=50, null=True, blank=True)
