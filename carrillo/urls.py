@@ -39,12 +39,11 @@ urlpatterns = patterns('',
     url(r'^capitalfisico/$','encuestas.views.capital_fisico', name = "capitalfisico"),
 
 
+    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial", name="reporte_capitalsocial"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalfisico/$',"encuestas.views.Reporte_CapitalFisico", name="reporte_capitalfisico"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/pap/$', "encuestas.views.mujeres_con_pap", name="reporte_mujeres_con_pap"),
 
-    url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
-    url(r'^reporte/capitalfisico/$',"encuestas.views.Reporte_CapitalFisico", name="Reporte_CapitalFisico"),
-    url(r'^reporte/pap/$', "encuestas.views.mujeres_con_pap", name="mujeres_con_pap"),
 
-    url(r'^reporte/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial"),
     url(r'^login/',"encuestas.views.Login", name="login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
     url(r'^contacto/$', "encuestas.views.contacto", name="conctacto"),

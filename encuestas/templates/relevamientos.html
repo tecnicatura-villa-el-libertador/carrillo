@@ -11,8 +11,30 @@
     {% for relevamiento in object_list %}
     <tr>
         <td>{{ relevamiento }}</td>
-           <td>{%if relevamiento.activo %}<a href="{% url 'entrevista_create' relevamiento.id %}" class="btn btn-success btn-xs">Nueva entrevista</a>{%endif%} <a href="{% url "entrevistas" relevamiento.id %}" class="btn btn-default btn-xs">Ver Entrevistas</a> <a href="#" class="btn btn-default btn-xs">Ver Reportes</a></td>
+           <td class="pull-right">
 
+
+           {%if relevamiento.activo %}
+            <a href="{% url 'entrevista_create' relevamiento.id %}" class="btn btn-success btn-xs">Nueva entrevista</a>
+           {%endif%}
+
+           <a href="{% url "entrevistas" relevamiento.id %}" class="btn btn-default btn-xs">Ver Entrevistas</a>
+         </td>
+         <td>
+        <div class="dropdown">
+            <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-default btn-xs">
+                Ver reportes
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="{% url "reporte_capitalfisico" relevamiento.id %}">Capital Físico</a></li>
+                <li><a href="{% url "reporte_capitalsocial" relevamiento.id %}">Capital Social</a></li>
+                <li><a href="{% url "reporte_mujeres_con_pap" relevamiento.id %}">Pap</a></li>
+            </ul>
+        </div>
+        </div>
+
+    </td>
     </tr>
 
     {% endfor %}
