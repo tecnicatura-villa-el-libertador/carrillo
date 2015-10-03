@@ -1,7 +1,7 @@
 from django import forms
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista, RespuestaEntrevista
 from bootstrap3_datetime.widgets import DateTimePicker
-
+import autocomplete_light
 
 
 from django import forms
@@ -69,6 +69,9 @@ class LoginForm(forms.Form):
 
 
 class EntrevistaModelForm(forms.ModelForm):
+
+    grupo_familiar = forms.ModelChoiceField(GrupoFamiliar.objects.all(),
+                                      widget=autocomplete_light.ChoiceWidget('GrupoFamiliarAutocomplete'))
 
     fecha_visita = forms.DateField(
         widget=DateTimePicker(options={"format": "YYYY-MM-DD",

@@ -44,7 +44,13 @@ def entrevista(request, id_relevamiento, id_entrevista=None):
     else:
         instance = None
     relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
-    form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
+
+    if 'grupo_familiar' in request.GET:
+        gf_inicial = GrupoFamiliar.objects.get(id=request.GET['grupo_familiar'])
+    else:
+        gf_inicial = None
+
+    form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None, initial={'grupo_familiar': gf_inicial})
     if form.is_valid():
 
         entrevista = form.save(commit=False)
@@ -326,10 +332,18 @@ def grupo_familiar(request, id_grupofamiliar = None):
     if request.method=="POST":
         form=GrupoFamiliarModelForm(request.POST, instance = instance)
         if form.is_valid():
-            form.save()
-            return render(request,'exito.html', {'form': form})
+            gf = form.save()
+            if 'guardar' in request.POST:
+                return redirect(reverse('grupofamiliar', args=[id_grupofamiliar]))
 
-    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona})
+            else:
+                relevamiento = [clave for clave in request.POST.keys() if clave.startswith('entrevista')][0]
+                relevamiento_id = int(relevamiento.split('_')[1])
+                return redirect(reverse('entrevista_create', args=[relevamiento_id]) + '?grupo_familiar=%i' % gf.id)
+            # return render(request,'exito.html', {'form': form})
+
+    relevamientos = Relevamiento.objects.filter(activo=True)
+    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona, 'relevamientos':relevamientos})
 
 
 
@@ -368,24 +382,24 @@ def Reporte_CapitalSocial(request, id_relevamiento):
 
     total=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento).count()
     con_energia=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, energia_electrica=True).count()
-    energia_porcentage=(con_energia/total)*100
+    energia_porcentaje=(con_energia/total)*100
     con_recoleccion_residuos=CapitalSocial.objects.filter(entrevista__relevamiento_id=1,recoleccion_residuo=True).count()
-    recoleccion_porcentage=(con_recoleccion_residuos/total)*100
+    recoleccion_porcentaje=(con_recoleccion_residuos/total)*100
     con_transporte_publico=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, transporte_publico=True).count()
-    transporte_porcentage=(con_transporte_publico/total)*100
+    transporte_porcentaje=(con_transporte_publico/total)*100
     con_pavimentacion=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, calle_pavimentada=True).count()
-    pavimentacion_porcentage=(con_pavimentacion/total)*100
+    pavimentacion_porcentaje=(con_pavimentacion/total)*100
     con_jardin_infantes=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, jardin_infantes=True).count()
-    jardin_porcentage=(con_jardin_infantes/total)*100
+    jardin_porcentaje=(con_jardin_infantes/total)*100
     con_escuela_primaria=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, escuela_primaria=True).count()
-    primaria_porcentage=(con_escuela_primaria/total)*100
+    primaria_porcentaje=(con_escuela_primaria/total)*100
     con_escuela_secundaria=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, escuela_secundaria=True).count()
-    secundaria_porcentage=(con_escuela_secundaria/total)*100
+    secundaria_porcentaje=(con_escuela_secundaria/total)*100
     con_comisaria=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, comisaria=True).count()
-    comisaria_porcentage=(con_comisaria/total)*100
+    comisaria_porcentaje=(con_comisaria/total)*100
     con_bomberos=CapitalSocial.objects.filter(entrevista__relevamiento=relevamiento, bomberos=True).count()
-    bomberos_porcentage=(con_bomberos/total)*100
-    return render(request, 'capitalsocial.html', {'energia_porcentage': energia_porcentage, 'pavimentacion_porcentage': pavimentacion_porcentage,'recoleccion_porcentage':recoleccion_porcentage,'transporte_porcentage':transporte_porcentage,'jardin_porcentage': jardin_porcentage,'primaria_porcentage':primaria_porcentage,'secundaria_porcentage':secundaria_porcentage,'comisaria_porcentage':comisaria_porcentage,'bomberos_porcentage':bomberos_porcentage})
+    bomberos_porcentaje=(con_bomberos/total)*100
+    return render(request, 'capitalsocial.html', {'energia_porcentaje': energia_porcentaje, 'pavimentacion_porcentaje': pavimentacion_porcentaje,'recoleccion_porcentaje':recoleccion_porcentaje,'transporte_porcentaje':transporte_porcentaje,'jardin_porcentaje': jardin_porcentaje,'primaria_porcentaje':primaria_porcentaje,'secundaria_porcentaje':secundaria_porcentaje,'comisaria_porcentaje':comisaria_porcentaje,'bomberos_porcentaje':bomberos_porcentaje})
 
 
 def Reporte_CapitalFisico(request, id_relevamiento):
