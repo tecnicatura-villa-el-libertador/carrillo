@@ -44,7 +44,13 @@ def entrevista(request, id_relevamiento, id_entrevista=None):
     else:
         instance = None
     relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
-    form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None)
+
+    if 'grupo_familiar' in request.GET:
+        gf_inicial = GrupoFamiliar.objects.get(id=request.GET['grupo_familiar'])
+    else:
+        gf_inicial = None
+
+    form = EntrevistaModelForm(instance=instance, data=request.POST if request.method == 'POST' else None, initial={'grupo_familiar': gf_inicial})
     if form.is_valid():
 
         entrevista = form.save(commit=False)
@@ -326,10 +332,18 @@ def grupo_familiar(request, id_grupofamiliar = None):
     if request.method=="POST":
         form=GrupoFamiliarModelForm(request.POST, instance = instance)
         if form.is_valid():
-            form.save()
-            return render(request,'exito.html', {'form': form})
+            gf = form.save()
+            if 'guardar' in request.POST:
+                return redirect(reverse('grupofamiliar', args=[id_grupofamiliar]))
 
-    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona})
+            else:
+                relevamiento = [clave for clave in request.POST.keys() if clave.startswith('entrevista')][0]
+                relevamiento_id = int(relevamiento.split('_')[1])
+                return redirect(reverse('entrevista_create', args=[relevamiento_id]) + '?grupo_familiar=%i' % gf.id)
+            # return render(request,'exito.html', {'form': form})
+
+    relevamientos = Relevamiento.objects.filter(activo=True)
+    return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona, 'relevamientos':relevamientos})
 
 
 
