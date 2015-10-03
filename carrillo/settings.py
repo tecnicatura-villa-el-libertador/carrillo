@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'pinax_theme_bootstrap',
     'bootstrap3_datetime',
     'django_modalview',
+    'autocomplete_light',
 )
 
 
