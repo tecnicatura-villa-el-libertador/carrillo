@@ -1,13 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-
+import autocomplete_light.shortcuts as al
+# import every app/autocomplete_light_registry.py
+al.autodiscover()
 
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'carrillo.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "encuestas.views.relevamientos", name="home"),
 
