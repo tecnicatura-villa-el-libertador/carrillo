@@ -25,8 +25,8 @@ class GrupoFamiliar(models.Model):
                              ('nuclear_ampliada', 'Nuclear Ampliada'),
                              ('binuclear', 'Binuclear'),
                              ('monoparental', 'Monoparental'),
-                             ( 'extensa','Extensa'),
-                             ('unipersonal','Unipersonal')
+                             ('extensa','Extensa'),
+                             ('unipersonal','Unipersonal'),
                              ('equivalentes', 'Equivalentes Familiares')]
 
     direccion = models.CharField(max_length=100)

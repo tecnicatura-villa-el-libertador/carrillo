@@ -330,17 +330,17 @@ def grupo_familiar(request, id_grupofamiliar = None):
     form = GrupoFamiliarModelForm(instance = instance)
     nombre = 'Grupo Familiar'
     if request.method=="POST":
-        form=GrupoFamiliarModelForm(request.POST, instance = instance)
+        form=GrupoFamiliarModelForm(request.POST, instance=instance)
         if form.is_valid():
             gf = form.save()
             if 'guardar' in request.POST:
-                return redirect(reverse('grupofamiliar', args=[id_grupofamiliar]))
+                return redirect(reverse('grupo_familiar_update', args=[gf.id]))
 
             else:
                 relevamiento = [clave for clave in request.POST.keys() if clave.startswith('entrevista')][0]
                 relevamiento_id = int(relevamiento.split('_')[1])
                 return redirect(reverse('entrevista_create', args=[relevamiento_id]) + '?grupo_familiar=%i' % gf.id)
-            # return render(request,'exito.html', {'form': form})
+
 
     relevamientos = Relevamiento.objects.filter(activo=True)
     return render(request,'grupo_familiar.html',{'form': form, 'nombre': nombre, 'form_persona': form_persona, 'relevamientos':relevamientos})
