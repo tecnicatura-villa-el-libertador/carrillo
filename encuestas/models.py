@@ -42,7 +42,7 @@ class GrupoFamiliar(models.Model):
 class Entrevista(TimeStampedModel):
     relevamiento = models.ForeignKey('Relevamiento')
     numero_entrevista = models.CharField(max_length=50, null=True, blank=True, help_text='Código interno de la entrevista, si existiera')
-    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado', related_name='entrevistas')
     cargado_por = models.ForeignKey("auth.User", related_name='entrevistas_cargadas', null=True, blank=True)
     entrevistadores = models.ManyToManyField("auth.User", related_name='entrevistas_realizadas')
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
@@ -95,15 +95,16 @@ class Persona(models.Model):
     )
 
     NACIONALIDAD_CHOICES = (
-        ('argentino', 'Argentino'),
-        ('boliviano', 'Boliviano'),
-        ('chileno', 'Chileno'),
-        ('uruguayo', 'Uruguayo'),
-        ('colombiano', 'Colombiano'),
-        ('peruano','Peruano'),
-
+        ('argentina', 'Argentino'),
+        ('boliviana', 'Boliviano'),
+        ('chilena', 'Chileno'),
+        ('paraguaya','Paraguaya'),
+        ('peruana','Peruano'),
+        ('uruguaya', 'Uruguayo'),
+        ('brasilera', 'Brasilera'),
+        ('colombiana', 'Colombiano'),
+        ('otra','otra'),
         )
-
 
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
@@ -111,8 +112,8 @@ class Persona(models.Model):
     apellido = models.CharField(max_length=30)
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
-    dni = models.IntegerField()
-    nacionalidad  = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
+    dni = models.CharField(max_length=30, null=True, blank=True, help_text='Deje en blanco si está indocumentado')
+    nacionalidad = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
     jefe_familia = models.BooleanField(default=False)
 
@@ -141,6 +142,7 @@ class CapitalFisico(models.Model):
 
     def __srt__(self):
         return "Capital Físico asociado a la entrevista: %s" % self.entrevista
+
 
 class CapitalSocial(models.Model):
     entrevista = models.OneToOneField('Entrevista', related_name='capital_social')

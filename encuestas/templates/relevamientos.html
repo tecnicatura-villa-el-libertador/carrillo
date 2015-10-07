@@ -27,9 +27,11 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="{% url "reporte_descriptivo" relevamiento.id %}">Datos descriptivos</a></li>
                 <li><a href="{% url "reporte_capitalfisico" relevamiento.id %}">Capital Físico</a></li>
                 <li><a href="{% url "reporte_capitalsocial" relevamiento.id %}">Capital Social</a></li>
                 <li><a href="{% url "reporte_mujeres_con_pap" relevamiento.id %}">Pap</a></li>
+
             </ul>
         </div>
         </div>

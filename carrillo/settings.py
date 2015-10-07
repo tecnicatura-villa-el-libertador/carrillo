@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'bootstrap3_datetime',
     'django_modalview',
     'autocomplete_light',
+    'django_extensions',
 )
 
 

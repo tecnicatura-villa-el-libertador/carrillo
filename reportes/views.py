@@ -1,7 +1,7 @@
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona
+from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar
 
 
 @login_required
@@ -66,8 +66,45 @@ def Reporte_CapitalFisico(request, id_relevamiento):
     tiene_calefaccion_envasado=CapitalFisico.objects.filter(entrevista__relevamiento=relevamiento, calefaccion='gas_envasado').count()
     calefaccion_envasado_porcentaje=(tiene_calefaccion_envasado/total)*100
     cantidad_habitaciones = CapitalFisico.objects.filter(entrevista__relevamiento=relevamiento).aggregate(Avg('habitaciones'))
-
-
     return render(request, 'capitalfisico.html',{'propietarioTerreno_porcentaje':propietarioTerreno_porcentaje, 'pisos_porcentaje': pisos_porcentaje, 'techo_porcentaje':techo_porcentaje, 'paredes_porcentaje':paredes_porcentaje,'propietario_vivienda_porcentaje':propietario_vivienda_porcentaje,'comodato_porcentaje':comodato_porcentaje,'alquiler_porcentaje':alquiler_porcentaje,'porcentaje_es_otro':porcentaje_es_otro,'calefaccion_natural_porcentaje':calefaccion_natural_porcentaje,'calefaccion_envasado_porcentaje':calefaccion_envasado_porcentaje,'cantidad_habitaciones':cantidad_habitaciones['habitaciones__avg']})
+
+
+@login_required
+def descriptivo(request, id_relevamiento):
+
+    def columna(relevamiento):
+        hogares = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
+
+        # grupos familiares con la misma direccion
+        total_lotes = hogares.values('direccion').distinct().count()
+        total_hogares = hogares.count()
+
+        total_personas = Persona.objects.filter(grupo_familiar__in=hogares).count()   # hogares.annotate(cantidad_miembros=Sum('miembros')).aggregate(Sum('cantidad_miembros'))
+        promedio_personas = total_personas / total_hogares
+
+        mujeres = Persona.objects.filter(grupo_familiar__in=hogares, sexo='f').count()
+        mujeres = {'total': mujeres, 'porcentaje': (mujeres / total_personas) * 100, 'promedio': mujeres / total_hogares}
+        hombres = Persona.objects.filter(grupo_familiar__in=hogares, sexo='m').count()
+        hombres = {'total': hombres, 'porcentaje': (hombres / total_personas) * 100, 'promedio': hombres / total_hogares}
+
+        migrantes = Persona.objects.filter(grupo_familiar__in=hogares).exclude(nacionalidad='argentina').count()
+        migrantes = {'total': migrantes, 'porcentaje': (migrantes / total_personas) * 100, 'promedio': migrantes / total_hogares}
+
+        indocumentados = Persona.objects.filter(grupo_familiar__in=hogares, dni__isnull=True).count()
+        indocumentados = {'total': indocumentados, 'porcentaje': (indocumentados / total_personas) * 100, 'promedio': indocumentados / total_hogares}
+
+        return locals()
+
+    relevamientos = [get_object_or_404(Relevamiento, id=i) for i in [id_relevamiento]]
+    columnas = [columna(relevamiento) for relevamiento in relevamientos]
+
+    return render(request, 'reporte_descriptivo.html', {'columnas': columnas,
+                                                        'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+
+
+
+
+
+
 
 
