@@ -1,0 +1,34 @@
+[
+{
+  "fields": {
+    "pregunta": "\u00bfQu\u00e9 es lo que m\u00e1s le preocupa del barrio?",
+    "activa": true
+  },
+  "model": "encuestas.pregunta",
+  "pk": 1
+},
+{
+  "fields": {
+    "pregunta": "\u00bfQu\u00e9 fortalezas tiene la comunidad para resolverlos?",
+    "activa": true
+  },
+  "model": "encuestas.pregunta",
+  "pk": 2
+},
+{
+  "fields": {
+    "pregunta": "\u00bfCu\u00e1les son las debilidades que tiene la comunidad para resolverlos?",
+    "activa": true
+  },
+  "model": "encuestas.pregunta",
+  "pk": 3
+},
+{
+  "fields": {
+    "pregunta": "\u00bfQu\u00e9 piensa que podr\u00eda hacer para mejorar el Centro de Integraci\u00f3n Comunidad / Centro de Salud del barrio?",
+    "activa": true
+  },
+  "model": "encuestas.pregunta",
+  "pk": 4
+}
+]
