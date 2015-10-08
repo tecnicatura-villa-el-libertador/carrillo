@@ -4,8 +4,16 @@
 
 	<h1>Reporte: {{ titulo }}</h1>
 
-	{{ relevamientos.0 }}
-
+	<a class="btn btn-default btn-xs" role="button" data-toggle="collapse" href="#collapseComparar" aria-expanded="false" aria-controls="collapseComparar">
+  Comparar relevamientos
+</a>
+<div class="collapse" id="collapseComparar">
+    <form method="get" action=".">
+        {% csrf_token %}
+        {% bootstrap_form form layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Comparar" }}</button>
+    </form>
+</div>
 
 	<table class="table table-striped">
 		<thead>

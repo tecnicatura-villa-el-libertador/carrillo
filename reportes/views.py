@@ -2,6 +2,7 @@ from django.db.models import Avg, Sum
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar
+from reportes.forms import ReporteForm
 
 
 @login_required
@@ -72,6 +73,8 @@ def Reporte_CapitalFisico(request, id_relevamiento):
 @login_required
 def descriptivo(request, id_relevamiento):
 
+
+
     def columna(relevamiento):
         hogares = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
 
@@ -95,16 +98,12 @@ def descriptivo(request, id_relevamiento):
 
         return locals()
 
-    relevamientos = [get_object_or_404(Relevamiento, id=i) for i in [id_relevamiento]]
+    relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
+    form = ReporteForm(data=request.GET or None)
+    form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
+    if form.is_valid():
+        relevamientos += form.cleaned_data.get('relevamientos', [])
     columnas = [columna(relevamiento) for relevamiento in relevamientos]
 
-    return render(request, 'reporte_descriptivo.html', {'columnas': columnas,
+    return render(request, 'reporte_descriptivo.html', {'columnas': columnas, 'form': form,
                                                         'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
-
-
-
-
-
-
-
-
