@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^reporte/(?P<id_relevamiento>\d+)/capitalfisico/$',"reportes.views.Reporte_CapitalFisico", name="reporte_capitalfisico"),
     url(r'^reporte/(?P<id_relevamiento>\d+)/pap/$', "reportes.views.mujeres_con_pap", name="reporte_mujeres_con_pap"),
     url(r'^reporte/(?P<id_relevamiento>\d+)/descriptivo/$', "reportes.views.descriptivo", name="reporte_descriptivo"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/tipo-familias/$', "reportes.views.tipo_familias", name="reporte_tipo_familias"),
 
 
     url(r'^login/',"encuestas.views.Login", name="login"),

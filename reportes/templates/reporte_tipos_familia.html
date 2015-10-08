@@ -1,0 +1,12 @@
+{% extends "reporte_descriptivo.html" %}
+
+{% block tbody %}
+        {% for col in columnas %}
+            <tr>
+                <td>{{ col.0 }}</td>
+                {% for val in col.1  %}
+                <td>{{ val.cantidad }} ({{val.porcentaje|floatformat}}%)</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+{% endblock tbody %}

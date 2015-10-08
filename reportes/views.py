@@ -1,4 +1,4 @@
-from django.db.models import Avg, Sum
+from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar
@@ -73,8 +73,6 @@ def Reporte_CapitalFisico(request, id_relevamiento):
 @login_required
 def descriptivo(request, id_relevamiento):
 
-
-
     def columna(relevamiento):
         hogares = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
 
@@ -107,3 +105,31 @@ def descriptivo(request, id_relevamiento):
 
     return render(request, 'reporte_descriptivo.html', {'columnas': columnas, 'form': form,
                                                         'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+
+
+
+@login_required
+def tipo_familias(request, id_relevamiento):
+
+    def columna(relevamientos):
+        return [(label, GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count())
+                for tipo, label in GrupoFamiliar.OPCIONES_TIPO_FAMILIA]
+
+    relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
+    form = ReporteForm(data=request.GET or None)
+    form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
+    if form.is_valid():
+        relevamientos += form.cleaned_data.get('relevamientos', [])
+
+    columnas = []
+    for tipo, label in GrupoFamiliar.OPCIONES_TIPO_FAMILIA:
+        data = []
+        for relevamiento in relevamientos:
+            total = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento).count()
+            cuenta = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count()
+
+            data.append({'cantidad': cuenta, 'porcentaje': cuenta*100/total})
+        columnas.append((label, data))
+
+    return render(request, 'reporte_tipos_familia.html', {'columnas': columnas, 'form': form,
+                                                          'relevamientos': relevamientos, 'titulo': 'Tipos de familia'})

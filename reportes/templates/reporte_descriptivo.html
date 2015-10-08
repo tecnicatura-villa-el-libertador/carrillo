@@ -25,6 +25,9 @@
 			</tr>
 		</thead>
 		<tbody>
+		{% block tbody %}
+
+
 			<tr>
 				<td>Total de lotes relevados</td>
 				{% for col in columnas %}
@@ -68,7 +71,7 @@
 					<td>{{ col.indocumentados.total }} ({{ col.indocumentados.porcentaje|floatformat }}%) <br>  {{ col.indocumentados.promedio|floatformat }} por hogar </td>
 				{% endfor %}
 			</tr>
-
+			{% endblock tbody %}
 
 
 		</tbody>
