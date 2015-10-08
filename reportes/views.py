@@ -128,7 +128,7 @@ def tipo_familias(request, id_relevamiento):
             total = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento).count()
             cuenta = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count()
 
-            data.append({'cantidad': cuenta, 'porcentaje': cuenta*100/total})
+            data.append({'cantidad': cuenta, 'porcentaje': cuenta*100/total, 'total': total})
         columnas.append((label, data))
 
     return render(request, 'reporte_tipos_familia.html', {'columnas': columnas, 'form': form,
