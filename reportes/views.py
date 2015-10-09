@@ -1,4 +1,7 @@
 from django.db.models import Avg
+from django.utils.timezone import now
+from django.db.models import Q
+from datetime import timedelta
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar
@@ -133,3 +136,27 @@ def tipo_familias(request, id_relevamiento):
 
     return render(request, 'reporte_tipos_familia.html', {'columnas': columnas, 'form': form,
                                                           'relevamientos': relevamientos, 'titulo': 'Tipos de familia'})
+
+
+"""
+@login_required
+def vulnerabilidad_cap_humano(request, id_relevamiento):
+    def columna(relevamientos):
+        familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
+        familias_con_menores = familias.filter(miembros__fecha_nacimiento__gte=desde).count()
+        tiene_madre, tiene_padre, es_jefa = Q(miembros__vinculo='Madre'), Q(miembros__vinculo='Padre'), Q(miembros__sexo='m') & Q(miembros__sexo='m')
+
+        familia_monoparental_con_jefa = familias.filter( filter(tiene_madre | tiene_padre).exclude(tiene_padre & tiene_madre)
+        return locals()
+
+
+
+    relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
+    form = ReporteForm(data=request.GET or None)
+    form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
+    if form.is_valid():
+        relevamientos += form.cleaned_data.get('relevamientos', [])
+"""
+
+
+
