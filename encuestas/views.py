@@ -37,7 +37,7 @@ contacto = ContactView.as_view()
 
 @login_required
 def entrevista(request, id_relevamiento, id_entrevista=None):
-
+    import ipdb; ipdb.set_trace()
     if id_entrevista:
         instance = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
     else:
@@ -59,7 +59,8 @@ def entrevista(request, id_relevamiento, id_entrevista=None):
         entrevista.entrevistadores.add(request.user)
         return redirect(reverse('entrevista_carga', args=[relevamiento.id, entrevista.id]))
 
-    return render(request,'entrevista.html', {'form': form, 'nombre': 'Entrevista', 'button_text': 'Guardar'})
+    return render(request,'entrevista.html', {'form': form,
+        'nombre': 'Entrevista', 'button_text': 'Continuar'})
 
 
 @login_required

@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    <form method="post" action=".">
+    <form method="post" action="." novalidate>
         <h1>{{nombre}}</h1>
         {% csrf_token %}
         {% if next %}
