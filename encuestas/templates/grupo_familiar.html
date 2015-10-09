@@ -32,7 +32,7 @@
         <td>{{ persona.vinculo }}</td>
 
         <td><a class="btn btn-success as_modal" href="{% url 'persona_update_modal' form.instance.id persona.id %}">Editar</a>
-            <a class="btn btn-danger as_modal" href="#">Eliminar</a> </td>
+            <a class="btn btn-danger as_modal" href="{% url 'persona_delete_modal' form.instance.id persona.id %}">Eliminar</a> </td>
 
     </tr>
 

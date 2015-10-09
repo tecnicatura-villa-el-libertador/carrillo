@@ -35,8 +35,6 @@ class PersonaModelForm(forms.ModelForm):
         if jef_fam and jefe_actual:
             raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
 
-
-
     class Meta:
         model = Persona
         fields = ['grupo_familiar', 'nombre', 'apellido', 'dni', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
