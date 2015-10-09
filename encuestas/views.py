@@ -37,7 +37,6 @@ contacto = ContactView.as_view()
 
 @login_required
 def entrevista(request, id_relevamiento, id_entrevista=None):
-    import ipdb; ipdb.set_trace()
     if id_entrevista:
         instance = get_object_or_404(Entrevista, id=id_entrevista, relevamiento__id=id_relevamiento)
     else:
