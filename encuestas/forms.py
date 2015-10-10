@@ -28,12 +28,19 @@ class PersonaModelForm(forms.ModelForm):
         #ipdb.set_trace()
         cleaned_data = super(PersonaModelForm, self).clean()
         jef_fam= cleaned_data["jefe_familia"]
-        #print ("jef_fam: ", jef_fam)
+        print ("jef_fam: ", jef_fam)
         grupfamiliar=cleaned_data["grupo_familiar"]
         #print ("resultado de la consulta ", grupfamiliar.miembros.filter(jefe_familia=True).exists())
         jefe_actual = grupfamiliar.miembros.filter(jefe_familia=True)
-        if jef_fam and jefe_actual:
+        print ("jefe_actual: ", jefe_actual)
+        if self.instance:
+            jefe_actual = jefe_actual.exclude(id=self.instance.id)
+
+        print ("jefe_actual con instancia actual excluida: ", jefe_actual)
+        if jef_fam and jefe_actual :
             raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
+        
+
 
     class Meta:
         model = Persona
