@@ -24,4 +24,11 @@
             </tr>
 
 
+            <tr>
+                <td>Nº de hogares con 1 o más personas de 65 años o más</td>
+                {% for col in columnas %}
+                    <td>{{ col.familias_con_ancianos }}</td>
+                {% endfor %}
+            </tr>
+
 {% endblock tbody %}

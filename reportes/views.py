@@ -144,7 +144,8 @@ def tipo_familias(request, id_relevamiento):
 
 @login_required
 def vulnerabilidad_cap_humano(request, id_relevamiento):
-    desde = now() - timedelta(days=365*5)
+    hace3 = (now() - timedelta(days=365*5)).date()
+    hace65 = (now() - timedelta(days=365*65)).date()
 
     def columna(relevamiento):
         familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
@@ -152,9 +153,14 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
         familias_con_3menores = familias.extra(select = {"menores_count" : """
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
-                encuestas_persona.fecha_nacimiento >= {}""".format(desde.date())})
+                encuestas_persona.fecha_nacimiento >= {}""".format(hace3)})
         familias_con_3menores = len([f for f in familias_con_3menores if f.menores_count >= 3])
         familias_monoparanteles_con_jefa = len([f for f in familias.filter(tipo_familia='monoparental') if f.jefe_familia and f.jefe_familia.sexo == 'f'])
+        familias_con_ancianos = familias.extra(select = {"ancianos_count":"""
+            SELECT COUNT(*) from encuestas_persona WHERE
+                encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
+                encuestas_persona.fecha_nacimiento <= {}""".format(hace65)})
+        familias_con_ancianos = len([f for f in familias_con_ancianos if f.ancianos_count >= 1])
 
         return locals()
 
