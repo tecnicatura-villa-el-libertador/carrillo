@@ -15,31 +15,22 @@ class ContactForm(forms.Form):
         pass
 
 
-
 class PersonaModelForm(forms.ModelForm):
 
     fecha_nacimiento = forms.DateField(
         widget=DateTimePicker(options={"format": "YYYY-MM-DD",
                                        "pickTime": False}))
 
-
-    def clean(self):
-        #import ipdb
-        #ipdb.set_trace()
+    def clean_jefe_familia(self):
         cleaned_data = super(PersonaModelForm, self).clean()
         jef_fam= cleaned_data["jefe_familia"]
-        print ("jef_fam: ", jef_fam)
         grupfamiliar=cleaned_data["grupo_familiar"]
-        #print ("resultado de la consulta ", grupfamiliar.miembros.filter(jefe_familia=True).exists())
         jefe_actual = grupfamiliar.miembros.filter(jefe_familia=True)
-        print ("jefe_actual: ", jefe_actual)
         if self.instance:
             jefe_actual = jefe_actual.exclude(id=self.instance.id)
 
-        print ("jefe_actual con instancia actual excluida: ", jefe_actual)
         if jef_fam and jefe_actual :
             raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
-        
 
     def clean_dni(self):
         dni = self.cleaned_data["dni"]
@@ -47,11 +38,8 @@ class PersonaModelForm(forms.ModelForm):
         if self.instance:
             personas_con_ese_dni = personas_con_ese_dni.exclude(id=self.instance.id)
         if personas_con_ese_dni.exists():
-            raise forms.ValidationError("Ya hay una persona con este DNI en la base de datos: %s" % personas_con_ese_dni[0])            
+            raise forms.ValidationError("Ya hay una persona con este DNI en la base de datos: %s" % personas_con_ese_dni[0])
         return dni
-
-        
-
 
     class Meta:
         model = Persona
