@@ -4,7 +4,7 @@ from django.db.models import Q
 from datetime import timedelta
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar, Entrevista
+from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar, Entrevista, CapitalHumano
 from reportes.forms import ReporteForm
 from django.http import Http404
 
@@ -146,21 +146,32 @@ def tipo_familias(request, id_relevamiento):
 def vulnerabilidad_cap_humano(request, id_relevamiento):
     hace3 = (now() - timedelta(days=365*5)).date()
     hace65 = (now() - timedelta(days=365*65)).date()
+    hace10 = (now() - timedelta(days=365*10)).date()
 
     def columna(relevamiento):
         familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
         total_familias = familias.count()
+
+        # familias con 3 o mas niños menores de 5 años
         familias_con_3menores = familias.extra(select = {"menores_count" : """
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
                 encuestas_persona.fecha_nacimiento >= {}""".format(hace3)})
         familias_con_3menores = len([f for f in familias_con_3menores if f.menores_count >= 3])
+
+        # familias con jefatura femenina
         familias_monoparanteles_con_jefa = len([f for f in familias.filter(tipo_familia='monoparental') if f.jefe_familia and f.jefe_familia.sexo == 'f'])
+
+        # familias con 1 o mas ancianos
         familias_con_ancianos = familias.extra(select = {"ancianos_count":"""
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
                 encuestas_persona.fecha_nacimiento <= {}""".format(hace65)})
         familias_con_ancianos = len([f for f in familias_con_ancianos if f.ancianos_count >= 1])
+
+        # N° de personas analfabetas (mayor de 10 años que no lee ni escribe
+        analfabetos = CapitalHumano.objects.filter(escolaridad='ninguno', persona__fecha_nacimiento__lte=hace10,
+                                                   entrevista__relevamiento=relevamiento).count()
 
         return locals()
 

@@ -31,4 +31,12 @@
                 {% endfor %}
             </tr>
 
+            <tr>
+                <td>N° de personas analfabetas <br>(mayor de 10 años que no lee ni escribe)</td>
+                {% for col in columnas %}
+                    <td>{{ col.analfabetos }}</td>
+                {% endfor %}
+            </tr>
+
+
 {% endblock tbody %}
