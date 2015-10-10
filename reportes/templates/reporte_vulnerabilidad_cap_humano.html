@@ -52,6 +52,12 @@
                 {% endfor %}
             </tr>
 
+            <tr>
+                <td>N° de hogares con dos o más hijos de 7 a 15 años con rezago o abandono del sistema educativo</td>
+                {% for col in columnas %}
+                    <td>{{ col.hogares_rezago }}</td>
+                {% endfor %}
+            </tr>
 
 
 {% endblock tbody %}

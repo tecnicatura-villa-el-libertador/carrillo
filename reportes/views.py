@@ -173,7 +173,23 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
 
         abandonaron = CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(11),hace(6)], entrevista__relevamiento=relevamiento)
         abandonaron = abandonaron.filter(escolaridad='prim_incompleto', escolaridad_abandono=True).count(), abandonaron.count()
+
+        abandonaron_sec = CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(20),hace(12)], entrevista__relevamiento=relevamiento)
+        abandonaron_sec = abandonaron_sec.filter(escolaridad='sec_incompleto', escolaridad_abandono=True).count(), abandonaron_sec.count()
+
+        hogares_rezago1 = []
+        hogares_rezago2 = []
+        for f in familias:
+            for p in CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(15), hace(7)], persona__grupo_familiar=f):
+                if p.esta_rezagado():
+                    if f in hogares_rezago1:
+                        hogares_rezago2.append(f)
+                    else:
+                        hogares_rezago1.append(f)
+        hogares_rezago = len(set(hogares_rezago2))
+
         return locals()
+
 
     relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
     form = ReporteForm(data=request.GET or None)

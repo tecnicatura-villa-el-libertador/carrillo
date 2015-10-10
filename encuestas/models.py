@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.db import models
+from django.utils.timezone import now
 from model_utils.models import TimeStampedModel
 
 
@@ -125,6 +126,10 @@ class Persona(models.Model):
     jefe_familia = models.BooleanField(default=False)
 
 
+    @property
+    def edad(self):
+        return (now().date() - self.fecha_nacimiento).days / 365
+
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
 
@@ -231,6 +236,22 @@ class CapitalHumano(models.Model):
     cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
     beneficios_sociales = models.ManyToManyField('Beneficio', blank=True, limit_choices_to={'activo': True})
     problemas_salud = models.ManyToManyField('ProblemaSalud', blank=True, limit_choices_to={'activo': True})
+
+
+    def esta_rezagado(self):
+        """verifica si está en el curso escolar correspondiente a su edad"""
+
+        if self.persona.edad < 6:
+            return False
+
+        if self.escolaridad.endswith('incompleto') and self.escolaridad_abandono:
+            return True
+
+        if 7 < self.persona.edad <= 20 and self.escolaridad == 'prim_incompleto':
+            return (self.persona.edad - 6) > self.escolaridad_ultimo_curso
+
+        if 13 < self.persona.edad <= 20 and self.escolaridad == 'sec_incompleto':
+            return (self.persona.edad - 12) > self.escolaridad_ultimo_curso
 
     def __srt__(self):
         return "Capital Humano asociado a la entrevista: %s" % self.entrevista
