@@ -1,4 +1,4 @@
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils.timezone import now
 from django.db.models import Q
 from datetime import timedelta
@@ -141,25 +141,29 @@ def tipo_familias(request, id_relevamiento):
                                                           'relevamientos': relevamientos, 'titulo': 'Tipos de familia'})
 
 
-"""
+
 @login_required
 def vulnerabilidad_cap_humano(request, id_relevamiento):
-    def columna(relevamientos):
+    desde = now() - timedelta(days=365*5)
+
+    def columna(relevamiento):
         familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
-        familias_con_menores = familias.filter(miembros__fecha_nacimiento__gte=desde).count()
-        tiene_madre, tiene_padre, es_jefa = Q(miembros__vinculo='Madre'), Q(miembros__vinculo='Padre'), Q(miembros__sexo='m') & Q(miembros__sexo='m')
-
-        familia_monoparental_con_jefa = familias.filter( filter(tiene_madre | tiene_padre).exclude(tiene_padre & tiene_madre)
+        familias_con_3menores = familias.extra(select = {"menores_count" : """
+            SELECT COUNT(*) from encuestas_persona WHERE
+                encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
+                encuestas_persona.fecha_nacimiento >= {}""".format(desde.date())})
+        familias_con_3menores = len([f for f in familias_con_3menores if f.menores_count >= 3])
         return locals()
-
-
 
     relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
     form = ReporteForm(data=request.GET or None)
     form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
     if form.is_valid():
         relevamientos += form.cleaned_data.get('relevamientos', [])
-"""
 
+    columnas = [columna(relevamiento) for relevamiento in relevamientos]
+
+    return render(request, 'reporte_vulnerabilidad_cap_humano.html', {'columnas': columnas, 'form': form,
+                                                                      'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
 
 

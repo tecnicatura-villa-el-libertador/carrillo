@@ -1,0 +1,12 @@
+{% extends "reporte_descriptivo.html" %}
+
+{% block tbody %}
+
+            <tr>
+                <td>Nº de hogares con tres hijos o más entre 0 a 5 años</td>
+                {% for col in columnas %}
+                    <td>{{ col.familias_con_3menores }}</td>
+                {% endfor %}
+            </tr>
+
+{% endblock tbody %}

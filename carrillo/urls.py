@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/nueva/$', "encuestas.views.persona_create_modal", name="persona_create_modal"),
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/(?P<id_persona>\d+)/$', "encuestas.views.persona_update_modal", name="persona_update_modal"),
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/(?P<id_persona>\d+)/delete$', "encuestas.views.persona_delete_modal", name="persona_delete_modal"),
-    
+
     # url(r'^ajax/persona/(?P<id_persona>\d+)/$',"encuestas.views.vistapersona", name = "persona"),
 
     url(r'^$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="auth_logout"),
@@ -48,6 +48,7 @@ urlpatterns = patterns('',
     url(r'^reporte/(?P<id_relevamiento>\d+)/pap/$', "reportes.views.mujeres_con_pap", name="reporte_mujeres_con_pap"),
     url(r'^reporte/(?P<id_relevamiento>\d+)/descriptivo/$', "reportes.views.descriptivo", name="reporte_descriptivo"),
     url(r'^reporte/(?P<id_relevamiento>\d+)/tipo-familias/$', "reportes.views.tipo_familias", name="reporte_tipo_familias"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/vulnerabilidades-capital-humano/$',"reportes.views.vulnerabilidad_cap_humano", name="reporte_vulnerabilidad_cap_humano"),
 
 
     url(r'^login/',"encuestas.views.Login", name="login"),

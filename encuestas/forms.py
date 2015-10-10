@@ -31,6 +31,8 @@ class PersonaModelForm(forms.ModelForm):
 
         if jef_fam and jefe_actual :
             raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
+        return jef_fam
+
 
     def clean_dni(self):
         dni = self.cleaned_data["dni"]
