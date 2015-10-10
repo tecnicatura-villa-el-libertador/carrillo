@@ -2,11 +2,26 @@
 
 {% block tbody %}
 
+
+            <tr>
+                <td>Nº de hogares entrevistados</td>
+                {% for col in columnas %}
+                    <td>{{ col.total_familias }}</td>
+                {% endfor %}
+            </tr>
             <tr>
                 <td>Nº de hogares con tres hijos o más entre 0 a 5 años</td>
                 {% for col in columnas %}
                     <td>{{ col.familias_con_3menores }}</td>
                 {% endfor %}
             </tr>
+
+            <tr>
+                <td>Nº de hogares monoparentales con jefatura femenina</td>
+                {% for col in columnas %}
+                    <td>{{ col.familias_monoparanteles_con_jefa }}</td>
+                {% endfor %}
+            </tr>
+
 
 {% endblock tbody %}

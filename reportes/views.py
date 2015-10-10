@@ -148,11 +148,14 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
 
     def columna(relevamiento):
         familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
+        total_familias = familias.count()
         familias_con_3menores = familias.extra(select = {"menores_count" : """
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
                 encuestas_persona.fecha_nacimiento >= {}""".format(desde.date())})
         familias_con_3menores = len([f for f in familias_con_3menores if f.menores_count >= 3])
+        familias_monoparanteles_con_jefa = len([f for f in familias.filter(tipo_familia='monoparental') if f.jefe_familia and f.jefe_familia.sexo == 'f'])
+
         return locals()
 
     relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]

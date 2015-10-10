@@ -38,6 +38,14 @@ class GrupoFamiliar(models.Model):
     def __str__(self):
         return 'Familia {0.apellido_principal} ({0.direccion})'.format(self)
 
+    @property
+    def jefe_familia(self):
+        try:
+            return self.miembros.filter(jefe_familia=True)[0]
+        except IndexError:
+            return None
+
+
 
 class Entrevista(TimeStampedModel):
     relevamiento = models.ForeignKey('Relevamiento')
