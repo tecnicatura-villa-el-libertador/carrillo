@@ -1,7 +1,7 @@
 from django import forms
 from .models import CapitalSocial, Persona, CapitalHumano, CapitalFisico, GrupoFamiliar, Entrevista, RespuestaEntrevista
 from bootstrap3_datetime.widgets import DateTimePicker
-
+import autocomplete_light
 
 
 from django import forms
@@ -21,10 +21,29 @@ class PersonaModelForm(forms.ModelForm):
     fecha_nacimiento = forms.DateField(
         widget=DateTimePicker(options={"format": "YYYY-MM-DD",
                                        "pickTime": False}))
+
+
+    def clean(self):
+        #import ipdb
+        #ipdb.set_trace()
+        cleaned_data = super(PersonaModelForm, self).clean()
+        jef_fam= cleaned_data["jefe_familia"]
+        #print ("jef_fam: ", jef_fam)
+        grupfamiliar=cleaned_data["grupo_familiar"]
+        #print ("resultado de la consulta ", grupfamiliar.miembros.filter(jefe_familia=True).exists())
+        jefe_actual = grupfamiliar.miembros.filter(jefe_familia=True)
+        if jef_fam and jefe_actual:
+            raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
+
+
+
     class Meta:
         model = Persona
         fields = ['grupo_familiar', 'nombre', 'apellido', 'dni', 'sexo', 'fecha_nacimiento', 'nacionalidad', 'vinculo', 'jefe_familia']
         widgets = {'grupo_familiar': forms.HiddenInput()}
+
+
+
 
 
 class CapitalHumanoModelForm(forms.ModelForm):
@@ -69,6 +88,9 @@ class LoginForm(forms.Form):
 
 
 class EntrevistaModelForm(forms.ModelForm):
+
+    grupo_familiar = forms.ModelChoiceField(GrupoFamiliar.objects.all(),
+                                      widget=autocomplete_light.ChoiceWidget('GrupoFamiliarAutocomplete'))
 
     fecha_visita = forms.DateField(
         widget=DateTimePicker(options={"format": "YYYY-MM-DD",

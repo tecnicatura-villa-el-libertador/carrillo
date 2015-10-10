@@ -25,7 +25,7 @@ class GrupoFamiliar(models.Model):
                              ('nuclear_ampliada', 'Nuclear Ampliada'),
                              ('binuclear', 'Binuclear'),
                              ('monoparental', 'Monoparental'),
-                             ( 'extensa','Extensa'),
+                             ('extensa','Extensa'),
                              ('unipersonal','Unipersonal'),
                              ('equivalentes', 'Equivalentes Familiares')]
 
@@ -42,7 +42,7 @@ class GrupoFamiliar(models.Model):
 class Entrevista(TimeStampedModel):
     relevamiento = models.ForeignKey('Relevamiento')
     numero_entrevista = models.CharField(max_length=50, null=True, blank=True, help_text='Código interno de la entrevista, si existiera')
-    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado')
+    grupo_familiar = models.ForeignKey('GrupoFamiliar', verbose_name='Grupo Familiar Entrevistado', related_name='entrevistas')
     cargado_por = models.ForeignKey("auth.User", related_name='entrevistas_cargadas', null=True, blank=True)
     entrevistadores = models.ManyToManyField("auth.User", related_name='entrevistas_realizadas')
     entrevistado = models.ForeignKey('Persona', null=True, blank=True)
@@ -79,7 +79,6 @@ class RespuestaEntrevista(models.Model):
 
 class Persona(models.Model):
     VINCULO_TYPE = (
-            ('Jefe/a de familia', 'Jefe/a de familia'),
             ('Padre','Padre'),
             ('Hijo/a','Hijo/a'),
             ('Madre','Madre'),
@@ -93,16 +92,30 @@ class Persona(models.Model):
             ('Sobrino/a', 'Sobrino/a'),
             ('Esposo/a', 'Esposo/a'),
     )
+
+    NACIONALIDAD_CHOICES = (
+        ('argentina', 'Argentino'),
+        ('boliviana', 'Boliviano'),
+        ('chilena', 'Chileno'),
+        ('paraguaya','Paraguaya'),
+        ('peruana','Peruano'),
+        ('uruguaya', 'Uruguayo'),
+        ('brasilera', 'Brasilera'),
+        ('colombiana', 'Colombiano'),
+        ('otra','otra'),
+        )
+
     grupo_familiar = models.ForeignKey('GrupoFamiliar', related_name='miembros')
 
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
     sexo = models.CharField(max_length=30, choices=(('m', 'masculino'), ('f', 'femenino')))
     fecha_nacimiento = models.DateField()
-    nacionalidad = models.CharField(max_length=30)
-    dni = models.IntegerField()
+    dni = models.CharField(max_length=30, null=True, blank=True, help_text='Deje en blanco si está indocumentado')
+    nacionalidad = models.CharField(max_length=50, choices=NACIONALIDAD_CHOICES)
     vinculo = models.CharField(max_length=50,choices=VINCULO_TYPE)
     jefe_familia = models.BooleanField(default=False)
+
 
     def __str__(self):
         return "%s %s" % (self.nombre, self.apellido)
@@ -128,6 +141,7 @@ class CapitalFisico(models.Model):
 
     def __srt__(self):
         return "Capital Físico asociado a la entrevista: %s" % self.entrevista
+
 
 class CapitalSocial(models.Model):
     entrevista = models.OneToOneField('Entrevista', related_name='capital_social')

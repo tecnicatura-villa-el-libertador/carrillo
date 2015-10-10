@@ -1,0 +1,82 @@
+{% extends "site_base.html" %}
+{% load bootstrap3 %}
+{% block body %}
+
+	<h1>Reporte: {{ titulo }}</h1>
+
+	<a class="btn btn-default btn-xs" role="button" data-toggle="collapse" href="#collapseComparar" aria-expanded="false" aria-controls="collapseComparar">
+  Comparar relevamientos
+</a>
+<div class="collapse" id="collapseComparar">
+    <form method="get" action=".">
+        {% csrf_token %}
+        {% bootstrap_form form layout='default' %}
+            <button class="btn btn-success" type="submit">{{ button_text|default:"Comparar" }}</button>
+    </form>
+</div>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td></td>
+				{% for rel in relevamientos %}
+					<td>{{ rel }}</td>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+		{% block tbody %}
+
+
+			<tr>
+				<td>Total de lotes relevados</td>
+				{% for col in columnas %}
+					<td>{{ col.total_lotes }}</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Total de hogares</td>
+				{% for col in columnas %}
+					<td>{{ col.total_hogares }}</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Población relevada</td>
+				{% for col in columnas %}
+					<td>{{ col.total_personas }}
+					</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Mujeres</td>
+				{% for col in columnas %}
+					<td>{{ col.mujeres.total }} ({{ col.mujeres.porcentaje|floatformat }}%) <br>  {{ col.mujeres.promedio|floatformat }} por hogar </td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Hombres</td>
+				{% for col in columnas %}
+					<td>{{ col.hombres.total }} ({{ col.hombres.porcentaje|floatformat }}%) <br>  {{ col.hombres.promedio|floatformat }} por hogar </td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Migrantes</td>
+				{% for col in columnas %}
+					<td>{{ col.migrantes.total }} ({{ col.migrantes.porcentaje|floatformat }}%) <br>  {{ col.migrantes.promedio|floatformat }} por hogar </td>
+				{% endfor %}
+			</tr>
+			<tr>
+				<td>Personas indocumentadas</td>
+				{% for col in columnas %}
+					<td>{{ col.indocumentados.total }} ({{ col.indocumentados.porcentaje|floatformat }}%) <br>  {{ col.indocumentados.promedio|floatformat }} por hogar </td>
+				{% endfor %}
+			</tr>
+			{% endblock tbody %}
+
+
+		</tbody>
+
+	</table>
+
+
+{% endblock body %}

@@ -1,0 +1,210 @@
+[
+{
+  "fields": {
+    "nombre": "AUH",
+    "activo": true
+  },
+  "pk": 1,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "Vale lo nuestro",
+    "activo": true
+  },
+  "pk": 2,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "Pensi\u00f3n por invalidez",
+    "activo": true
+  },
+  "pk": 3,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "Pensi\u00f3n Mayor/menor",
+    "activo": true
+  },
+  "pk": 4,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "7 hijos",
+    "activo": true
+  },
+  "pk": 5,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "Vejez",
+    "activo": true
+  },
+  "pk": 6,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "jubilaci\u00f3n",
+    "activo": true
+  },
+  "pk": 7,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "otros",
+    "activo": true
+  },
+  "pk": 8,
+  "model": "encuestas.beneficio"
+},
+{
+  "fields": {
+    "nombre": "Desnutricion",
+    "activo": true
+  },
+  "pk": 1,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "HTA",
+    "activo": true
+  },
+  "pk": 2,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "DBT",
+    "activo": true
+  },
+  "pk": 3,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "TBC",
+    "activo": true
+  },
+  "pk": 4,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Chagas",
+    "activo": true
+  },
+  "pk": 5,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Dislipemias",
+    "activo": true
+  },
+  "pk": 6,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "C\u00e1ncer",
+    "activo": true
+  },
+  "pk": 7,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Tabaquismo",
+    "activo": true
+  },
+  "pk": 8,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Alcoholismo",
+    "activo": true
+  },
+  "pk": 9,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "EPOC/Asma",
+    "activo": true
+  },
+  "pk": 10,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Drogas",
+    "activo": true
+  },
+  "pk": 11,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Violencia",
+    "activo": true
+  },
+  "pk": 12,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "Otros",
+    "activo": true
+  },
+  "pk": 13,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "nombre": "ns/nc",
+    "activo": true
+  },
+  "pk": 14,
+  "model": "encuestas.problemasalud"
+},
+{
+  "fields": {
+    "activa": true,
+    "pregunta": "\u00bfQu\u00e9 es lo que m\u00e1s le preocupa del barrio?"
+  },
+  "pk": 1,
+  "model": "encuestas.pregunta"
+},
+{
+  "fields": {
+    "activa": true,
+    "pregunta": "\u00bfQu\u00e9 fortalezas tiene la comunidad para resolverlos?"
+  },
+  "pk": 2,
+  "model": "encuestas.pregunta"
+},
+{
+  "fields": {
+    "activa": true,
+    "pregunta": "\u00bfCu\u00e1les son las debilidades que tiene la comunidad para resolverlos?"
+  },
+  "pk": 3,
+  "model": "encuestas.pregunta"
+},
+{
+  "fields": {
+    "activa": true,
+    "pregunta": "\u00bfQu\u00e9 piensa que podr\u00eda hacer para mejorar el Centro de Integraci\u00f3n Comunidad / Centro de Salud del barrio?"
+  },
+  "pk": 4,
+  "model": "encuestas.pregunta"
+}
+]

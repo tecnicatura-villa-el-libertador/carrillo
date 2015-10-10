@@ -1,13 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-
+import autocomplete_light.shortcuts as al
+# import every app/autocomplete_light_registry.py
+al.autodiscover()
 
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'carrillo.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "encuestas.views.relevamientos", name="home"),
 
@@ -39,9 +41,11 @@ urlpatterns = patterns('',
     url(r'^capitalfisico/$','encuestas.views.capital_fisico', name = "capitalfisico"),
 
 
-    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalsocial/$', "encuestas.views.Reporte_CapitalSocial", name="reporte_capitalsocial"),
-    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalfisico/$',"encuestas.views.Reporte_CapitalFisico", name="reporte_capitalfisico"),
-    url(r'^reporte/(?P<id_relevamiento>\d+)/pap/$', "encuestas.views.mujeres_con_pap", name="reporte_mujeres_con_pap"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalsocial/$', "reportes.views.Reporte_CapitalSocial", name="reporte_capitalsocial"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/capitalfisico/$',"reportes.views.Reporte_CapitalFisico", name="reporte_capitalfisico"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/pap/$', "reportes.views.mujeres_con_pap", name="reporte_mujeres_con_pap"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/descriptivo/$', "reportes.views.descriptivo", name="reporte_descriptivo"),
+    url(r'^reporte/(?P<id_relevamiento>\d+)/tipo-familias/$', "reportes.views.tipo_familias", name="reporte_tipo_familias"),
 
 
     url(r'^login/',"encuestas.views.Login", name="login"),
