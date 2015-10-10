@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.debug import sensitive_post_parameters
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
-from django_modalview.generic.edit import ModalCreateView, ModalUpdateView
+from django_modalview.generic.edit import ModalCreateView, ModalUpdateView, ModalDeleteView
 from django_modalview.generic.component import ModalResponse, ModalButton
 from django.views.generic.edit import FormView
 from django.views import generic
@@ -172,6 +172,7 @@ class PersonaCreateModal(ModalCreateView):
         self.title = "Agregar persona al grupo familiar"
         self.submit_button = ModalButton('Guardar', button_type='primary')
         self.close_button = ModalButton('Cerrar')
+        self.delete_button=ModalButton('Eliminar')
 
         self.form_class = PersonaModelForm
 
@@ -210,8 +211,36 @@ class PersonaUpdateModal(ModalUpdateView):
         self.response = ModalResponse("{obj} se actualizó correctamente".format(obj=i), 'success')
         return super(PersonaUpdateModal, self).form_valid(form, commit=False, **kwargs)
 
+
+class PersonaDeleteModal(ModalDeleteView):
+    def __init__(self, *args, **kwargs):
+        super(PersonaDeleteModal, self).__init__(*args, **kwargs)
+        self.title = "Eliminar persona"
+        self.submit_button = ModalButton('Eliminar', button_type='danger')
+        self.close_button = ModalButton('Cancelar',  button_type='default')
+       
+    def dispatch (self, request, *args, **kwargs):
+
+        self.object = Persona.objects.get(id=kwargs.get('id_persona'), grupo_familiar__id=kwargs.get('id_grupofamiliar'))
+        
+        self.description = "¿Seguro que desea eliminar a %s?" % self.object
+        return super(PersonaDeleteModal, self).dispatch(request, *args, **kwargs)
+        
+
+    def delete(self, request, *args, **kwargs):
+        
+        capitales_asociados = self.object.capitales_humanos.count()
+
+        if capitales_asociados:
+            self.response = ModalResponse("la persona no se puede eliminar porque tiene datos de entrevistas asociados", "warning")
+        else:
+            self.object.delete()
+            self.response = ModalResponse("La persona fue eliminada", "success")
+
+
 persona_create_modal = login_required(PersonaCreateModal.as_view())
 persona_update_modal = login_required(PersonaUpdateModal.as_view())
+persona_delete_modal = login_required(PersonaDeleteModal.as_view())
 
 
 class CapitalHumanoCreateModal(ModalCreateView):
