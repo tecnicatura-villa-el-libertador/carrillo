@@ -4,20 +4,23 @@ from django.db.models import Q
 from datetime import timedelta
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar
+from encuestas.models import Relevamiento, CapitalSocial, CapitalFisico, Persona, GrupoFamiliar, Entrevista
 from reportes.forms import ReporteForm
-
+from django.http import Http404
 
 @login_required
 def mujeres_con_pap(request, id_relevamiento):
-    relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
-    nombre = 'Porcentaje de mujeres con PAP'
-    mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevista__relevamiento=relevamiento, sexo='f', capitales_humanos__pap=True).count()
-    mujeres_total = Persona.objects.filter(grupo_familiar__entrevista__relevamiento=relevamiento, sexo='f').count()
+    try:
+        relevamiento = get_object_or_404(Relevamiento, id=id_relevamiento)
+        nombre = 'Porcentaje de mujeres con PAP'
+        mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevistas__relevamiento=relevamiento, sexo='f', capitales_humanos__pap=True).count()
+        mujeres_total = Persona.objects.filter(grupo_familiar__entrevistas__relevamiento=relevamiento, sexo='f').count()
 
-    total = (mujeres_con_pap/mujeres_total)*100 if mujeres_total else '--'
+        total = (mujeres_con_pap/mujeres_total)*100 if mujeres_total else '--'
 
-    return render(request,'pap.html',{'nombre': nombre, 'total': total})
+        return render(request,'pap.html',{'nombre': nombre, 'total': total})
+    except Relevamiento.DoesNotExist:
+        raise Http404("El relevamiento no existe")
 
 
 @login_required
