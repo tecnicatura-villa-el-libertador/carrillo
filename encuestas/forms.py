@@ -36,6 +36,17 @@ class PersonaModelForm(forms.ModelForm):
             raise forms.ValidationError("%s ya es jefe de familia" % jefe_actual[0])
 
 
+    def clean_dni(self):
+        dni = self.cleaned_data["dni"]
+        personas_con_ese_dni = Persona.objects.filter(dni=dni)
+        if self.instance:
+            personas_con_ese_dni = personas_con_ese_dni.exclude(id=self.instance.id)
+        if personas_con_ese_dni.exists():
+            raise forms.ValidationError("Ya hay una persona con este DNI en la base de datos: %s" % personas_con_ese_dni[0])            
+        return dni
+
+        
+
 
     class Meta:
         model = Persona
