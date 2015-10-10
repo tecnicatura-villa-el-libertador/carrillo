@@ -34,9 +34,24 @@
             <tr>
                 <td>N° de personas analfabetas <br>(mayor de 10 años que no lee ni escribe)</td>
                 {% for col in columnas %}
-                    <td>{{ col.analfabetos }}</td>
+                    <td>{{ col.analfabetos.0 }} de {{ col.analfabetos.1 }}</td>
                 {% endfor %}
             </tr>
+
+            <tr>
+                <td>Nº de niños entre 6 y 11 años con primario incompleto por abandono escolar</td>
+                {% for col in columnas %}
+                    <td>{{ col.abandonaron.0 }} de {{ col.abandonaron.1 }}</td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <td>Nº de adolescentes entre 12 y 20 años con secundario incompleto por abandono escolar</td>
+                {% for col in columnas %}
+                    <td>{{ col.abandonaron_sec.0 }} de {{ col.abandonaron_sec.1 }}</td>
+                {% endfor %}
+            </tr>
+
 
 
 {% endblock tbody %}

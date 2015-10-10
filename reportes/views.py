@@ -144,9 +144,7 @@ def tipo_familias(request, id_relevamiento):
 
 @login_required
 def vulnerabilidad_cap_humano(request, id_relevamiento):
-    hace3 = (now() - timedelta(days=365*5)).date()
-    hace65 = (now() - timedelta(days=365*65)).date()
-    hace10 = (now() - timedelta(days=365*10)).date()
+    hace = lambda i: (now() - timedelta(days=365*i)).date()
 
     def columna(relevamiento):
         familias = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento)
@@ -156,7 +154,7 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
         familias_con_3menores = familias.extra(select = {"menores_count" : """
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
-                encuestas_persona.fecha_nacimiento >= {}""".format(hace3)})
+                encuestas_persona.fecha_nacimiento >= {}""".format(hace(3))})
         familias_con_3menores = len([f for f in familias_con_3menores if f.menores_count >= 3])
 
         # familias con jefatura femenina
@@ -166,13 +164,15 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
         familias_con_ancianos = familias.extra(select = {"ancianos_count":"""
             SELECT COUNT(*) from encuestas_persona WHERE
                 encuestas_persona.grupo_familiar_id = encuestas_grupofamiliar.id AND
-                encuestas_persona.fecha_nacimiento <= {}""".format(hace65)})
+                encuestas_persona.fecha_nacimiento <= {}""".format(hace(65))})
         familias_con_ancianos = len([f for f in familias_con_ancianos if f.ancianos_count >= 1])
 
         # N° de personas analfabetas (mayor de 10 años que no lee ni escribe
-        analfabetos = CapitalHumano.objects.filter(escolaridad='ninguno', persona__fecha_nacimiento__lte=hace10,
-                                                   entrevista__relevamiento=relevamiento).count()
+        analfabetos = CapitalHumano.objects.filter(persona__fecha_nacimiento__lte=hace(10), entrevista__relevamiento=relevamiento)
+        analfabetos = analfabetos.filter(escolaridad='ninguno').count(), analfabetos.count()
 
+        abandonaron = CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(11),hace(6)], entrevista__relevamiento=relevamiento)
+        abandonaron = abandonaron.filter(escolaridad='prim_incompleto', escolaridad_abandono=True).count(), abandonaron.count()
         return locals()
 
     relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]

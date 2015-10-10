@@ -225,6 +225,7 @@ class CapitalHumano(models.Model):
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     escolaridad = models.CharField(max_length=50, choices=SIT_ESCOLARIDAD)
     escolaridad_ultimo_curso = models.IntegerField(help_text='último curso aprobado', null=True,blank=True)
+    escolaridad_abandono = models.BooleanField(default=False)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
     vacunas = models.CharField(max_length=50,choices=SIT_VACUNAS_TYPE)
     cobertura_medica = models.CharField(max_length=50,choices=SIT_COBERTURA_TYPE)
