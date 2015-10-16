@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db.models import Avg, Count
 from django.utils.timezone import now
 from django.db.models import Q
@@ -102,15 +103,20 @@ def descriptivo(request, id_relevamiento):
 
         return locals()
 
-    relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
-    form = ReporteForm(data=request.GET or None)
-    form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
-    if form.is_valid():
-        relevamientos += form.cleaned_data.get('relevamientos', [])
-    columnas = [columna(relevamiento) for relevamiento in relevamientos]
+    try:
+        relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
+        form = ReporteForm(data=request.GET or None)
+        form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
+        if form.is_valid():
+            relevamientos += form.cleaned_data.get('relevamientos', [])
+        columnas = [columna(relevamiento) for relevamiento in relevamientos]
 
-    return render(request, 'reporte_descriptivo.html', {'columnas': columnas, 'form': form,
-                                                        'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+
+        return render(request, 'reporte_descriptivo.html', {'columnas': columnas, 'form': form, 'not_error': True,
+                                                            'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+
+    except ZeroDivisionError:
+        return render(request, 'reporte_descriptivo.html', {'titulo': 'Datos descriptivos', 'not_error': False})
 
 
 
@@ -121,24 +127,28 @@ def tipo_familias(request, id_relevamiento):
         return [(label, GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count())
                 for tipo, label in GrupoFamiliar.OPCIONES_TIPO_FAMILIA]
 
-    relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
-    form = ReporteForm(data=request.GET or None)
-    form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
-    if form.is_valid():
-        relevamientos += form.cleaned_data.get('relevamientos', [])
+    try:
+        relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
+        form = ReporteForm(data=request.GET or None)
+        form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
+        if form.is_valid():
+            relevamientos += form.cleaned_data.get('relevamientos', [])
 
-    columnas = []
-    for tipo, label in GrupoFamiliar.OPCIONES_TIPO_FAMILIA:
-        data = []
-        for relevamiento in relevamientos:
-            total = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento).count()
-            cuenta = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count()
+        columnas = []
+        for tipo, label in GrupoFamiliar.OPCIONES_TIPO_FAMILIA:
+            data = []
+            for relevamiento in relevamientos:
+                total = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento).count()
+                cuenta = GrupoFamiliar.objects.filter(entrevistas__relevamiento=relevamiento, tipo_familia=tipo).count()
 
-            data.append({'cantidad': cuenta, 'porcentaje': cuenta*100/total, 'total': total})
-        columnas.append((label, data))
+                data.append({'cantidad': cuenta, 'porcentaje': cuenta*100/total, 'total': total})
+            columnas.append((label, data))
 
-    return render(request, 'reporte_tipos_familia.html', {'columnas': columnas, 'form': form,
-                                                          'relevamientos': relevamientos, 'titulo': 'Tipos de familia'})
+        return render(request, 'reporte_tipos_familia.html', {'columnas': columnas, 'form': form, 'not_error': True,
+                                                              'relevamientos': relevamientos, 'titulo': 'Tipos de familia'})
+
+    except ZeroDivisionError:
+        return render(request, 'reporte_tipos_familia.html', {'titulo': 'Tipos de familias', 'not_error': False})
 
 
 
@@ -190,7 +200,6 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
 
         return locals()
 
-
     relevamientos = [get_object_or_404(Relevamiento, id=id_relevamiento)]
     form = ReporteForm(data=request.GET or None)
     form.fields['relevamientos'].queryset = Relevamiento.objects.exclude(id=id_relevamiento)
@@ -199,7 +208,8 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
 
     columnas = [columna(relevamiento) for relevamiento in relevamientos]
 
-    return render(request, 'reporte_vulnerabilidad_cap_humano.html', {'columnas': columnas, 'form': form,
-                                                                      'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+    return render(request, 'reporte_vulnerabilidad_cap_humano.html', {'columnas': columnas, 'form': form, 'not_error': True,
+                                                                      'relevamientos': relevamientos,
+                                                                      'titulo': 'Vulnerabilidades de capital humano'})
 
 
