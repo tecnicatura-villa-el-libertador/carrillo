@@ -60,4 +60,27 @@
             </tr>
 
 
+            <tr>
+                <td>N° de hogares con jefe/a de hogar que no trabaja</td>
+                {% for col in columnas %}
+                    <td>{{ col.jefe_desocupado }}</td>
+                {% endfor %}
+            </tr>
+
+
+            <tr>
+                <td>N° de hogares con jefe/a de hogar con trabajo transitorio</td>
+                {% for col in columnas %}
+                    <td>{{ col.jefe_transitorio }}</td>
+                {% endfor %}
+            </tr>
+
+
+            <tr>
+                <td>N° de personas entre 15 y 24 años que no estudian ni trabajan </td>
+                {% for col in columnas %}
+                    <td>{{ col.ni_ni.0 }} de {{ col.ni_ni.1 }}</td>
+                {% endfor %}
+            </tr>
+
 {% endblock tbody %}

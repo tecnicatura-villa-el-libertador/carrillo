@@ -180,13 +180,19 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
         hogares_rezago1 = []
         hogares_rezago2 = []
         for f in familias:
-            for p in CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(15), hace(7)], persona__grupo_familiar=f):
-                if p.esta_rezagado():
+            for ch in CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(15), hace(7)], persona__grupo_familiar=f):
+                if ch.esta_rezagado():
                     if f in hogares_rezago1:
                         hogares_rezago2.append(f)
                     else:
                         hogares_rezago1.append(f)
         hogares_rezago = len(set(hogares_rezago2))
+
+        jefe_desocupado = len([c for c in CapitalHumano.objects.filter(entrevista__relevamiento=relevamiento) if c.persona.jefe_familia and c.trabajo.startswith('no_trabaja')])
+        jefe_transitorio = len([c for c in CapitalHumano.objects.filter(entrevista__relevamiento=relevamiento) if c.persona.jefe_familia and c.trabajo.startswith('transitorio')])
+
+        ni_ni = CapitalHumano.objects.filter(persona__fecha_nacimiento__range=[hace(24),hace(15)], entrevista__relevamiento=relevamiento)
+        ni_ni = ni_ni.filter(Q(escolaridad_abandono=True) & Q(trabajo__startswith='no_trabaja')).count(), ni_ni.count()
 
         return locals()
 
@@ -200,6 +206,6 @@ def vulnerabilidad_cap_humano(request, id_relevamiento):
     columnas = [columna(relevamiento) for relevamiento in relevamientos]
 
     return render(request, 'reporte_vulnerabilidad_cap_humano.html', {'columnas': columnas, 'form': form,
-                                                                      'relevamientos': relevamientos, 'titulo': 'Datos descriptivos'})
+                                                                      'relevamientos': relevamientos, 'titulo': 'Indicadores de vulnerabildad'})
 
 
