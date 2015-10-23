@@ -162,6 +162,7 @@ entrevistas = login_required(EntrevistasListView.as_view())
 class GrupoFamiliarListView(generic.list.ListView):
     template_name = "grupos_familiares.html"
     model = GrupoFamiliar
+    paginate_by = 2
 
 grupos_familiares = login_required(GrupoFamiliarListView.as_view())
 
