@@ -136,6 +136,7 @@ def entrevista_carga(request, id_relevamiento, id_entrevista):
 class RelevamientosListView(generic.list.ListView):
     template_name = "relevamientos.html"
     model = Relevamiento
+    paginate_by = 10
 
 relevamientos = login_required(RelevamientosListView.as_view())
 
@@ -143,6 +144,8 @@ relevamientos = login_required(RelevamientosListView.as_view())
 class EntrevistasListView(generic.list.ListView):
     template_name = "entrevistas.html"
     model = Entrevista
+    paginate_by = 10
+
 
     def get_queryset(self):
         self.relevamiento = get_object_or_404(Relevamiento, id=self.kwargs['id_relevamiento'])
