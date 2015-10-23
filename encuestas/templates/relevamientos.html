@@ -6,6 +6,8 @@
 
     <h1>Campañas de relevamiento</h1>
 
+    {% if object_list %}
+
     <table class="table">
 
     {% for relevamiento in object_list %}
@@ -44,6 +46,14 @@
     {% endfor %}
 
 </table>
+    
+    {% else %}
 
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Todavia no existen campañas en el sistema, configure una para comenzar
+        </div>
+
+    {% endif %}
 
 {% endblock body %}
