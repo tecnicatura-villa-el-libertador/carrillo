@@ -14,47 +14,89 @@
 {% block body %}
 
 
+<div>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#Editar" aria-controls="Editar" role="tab" data-toggle="tab">Editar</a></li>
+    <li role="presentation"><a href="#entrevista" aria-controls="Entrevista" role="tab" data-toggle="tab">Entrevistas asociadas</a></li>
+    <li role="presentation"><a href="#Miembro" aria-controls="Miembro" role="tab" data-toggle="tab">Miembros</a></li>
+</ul>
+
+  <form method="post" action="." novalidate>
+  {% csrf_token %}
+  <div class="tab-content">
+
+    <div role="tabpanel" class="tab-pane active" id="Editar">
 
     {% if form.instance.id %}
+       <form method="post" action=".">
+            <h1>{{nombre}}</h1>
+            {% csrf_token %}
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+            {% bootstrap_form form layout='default' %}
+                <input name="guardar" class="btn btn-success" type="submit" value="Guardar" />
 
-    <h2>Miembros</h2>
-    <br>
-
-        <div class="pull-right"><a class="btn btn-default as_modal" href="{% url 'persona_create_modal' form.instance.id %}">Agregar nueva persona</a></div>
-
-
-
-    <table class="table">
-
-    {% for persona in form.instance.miembros.all %}
-    <tr>
-        <td>{{ persona }}</td>
-        <td>{{ persona.vinculo }}</td>
-
-        <td><a class="btn btn-success as_modal" href="{% url 'persona_update_modal' form.instance.id persona.id %}">Editar</a>
-            <a class="btn btn-danger as_modal" href="{% url 'persona_delete_modal' form.instance.id persona.id %}">Eliminar</a> </td>
-
-    </tr>
-
-    {% endfor %}
-
-    </table>
+                {% for relevamiento in relevamientos %}
+                <input name="entrevista_{{ relevamiento.id }}" class="btn btn-success" type="submit" value="Crear nueva entrevista en {{ relevamiento }}" />
+                {% endfor %}
+        </form>
 
     {% endif %}
 
-   <form method="post" action=".">
-        <h1>{{nombre}}</h1>
-        {% csrf_token %}
-        {% if next %}
-        <input type="hidden" name="next" value="{{ next }}">
-        {% endif %}
-        {% bootstrap_form form layout='default' %}
-            <input name="guardar" class="btn btn-success" type="submit" value="Guardar" />
 
-            {% for relevamiento in relevamientos %}
-            <input name="entrevista_{{ relevamiento.id }}" class="btn btn-success" type="submit" value="Crear nueva entrevista en {{ relevamiento }}" />
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="entrevista">
+
+        {% if form.instance.entrevistas.all %}
+        <h2> Entrevistas </h2>
+        <table class="table">
+
+            {% for entrevista in form.instance.entrevistas.all %}
+            <tr>
+                <td>{{ entrevista }}</td>
+
+                <td> Editar </td>
+
+            </tr>
+
             {% endfor %}
-    </form>
+
+            </table>
+
+      {% endif %}
+
+
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="Miembro">
+
+    <br>
+    <div class="pull-right"><a class="btn btn-default as_modal" href="{% url 'persona_create_modal' form.instance.id %}">Agregar nueva persona</a></div>
+
+    <br>
+    <table class="table">
+
+      {% for persona in form.instance.miembros.all %}
+        <tr>
+          <td>{{ persona }}</td>
+          <td>{{ persona.vinculo }}</td>
+
+          <td><a class="btn btn-success as_modal" href="{% url 'persona_update_modal' form.instance.id persona.id %}">Editar</a>
+            <a class="btn btn-danger as_modal" href="{% url 'persona_delete_modal' form.instance.id persona.id %}">Eliminar</a> </td>
+
+      </tr>
+
+      {% endfor %}
+
+    </table>
+
+    </div>
+
+  </div>
+</div>
+
 
 
 {% endblock body %}
