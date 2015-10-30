@@ -10,8 +10,16 @@
 
 {% block body %}
 
+  {entrevista #{}-{}.format(self.id,<a href=> entrevista.grupo_familiar </a>)}
 
-<h1>{{ entrevista}} </h1>
+<h1>
+	Entrevista#{{ entrevista.id}} - 
+	<a href="{%url 'grupofamiliar' form.instance.grupo_familiar.id%}">
+
+	 {{entrevista.grupo_familiar }}
+	</a> 
+
+</h1>
 
 
 <div>
@@ -93,7 +101,7 @@
         {% endfor %}
 
         </table>
-    <a href="{%url 'grupofamiliar' form.instance.grupo_familiar.id%}"> Familia </a>
+ 
     </div>
     <div role="tabpanel" class="tab-pane" id="entrevista">
 
