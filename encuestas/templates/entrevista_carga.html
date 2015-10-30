@@ -10,13 +10,11 @@
 
 {% block body %}
 
-  {entrevista #{}-{}.format(self.id,<a href=> entrevista.grupo_familiar </a>)}
-
 <h1>
 	Entrevista#{{ entrevista.id}} - 
 	<a href="{%url 'grupofamiliar' form.instance.grupo_familiar.id%}">
 
-	 {{entrevista.grupo_familiar }}
+	 Familia {{entrevista.grupo_familiar.apellido_principal }}
 	</a> 
 
 </h1>
