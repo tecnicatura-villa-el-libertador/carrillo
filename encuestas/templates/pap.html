@@ -1,8 +1,16 @@
 {% extends "site_base.html" %}
 {% load bootstrap3 %}
 {% block body %}
+	
+	{% if not_error %}
+		<h1>{{nombre}}</h1>
+		<h2>El porcentaje de mujeres con PAP es % {{total}}</h2>
 
+	{% else %}
 
-	<h1>{{nombre}}</h1>
-	<h2>El porcentaje de mujeres con PAP es % {{total}}</h2>
+		<div class="alert alert-warning alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>¡Atención!</strong> No hay datos suficientes para realizar el reporte.
+		</div>
+	{% endif %}			
 {% endblock body %}
