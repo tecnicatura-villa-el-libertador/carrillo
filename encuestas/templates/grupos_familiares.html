@@ -3,19 +3,7 @@
 {% load bootstrap3 %}
 
 {% block body %}
-
-
- 
-    <div class="col-md-4 pull-right">
-      <form method="get" action="." class="form-inline" novalidate>
-
-         {% bootstrap_form buscador layout='inline' %}
-         <button class="btn btn-default" type="submit">
-          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>  
-         </button>
-      </form>
-    </div>
- 
+{% include "buscador.html" %}
 
     <h1>Grupos Familiares</h1>
 
