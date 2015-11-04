@@ -52,7 +52,7 @@ INSTALLED_APPS = (
 
 BOOTSTRAP3 = {'field_renderers': {
         'default': 'bootstrap3.renderers.FieldRenderer',
-        'inline': 'meshh.renderers.InlineFieldRenderer',
+        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
     },
 }
 
