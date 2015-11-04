@@ -1,20 +1,27 @@
 {% extends "site_base.html" %}
 {% load bootstrap3 %}
 {% block body %}
-	
-	<h1>Reporte: Capital Fisico</h1>
-	<p>Propietario del Terreno: {{propietarioTerreno_porcentaje}} % </p>
- 	 <p>Propietario de Vivienda: {{propietario_vivienda_porcentaje}} % </p>
-	  <p>En comodato: {{comodato_porcentaje}} %</p>   
-           <p>Alquila: {{alquiler_porcentaje}} %</p>
-	    <p>Otro: {{porcentaje_es_otro}}%</p>
-	     <p>Tiene pisos: {{pisos_porcentaje}} % </p>
-	      <p>Tiene techo: {{techo_porcentaje}} % </p>
-	       <p>Tiene paredes: {{paredes_porcentaje}} % </p>
-                <p> Tiene Calefaccion Gas natural: {{calefaccion_natural_porcentaje}} % </p>
-		 <p> Tiene Calefaccion Gas envasado: {{calefaccion_envasado_porcentaje}} % </p>
-		  <p> Cantidad promedio de habitaciones: {{cantidad_habitaciones}} % </p>
+	{% if not_error %}
+		<h1>Reporte: Capital Fisico</h1>
+		<p>Propietario del Terreno: {{propietarioTerreno_porcentaje}} % </p>
+	 	 <p>Propietario de Vivienda: {{propietario_vivienda_porcentaje}} % </p>
+		  <p>En comodato: {{comodato_porcentaje}} %</p>   
+	           <p>Alquila: {{alquiler_porcentaje}} %</p>
+		    <p>Otro: {{porcentaje_es_otro}}%</p>
+		     <p>Tiene pisos: {{pisos_porcentaje}} % </p>
+		      <p>Tiene techo: {{techo_porcentaje}} % </p>
+		       <p>Tiene paredes: {{paredes_porcentaje}} % </p>
+	                <p> Tiene Calefaccion Gas natural: {{calefaccion_natural_porcentaje}} % </p>
+			 <p> Tiene Calefaccion Gas envasado: {{calefaccion_envasado_porcentaje}} % </p>
+			  <p> Cantidad promedio de habitaciones: {{cantidad_habitaciones}} % </p>
+	{% else %}
 
+		<div class="alert alert-warning alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>¡Atención!</strong> No hay datos suficientes para realizar el reporte.
+		</div>
+
+	{% endif %}
 
 
 {% endblock body %}
