@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
                     LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm, RespuestaEntrevistaModelForm)

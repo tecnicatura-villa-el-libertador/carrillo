@@ -10,8 +10,14 @@
 
 {% block body %}
 
+<h1>
+	Entrevista#{{ entrevista.id}} - 
+	<a href="{%url 'grupofamiliar' form.instance.grupo_familiar.id%}">
 
-<h1>{{ entrevista}} </h1>
+	 Familia {{entrevista.grupo_familiar.apellido_principal }}
+	</a> 
+
+</h1>
 
 
 <div>
@@ -93,8 +99,7 @@
         {% endfor %}
 
         </table>
-
-
+ 
     </div>
     <div role="tabpanel" class="tab-pane" id="entrevista">
 
