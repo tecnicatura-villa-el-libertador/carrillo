@@ -173,6 +173,7 @@ entrevistas = login_required(EntrevistasListView.as_view())
 class GrupoFamiliarListView(generic.list.ListView):
     template_name = "grupos_familiares.html"
     model = GrupoFamiliar
+    paginate_by = 10
 
     def get_queryset(self):
         if "buscador" in self.request.GET:
