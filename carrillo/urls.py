@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^persona/(?P<id_persona>\d+)/$',"encuestas.views.vistapersona", name="persona"),
 
     url(r'^persona/$', "encuestas.views.vistapersona", name="persona"),
-    url(r'^persona/(?P<id_persona>\d+)/$', "encuestas.views.vistapersona", name="persona"),
+ 
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/nueva/$', "encuestas.views.persona_create_modal", name="persona_create_modal"),
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/(?P<id_persona>\d+)/$', "encuestas.views.persona_update_modal", name="persona_update_modal"),
     url(r'^ajax/grupofamiliar/(?P<id_grupofamiliar>\d+)/persona/(?P<id_persona>\d+)/delete$', "encuestas.views.persona_delete_modal", name="persona_delete_modal"),
