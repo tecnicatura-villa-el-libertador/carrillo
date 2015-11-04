@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from .forms import (PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm, GrupoFamiliarModelForm,
-                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm, RespuestaEntrevistaModelForm)
+                    LoginForm, CapitalHumanoModelForm, EntrevistaModelForm, OtrosDatosModelForm, RespuestaEntrevistaModelForm, BuscadorForm)
 from .models import CapitalSocial, GrupoFamiliar, Entrevista, Relevamiento, Persona, CapitalFisico, Pregunta, RespuestaEntrevista
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.urlresolvers import reverse
@@ -16,6 +17,7 @@ from django.views.generic.edit import FormView
 from django.views import generic
 from django.contrib import messages
 from encuestas.forms import ContactForm
+from django.db.models import Q
 
 
 class ContactView(FormView):
@@ -145,13 +147,23 @@ class EntrevistasListView(generic.list.ListView):
 
     def get_queryset(self):
         self.relevamiento = get_object_or_404(Relevamiento, id=self.kwargs['id_relevamiento'])
-        return Entrevista.objects.filter(relevamiento=self.relevamiento)
+        qs = Entrevista.objects.filter(relevamiento=self.relevamiento)
+        if "buscador" in self.request.GET:
+            apellido = self.request.GET['buscador']
+            condicion1 = Q(grupo_familiar__miembros__apellido__icontains= apellido)
+            condicion2 = Q(grupo_familiar__apellido_principal__icontains= apellido)
+            return qs.filter(condicion1 | condicion2).distinct()
+        else:
+            return qs
+
+
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(EntrevistasListView, self).get_context_data(**kwargs)
         # Add in the publisher
         context['relevamiento'] = self.relevamiento
+        context['buscador'] = BuscadorForm()
         return context
 
 
@@ -161,6 +173,22 @@ entrevistas = login_required(EntrevistasListView.as_view())
 class GrupoFamiliarListView(generic.list.ListView):
     template_name = "grupos_familiares.html"
     model = GrupoFamiliar
+    paginate_by = 10
+
+    def get_queryset(self):
+        if "buscador" in self.request.GET:
+            apellido = self.request.GET['buscador']
+            return GrupoFamiliar.objects.filter(apellido_principal__icontains= apellido).distinct()
+        else:
+            return GrupoFamiliar.objects.all()
+
+
+    def get_context_data(self, **kwargs):
+        context = super(GrupoFamiliarListView, self).get_context_data( **kwargs)
+        context['buscador'] = BuscadorForm()
+        return context
+
+
 
 grupos_familiares = login_required(GrupoFamiliarListView.as_view())
 

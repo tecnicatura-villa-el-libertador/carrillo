@@ -49,9 +49,6 @@ class PersonaModelForm(forms.ModelForm):
         widgets = {'grupo_familiar': forms.HiddenInput()}
 
 
-
-
-
 class CapitalHumanoModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -87,6 +84,8 @@ class GrupoFamiliarModelForm(forms.ModelForm):
         model = GrupoFamiliar
         fields = ['apellido_principal', 'direccion', 'historia_clinica', 'telefono', 'tipo_familia']
 
+class BuscadorForm(forms.Form):
+    buscador = forms.CharField(max_length=100)
 
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=100)

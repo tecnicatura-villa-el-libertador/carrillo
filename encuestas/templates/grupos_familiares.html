@@ -3,12 +3,21 @@
 {% load bootstrap3 %}
 
 {% block body %}
-
-
+{% include "buscador.html" %}
 
     <h1>Grupos Familiares</h1>
 
-  <div class="pull-right"><a class="btn btn-default" href="{% url 'grupo_familiar_create' %}">Agregar nuevo Grupo Familiar</a></div>
+	<div class="pull-right"><a class="btn btn-default" href="{% url 'grupo_familiar_create' %}">Agregar nuevo Grupo Familiar</a></div>
+
+  	{% if not object_list %}
+		<div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            No se encontro ninguna familia con ese apellido
+        </div>
+
+    {% endif %}
+    
+
     <table class="table">
 
     {% for grupo in object_list %}
@@ -20,7 +29,15 @@
 
     {% endfor %}
 
-</table>
 
+
+
+
+</table>
+    
+
+{% include "paginas.html" %}
 
 {% endblock body %}
+
+
