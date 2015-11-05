@@ -1,5 +1,5 @@
 
-
+{% if is_paginated %}
  <ul class="pagination pagination-centered">
             {% if page_obj.has_previous %}
                 <li><a href="?page=1"><<</a></li>
@@ -15,3 +15,4 @@
                 <li><a href="?page={{ page_obj.paginator.num_pages }}">>></a></li>
             {% endif %}
         </ul>
+{% endif %}
