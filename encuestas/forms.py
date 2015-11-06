@@ -84,12 +84,14 @@ class GrupoFamiliarModelForm(forms.ModelForm):
         model = GrupoFamiliar
         fields = ['apellido_principal', 'direccion', 'historia_clinica', 'telefono', 'tipo_familia']
 
+
 class BuscadorForm(forms.Form):
     buscador = forms.CharField(max_length=100)
 
+
 class LoginForm(forms.Form):
-	username = forms.CharField(max_length=100)
-	password = forms.CharField(max_length=100, widget=forms.PasswordInput())
+	username = forms.CharField(label='Nombre de usuario', max_length=100)
+	password = forms.CharField(label='Contraseña', max_length=100, widget=forms.PasswordInput())
 
 
 class EntrevistaModelForm(forms.ModelForm):

@@ -17,9 +17,16 @@
 {% block nav %}
 
         <ul class="nav navbar-nav" style="margin-top: 15px">
+    {% if user.is_authenticated %}
             <li><a href="{% url 'home' %}">Relevamientos</a></li>
             <li><a href="{% url 'grupos_familiares' %}">Grupos Familiares</a></li>
+            <li class="nav-right"><a href="{% url "auth_logout" %}">Salir</a></li>
+    {% endif %}
+
         </ul>
+
+
+
 {% endblock %}
 
 {% block body_extra_attributes %}{% endblock %}

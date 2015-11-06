@@ -402,7 +402,7 @@ def grupo_familiar(request, id_grupofamiliar = None):
 
 
 def Login(request):
-    nombre = "Formulario de login"
+    nombre = "Bienvendid@ al Sistema Carrillo"
     form = LoginForm()
     next_url = request.GET.get('next', '/')
     if request.method =="POST":
@@ -416,5 +416,5 @@ def Login(request):
                 return redirect(request.POST.get('next', '/'))
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre,
-                                             'next': next_url})
+                                             'next': next_url, 'button_text': 'Ingresar'})
 
