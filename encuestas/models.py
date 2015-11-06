@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.timezone import now
+from django.core.urlresolvers import reverse
 from model_utils.models import TimeStampedModel
 
 
@@ -70,6 +71,10 @@ class Entrevista(TimeStampedModel):
          - capitalhumano 50%/len(miembros en la familia)
          """
         pass
+
+
+    def get_absolute_url(self):
+        return reverse("entrevista_carga", args=[self.relevamiento.id, self.id])
 
 
 class Pregunta(models.Model):

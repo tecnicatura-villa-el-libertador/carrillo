@@ -16,9 +16,15 @@
 
 <div>
 <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#Editar" aria-controls="Editar" role="tab" data-toggle="tab">Editar</a></li>
-    <li role="presentation"><a href="#entrevista" aria-controls="Entrevista" role="tab" data-toggle="tab">Entrevistas asociadas</a></li>
+    <li role="presentation" class="active"><a href="#Editar" aria-controls="Editar" role="tab" data-toggle="tab">Grupo</a></li>
+
+    {% if form.instance.id %}
     <li role="presentation"><a href="#Miembro" aria-controls="Miembro" role="tab" data-toggle="tab">Miembros</a></li>
+    <li role="presentation"><a href="#entrevista" aria-controls="Entrevista" role="tab" data-toggle="tab">Entrevistas</a></li>
+    {% else %}
+    <li role="presentation" class="disabled"><a aria-controls="Miembro" >Miembros</a></li>
+    <li role="presentation" class="disabled"><a aria-controls="Entrevista">Entrevistas</a></li>
+    {% endif %}
 </ul>
 
   <form method="post" action="." novalidate>
@@ -27,7 +33,7 @@
 
     <div role="tabpanel" class="tab-pane active" id="Editar">
 
-    {% if form.instance.id %}
+
        <form method="post" action=".">
             <h1>{{nombre}}</h1>
             {% csrf_token %}
@@ -37,17 +43,36 @@
             {% bootstrap_form form layout='default' %}
                 <input name="guardar" class="btn btn-success" type="submit" value="Guardar" />
 
-                {% for relevamiento in relevamientos %}
-                <input name="entrevista_{{ relevamiento.id }}" class="btn btn-success" type="submit" value="Crear nueva entrevista en {{ relevamiento }}" />
-                {% endfor %}
         </form>
 
-    {% endif %}
+
 
 
     </div>
 
     <div role="tabpanel" class="tab-pane" id="entrevista">
+
+
+    <br>
+    <div class="pull-right">
+        <div class="dropdown">
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-default">
+            Crear nueva entrevista
+              <span class="caret"></span>
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dLabel">
+
+            {% if form.instance.id %}
+                {% for relevamiento in relevamientos %}
+
+                <li><a href="{% url "entrevista_create" relevamiento.id %}?grupo_familiar={{ form.instance.id }}">En {{ relevamiento }}</a></li>
+                {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+
+    </div>
 
         {% if form.instance.entrevistas.all %}
         <h2> Entrevistas </h2>
@@ -57,7 +82,7 @@
             <tr>
                 <td>{{ entrevista }}</td>
 
-                <td> Editar </td>
+                <td><a class="btn btn-default btn-xs" href="{{ entrevista.get_absolute_url }}">Editar</a></td>
 
             </tr>
 
@@ -72,10 +97,11 @@
 
     <div role="tabpanel" class="tab-pane" id="Miembro">
 
+    {% if form.instance.id %}
+
     <br>
     <div class="pull-right"><a class="btn btn-default as_modal" href="{% url 'persona_create_modal' form.instance.id %}">Agregar nueva persona</a></div>
 
-    <br>
     <table class="table">
 
       {% for persona in form.instance.miembros.all %}
@@ -91,30 +117,13 @@
       {% endfor %}
 
     </table>
+    {% endif %}
 
     </div>
 
   </div>
 </div>
 
-<<<<<<< HEAD
-
-
-=======
-   <form method="post" action=".">
-        <h1>{{nombre}}</h1>
-        {% csrf_token %}
-        {% if next %}
-        <input type="hidden" name="next" value="{{ next }}">
-        {% endif %}
-        {% bootstrap_form form layout='default' %}
-            <input name="guardar" class="btn btn-success" type="submit" value="Guardar" />
-
-            {% for relevamiento in relevamientos %}
-            <input name="entrevista_{{ relevamiento.id }}" class="btn btn-success" type="submit" value="Crear nueva entrevista en {{ relevamiento }}" />
-            {% endfor %}
-    </form>
->>>>>>> CarolinaC-desastre
 {% endblock body %}
 
 
